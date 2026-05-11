@@ -120,7 +120,7 @@ export function LockCelebration() {
           animation: "fade-in-soft 480ms ease-out 200ms forwards",
         }}
       >
-        Brief locked
+        Dossier sealed
         <span className="mx-3" style={{ color: "rgba(110,128,104,0.35)" }}>·</span>
         Foundation phase
       </p>

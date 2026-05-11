@@ -43,7 +43,7 @@ export function AtelierHome() {
           <span className="italic text-sage-deep">and everything she wears.</span>
         </h1>
         <p className="text-[14.5px] text-ink-400 mt-5 leading-relaxed max-w-[560px]">
-          An atelier inside the app. Build a brief from couture-grade taxonomy,
+          An atelier inside the app. Build a dossier from couture-grade taxonomy,
           iterate as quickly as you can talk, and finish with a tech pack a real
           house can quote from. Nothing here is visible to your partner.
         </p>

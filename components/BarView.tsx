@@ -134,7 +134,7 @@ export function BarView() {
               Not yet
             </p>
             <p className="text-[14px] text-ink leading-relaxed">
-              Lock the brief first — Sommelier needs your headcount and tone before drafting
+              Seal the dossier first — Sommelier needs your headcount and tone before drafting
               the bar.
             </p>
           </div>

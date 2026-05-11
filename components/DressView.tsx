@@ -173,7 +173,7 @@ export function DressView() {
           />
           {!briefLocked && (
             <p className="text-[12px] text-ink-300 italic mt-2">
-              Lock the brief first and Couturier will have what it needs.
+              Seal the dossier first and Couturier will have what it needs.
             </p>
           )}
           <div className="mt-4 flex items-center gap-3">

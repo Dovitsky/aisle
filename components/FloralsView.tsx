@@ -117,7 +117,7 @@ export function FloralsView() {
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           Real stems, real vessels, real quantities — pulled from your locked design palette
           and the season we&rsquo;re in. Edit individual pieces; the line goes to your florist
-          as a brief.
+          as a dossier.
         </p>
       </header>
 
@@ -129,7 +129,7 @@ export function FloralsView() {
               Not yet
             </p>
             <p className="text-[14px] text-ink leading-relaxed">
-              Lock the brief first — Botanist needs your season, palette, and headcount before
+              Seal the dossier first — Botanist needs your season, palette, and headcount before
               proposing real arrangements.
             </p>
           </div>

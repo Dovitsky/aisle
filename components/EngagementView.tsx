@@ -98,7 +98,7 @@ export function EngagementView() {
       {/* Hero */}
       <header>
         <p className="text-[10px] uppercase tracking-[0.26em] text-sage-500 font-mono mb-2">
-          Concierge · Before the brief
+          Concierge · Before the dossier
         </p>
         <div className="flex items-baseline justify-between gap-6 flex-wrap">
           <h1 className="display text-[36px] sm:text-[44px] lg:text-[52px] leading-[1.02] tracking-[-0.01em]">

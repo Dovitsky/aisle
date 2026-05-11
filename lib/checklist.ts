@@ -31,10 +31,10 @@ export const CHECKLIST: ChecklistItem[] = [
   {
     id: "lock-brief",
     monthsOut: 12,
-    title: "Lock the brief",
+    title: "Seal the dossier",
     detail: "Date window, region, guest count, budget, vibe. Releases the team.",
     area: "Foundation",
-    href: "/brief",
+    href: "/dossier",
     isDone: (s) => !!s.brief?.locked,
   },
   {
@@ -52,7 +52,7 @@ export const CHECKLIST: ChecklistItem[] = [
     title: "Lock the date",
     detail: "Once the venue confirms, freeze the date everywhere.",
     area: "Foundation",
-    href: "/brief",
+    href: "/dossier",
     isDone: (s) => !!s.brief?.weddingDate,
   },
 

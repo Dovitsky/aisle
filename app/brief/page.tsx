@@ -1,5 +1,8 @@
-import { BriefForm } from "@/components/BriefForm";
+import { redirect } from "next/navigation";
 
-export default function BriefPage() {
-  return <BriefForm />;
+// Old /brief URL preserved as a 308 redirect to the canonical /dossier
+// route. Keep this file forever — external links and old screenshots
+// still point here.
+export default function BriefRedirect() {
+  redirect("/dossier");
 }

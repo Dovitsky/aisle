@@ -50,7 +50,7 @@ function ActionPreview({ a }: { a: ApprovalCardT["action"] }) {
     case "lock_brief":
       return (
         <Box>
-          <Mini>The brief</Mini>
+          <Mini>The dossier</Mini>
           <div className="mt-1 italic text-ink-400 text-[14px]">{a.summary}</div>
         </Box>
       );
@@ -380,7 +380,7 @@ function toastDetailForAction(card: ApprovalCardT): string {
     case "lock_cake":             return `Cake locked. ${a.tiers}-tier, ${a.servings} servings.`;
     case "publish_website":       return `aisle.wedding/${a.slug} is live.`;
     case "file_marriage_license": return `Filing in ${a.county}, ${a.state}.`;
-    case "send_caterer_brief":    return `Brief sent to ${a.vendor}; ${a.allergenCount} allergens flagged.`;
+    case "send_caterer_brief":    return `Dossier sent to ${a.vendor}; ${a.allergenCount} allergens flagged.`;
     case "block_hotel_rooms":     return `${a.rooms} rooms blocked at ${a.hotel} ($${a.nightlyRate}/night).`;
     case "lock_vows":             return `Vows locked for the ${a.whose}.`;
     default:                      return "Maestro is taking it from here.";

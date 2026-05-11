@@ -182,7 +182,7 @@ function ContinuingDraft({ state }: { state: ProjectState }) {
       {/* Real CTA. bordered pill, not a buried link */}
       <div className="mt-10 flex items-center gap-3 flex-wrap justify-center">
         <Link
-          href="/brief"
+          href="/dossier"
           className="inline-flex items-center gap-2 rounded-full border hairline bg-white/80 hover:bg-white hover:border-ink/30 px-5 py-2.5 text-[12px] uppercase tracking-[0.22em] font-medium text-ink transition-all"
         >
           Or fill the form yourself

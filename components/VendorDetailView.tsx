@@ -150,7 +150,7 @@ function VendorDetail({
         </p>
         {/* Stat row. fit · status · estimate */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8">
-          <Stat label="Fit" value={`${v.fitScore}/100`} sub="against your brief" />
+          <Stat label="Fit" value={`${v.fitScore}/100`} sub="against your dossier" />
           <Stat label="Stage" value={prettyStatus(v.status)} />
           <Stat label="Estimate" value={v.estimateUsd ? `$${(v.estimateUsd / 1000).toFixed(1)}k` : ","} />
           <Stat label="Booked" value={v.contractedUsd ? "Yes" : "Not yet"} />

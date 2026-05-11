@@ -130,12 +130,12 @@ export function RentalsView() {
         <Stat label="Categories" value={Object.keys(grouped).length} />
         <Stat label="Items" value={itemsCount.toLocaleString()} sub={`across ${state.rentals.length} line items`} />
         <Stat label="Estimated cost" value={`$${total.toLocaleString()}`} tone="ink" />
-        <Stat label="For" value={`${guestCount || ","} guests`} sub="based on your brief" />
+        <Stat label="For" value={`${guestCount || ","} guests`} sub="based on your dossier" />
       </div>
 
       {!briefLocked && (
         <div className="rounded-card border hairline bg-white/60 px-5 py-4 text-[14px]">
-          Lock the brief first and Steward will pull a starting list together.
+          Seal the dossier first and Steward will pull a starting list together.
         </div>
       )}
 

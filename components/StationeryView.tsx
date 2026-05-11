@@ -82,7 +82,7 @@ export function StationeryView() {
 
       {!state.brief?.locked && (
         <div className="rounded-card border hairline bg-paper-200/40 px-4 py-3 text-sm">
-          Lock the brief first. <Link href="/brief" className="underline-offset-4 underline">Brief</Link>.
+          Seal the dossier first. <Link href="/dossier" className="underline-offset-4 underline">Dossier</Link>.
         </div>
       )}
 

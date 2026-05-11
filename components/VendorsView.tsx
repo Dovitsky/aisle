@@ -238,7 +238,7 @@ export function VendorsView() {
 
         {!briefLocked && (
           <div className="rounded-card border hairline bg-white/60 px-5 py-4 text-[14px] mb-6">
-            Lock the brief first. <Link href="/brief" className="underline-offset-4 underline hover:text-sage-500">Open brief</Link>.
+            Seal the dossier first. <Link href="/dossier" className="underline-offset-4 underline hover:text-sage-500">Open dossier</Link>.
           </div>
         )}
 
@@ -280,7 +280,7 @@ export function VendorsView() {
           <div className="rounded-card border hairline bg-white/60 px-6 py-10 text-center max-w-lg">
             <p className="display text-xl text-ink leading-tight">No {activeCategory.toLowerCase()}s yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Tap <span className="italic text-ink">Find {activeCategory.toLowerCase()}s</span> above and we'll pull five strong matches based on your brief.
+              Tap <span className="italic text-ink">Find {activeCategory.toLowerCase()}s</span> above and we'll pull five strong matches based on your dossier.
             </p>
           </div>
         )}

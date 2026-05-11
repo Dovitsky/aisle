@@ -359,7 +359,7 @@ function TechPackRail({
           Eight pages your atelier can quote from.
         </p>
         <ul className="mt-4 space-y-2 text-[12.5px] text-ink-400 leading-relaxed">
-          <li>1. Title + designer brief</li>
+          <li>1. Title + designer dossier</li>
           <li>2. Design specifications</li>
           <li>3. Reference imagery</li>
           <li>4. Construction notes</li>

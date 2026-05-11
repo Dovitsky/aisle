@@ -130,9 +130,9 @@ export function DesignView() {
 
       {!briefLocked && (
         <div className="rounded-card border hairline bg-white/60 px-5 py-4 text-[14px]">
-          Lock the brief first.{" "}
-          <Link href="/brief" className="underline-offset-4 underline hover:text-sage-500">
-            Open brief
+          Seal the dossier first.{" "}
+          <Link href="/dossier" className="underline-offset-4 underline hover:text-sage-500">
+            Open dossier
           </Link>
           .
         </div>

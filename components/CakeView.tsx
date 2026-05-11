@@ -110,7 +110,7 @@ export function CakeView() {
               Not yet
             </p>
             <p className="text-[14px] text-ink leading-relaxed">
-              Lock the brief first — Patissier needs the season, palette, and headcount before
+              Seal the dossier first — Patissier needs the season, palette, and headcount before
               sketching a cake.
             </p>
           </div>

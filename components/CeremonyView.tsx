@@ -178,7 +178,7 @@ export function CeremonyView() {
             )}
             {!briefLocked && (
               <span className="text-[11px] uppercase tracking-[0.16em] text-ink-300">
-                Lock the brief first
+                Seal the dossier first
               </span>
             )}
           </div>

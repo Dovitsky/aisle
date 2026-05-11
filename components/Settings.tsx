@@ -243,8 +243,8 @@ export function Settings() {
       <section className="surface rounded-card border hairline shadow-card p-4">
         <h2 className="display text-xl">Project</h2>
         <dl className="mt-2 grid grid-cols-[140px_1fr] gap-y-1 text-[13px]">
-          <dt className="text-ink-300">Brief</dt>
-          <dd>{state.brief?.locked ? "locked" : state.brief ? "draft" : "not started"}</dd>
+          <dt className="text-ink-300">Dossier</dt>
+          <dd>{state.brief?.locked ? "sealed" : state.brief ? "draft" : "not started"}</dd>
           <dt className="text-ink-300">Vendors</dt><dd>{state.vendors.length}</dd>
           <dt className="text-ink-300">Households / Guests</dt><dd>{state.households.length} / {state.guests.length}</dd>
           <dt className="text-ink-300">Budget lines</dt><dd>{state.budget.length}</dd>
@@ -260,7 +260,7 @@ export function Settings() {
       <section className="surface rounded-card border border-risk-high/20 shadow-card p-4">
         <h2 className="display text-xl text-risk-high">Reset everything</h2>
         <p className="text-[13px] text-ink-300 mt-1">
-          Wipes the brief, vendors, guests, designs, seating, day-of, thank-yous, chat, approvals, and ledger.
+          Wipes the dossier, vendors, guests, designs, seating, day-of, thank-yous, chat, approvals, and ledger.
         </p>
         {confirmReset ? (
           <div className="mt-3 flex gap-2">

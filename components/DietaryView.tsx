@@ -139,7 +139,7 @@ export function DietaryView() {
       <PageHeader
         eyebrow="Dietary"
         title="Dietary & allergens"
-        subtitle="Allergens, dietary preferences, menu cross-checks, and the brief your caterer actually needs. Critical entries get separate-prep protocol."
+        subtitle="Allergens, dietary preferences, menu cross-checks, and the dossier your caterer actually needs. Critical entries get separate-prep protocol."
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 stagger">
@@ -169,7 +169,7 @@ export function DietaryView() {
           disabled={!!busy || stats.yes === 0}
           className="rounded-2xl border hairline bg-white/80 hover:bg-white px-4 py-2 text-sm transition-colors disabled:opacity-50"
         >
-          {busy === "brief" ? "Drafting…" : "Send caterer brief"}
+          {busy === "brief" ? "Drafting…" : "Send caterer dossier"}
         </button>
       </div>
 

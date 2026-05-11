@@ -58,7 +58,7 @@ const BANKS: Record<Kind, string[]> = {
     "Thinking about your wedding",
     "Cross-checking your style notes",
     "Pulling threads together",
-    "Reading the brief one more time",
+    "Reading the dossier one more time",
     "Talking with the right specialist",
     "Looking at it the way a planner would",
   ],

@@ -83,7 +83,7 @@ export function BriefForm() {
       {locked && (
         <div className="rounded-card border border-risk-low/20 bg-risk-low/5 px-4 py-3 text-sm flex items-center gap-2 animate-fade-in-soft">
           <span className="text-risk-low">✓</span>
-          <span>Brief locked at {new Date(state.brief!.lockedAt!).toLocaleString()}.</span>
+          <span>Dossier sealed {new Date(state.brief!.lockedAt!).toLocaleString()}.</span>
         </div>
       )}
 
@@ -174,7 +174,7 @@ export function BriefForm() {
           disabled={!!busy}
           className="cta-sage flex-1 rounded-2xl py-3 text-sm font-semibold transition-all disabled:opacity-50"
         >
-          {busy === "lock" ? "Locking…" : locked ? "Re-lock" : "Lock brief"}
+          {busy === "lock" ? "Sealing…" : locked ? "Re-seal" : "Seal the dossier"}
         </button>
       </div>
     </div>

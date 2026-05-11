@@ -96,7 +96,7 @@ export function MusicView() {
             kind: "agent",
             agent: "Cantor",
             title: `${j.state.music.length} cues lined up`,
-            detail: "Edit any slot — the band/DJ brief reflects what's in here.",
+            detail: "Edit any slot — the band/DJ dossier reflects what's in here.",
           });
         }
       }
@@ -164,7 +164,7 @@ export function MusicView() {
               Not yet
             </p>
             <p className="text-[14px] text-ink leading-relaxed">
-              Lock the brief first and Cantor can pull a starting setlist that fits your
+              Seal the dossier first and Cantor can pull a starting setlist that fits your
               tone, headcount, and venue acoustics.
             </p>
           </div>
