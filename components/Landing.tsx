@@ -232,19 +232,10 @@ function HeroPhoto() {
         position: "relative",
         overflow: "hidden",
         background: "#1A1A18",
+        minHeight: "min(100vh, 880px)",
       }}
       className="hero-photo"
     >
-      <style jsx>{`
-        .hero-photo { min-height: min(100vh, 880px); }
-        @media (max-width: 960px) {
-          .hero-photo {
-            min-height: 0 !important;
-            height: 52vh;
-            max-height: 460px;
-          }
-        }
-      `}</style>
       {/* The actual photograph. long candlelit dinner, treated warm */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -351,27 +342,6 @@ function HeroEditorial() {
         gap: 0,
       }}
     >
-      <style jsx>{`
-        @media (max-width: 960px) {
-          .hero-editorial {
-            padding: 36px 24px 32px !important;
-          }
-          .hero-editorial > p:first-of-type { margin-bottom: 18px !important; }
-          .hero-editorial > h1 { font-size: 42px !important; }
-          .hero-editorial > p[class="cat-rise"]:nth-of-type(2) {
-            margin-top: 18px !important;
-            font-size: 16px !important;
-          }
-          .hero-editorial > div[aria-hidden] {
-            margin: 24px 0 22px !important;
-          }
-          .hero-editorial > p:last-of-type {
-            margin-top: 14px !important;
-            font-size: 9.5px !important;
-            letter-spacing: 0.22em !important;
-          }
-        }
-      `}</style>
       {/* Eyebrow */}
       <p
         className="cat-rise"
@@ -489,8 +459,7 @@ function HeroEditorial() {
       </p>
 
       {/* Bottom-right ornamental mark on the column — hidden on mobile
-          where the column is too tight to carry it without crowding the
-          microcopy. */}
+          via the consolidated style block at the end of this component. */}
       <div
         aria-hidden
         className="hero-ornament"
@@ -504,11 +473,6 @@ function HeroEditorial() {
           gap: 8,
         }}
       >
-        <style jsx>{`
-          @media (max-width: 960px) {
-            .hero-ornament { display: none !important; }
-          }
-        `}</style>
         <span
           style={{
             fontFamily: MONO,
@@ -529,6 +493,28 @@ function HeroEditorial() {
           }}
         />
       </div>
+
+      {/* All mobile overrides for the hero editorial column live here in
+          a single style block — SWC trips when multiple `<style jsx>`
+          blocks are nested in deep children. */}
+      <style jsx>{`
+        @media (max-width: 960px) {
+          .hero-photo {
+            min-height: 0 !important;
+            height: 52vh !important;
+            max-height: 460px !important;
+          }
+          .hero-editorial {
+            padding: 36px 24px 32px !important;
+          }
+          .hero-editorial h1 {
+            font-size: 42px !important;
+          }
+          .hero-ornament {
+            display: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -739,11 +725,6 @@ function Trust() {
           "clamp(96px, 16vh, 180px) clamp(28px, 5vw, 80px)",
       }}
     >
-      <style jsx>{`
-        @media (max-width: 960px) {
-          .trust-section { padding: 56px 24px !important; }
-        }
-      `}</style>
       <div
         className="trust-grid"
         style={{
@@ -819,11 +800,6 @@ function Trust() {
             paddingTop: 12,
           }}
         >
-          <style jsx>{`
-            @media (max-width: 960px) {
-              .trust-rows { gap: 22px !important; padding-top: 4px !important; }
-            }
-          `}</style>
           {[
             { label: "Emails", body: "Drafted, queued, awaiting your tap.", d: 220 },
             { label: "Contracts", body: "Reviewed, scored, never signed without you.", d: 340 },
@@ -883,6 +859,13 @@ function Trust() {
           .trust-grid {
             grid-template-columns: 1fr !important;
             gap: 32px !important;
+          }
+          .trust-section {
+            padding: 56px 24px !important;
+          }
+          .trust-rows {
+            gap: 22px !important;
+            padding-top: 4px !important;
           }
         }
       `}</style>
