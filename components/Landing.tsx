@@ -203,7 +203,6 @@ function Hero() {
     <section
       style={{
         position: "relative",
-        minHeight: "100vh",
         display: "grid",
         gridTemplateColumns: "minmax(0, 1.05fr) minmax(0, 1fr)",
         background: IVORY,
@@ -214,9 +213,11 @@ function Hero() {
       <HeroEditorial />
 
       <style jsx>{`
+        .hero-spread { min-height: 100vh; }
         @media (max-width: 960px) {
           .hero-spread {
             grid-template-columns: 1fr !important;
+            min-height: 0 !important;
           }
         }
       `}</style>
@@ -231,10 +232,19 @@ function HeroPhoto() {
         position: "relative",
         overflow: "hidden",
         background: "#1A1A18",
-        minHeight: "min(100vh, 880px)",
       }}
       className="hero-photo"
     >
+      <style jsx>{`
+        .hero-photo { min-height: min(100vh, 880px); }
+        @media (max-width: 960px) {
+          .hero-photo {
+            min-height: 0 !important;
+            height: 52vh;
+            max-height: 460px;
+          }
+        }
+      `}</style>
       {/* The actual photograph. long candlelit dinner, treated warm */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -251,14 +261,15 @@ function HeroPhoto() {
         }}
       />
 
-      {/* Soft warm vignette overlay so type can sit on it later if needed */}
+      {/* Warm vignette + a stronger bottom gradient so the caption + "Issue №01"
+          read cleanly against the photograph on every screen size. */}
       <div
         aria-hidden
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse 80% 70% at 50% 60%, transparent 50%, rgba(20,18,12,0.42) 100%), linear-gradient(160deg, rgba(20,18,12,0.04) 0%, rgba(20,18,12,0.32) 100%)",
+            "linear-gradient(180deg, rgba(20,18,12,0.18) 0%, transparent 22%, transparent 55%, rgba(20,18,12,0.68) 100%), radial-gradient(ellipse 80% 70% at 50% 60%, transparent 50%, rgba(20,18,12,0.30) 100%)",
           pointerEvents: "none",
         }}
       />
@@ -281,7 +292,8 @@ function HeroPhoto() {
             fontSize: 10,
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "rgba(248,246,241,0.66)",
+            color: "rgba(248,246,241,0.92)",
+            textShadow: "0 1px 8px rgba(0,0,0,0.5)",
             marginBottom: 10,
           }}
         >
@@ -294,7 +306,8 @@ function HeroPhoto() {
             fontWeight: 300,
             fontSize: 18,
             lineHeight: 1.45,
-            color: "rgba(248,246,241,0.92)",
+            color: "rgba(248,246,241,1)",
+            textShadow: "0 2px 12px rgba(0,0,0,0.55)",
             margin: 0,
             letterSpacing: "-0.005em",
           }}
@@ -326,6 +339,7 @@ function HeroPhoto() {
 function HeroEditorial() {
   return (
     <div
+      className="hero-editorial"
       style={{
         position: "relative",
         background: IVORY,
@@ -337,6 +351,27 @@ function HeroEditorial() {
         gap: 0,
       }}
     >
+      <style jsx>{`
+        @media (max-width: 960px) {
+          .hero-editorial {
+            padding: 36px 24px 32px !important;
+          }
+          .hero-editorial > p:first-of-type { margin-bottom: 18px !important; }
+          .hero-editorial > h1 { font-size: 42px !important; }
+          .hero-editorial > p[class="cat-rise"]:nth-of-type(2) {
+            margin-top: 18px !important;
+            font-size: 16px !important;
+          }
+          .hero-editorial > div[aria-hidden] {
+            margin: 24px 0 22px !important;
+          }
+          .hero-editorial > p:last-of-type {
+            margin-top: 14px !important;
+            font-size: 9.5px !important;
+            letter-spacing: 0.22em !important;
+          }
+        }
+      `}</style>
       {/* Eyebrow */}
       <p
         className="cat-rise"
@@ -453,9 +488,12 @@ function HeroEditorial() {
         Takes about a minute · No card required
       </p>
 
-      {/* Bottom-right ornamental mark on the column */}
+      {/* Bottom-right ornamental mark on the column — hidden on mobile
+          where the column is too tight to carry it without crowding the
+          microcopy. */}
       <div
         aria-hidden
+        className="hero-ornament"
         style={{
           position: "absolute",
           right: "clamp(28px, 5vw, 80px)",
@@ -466,6 +504,11 @@ function HeroEditorial() {
           gap: 8,
         }}
       >
+        <style jsx>{`
+          @media (max-width: 960px) {
+            .hero-ornament { display: none !important; }
+          }
+        `}</style>
         <span
           style={{
             fontFamily: MONO,
@@ -573,7 +616,7 @@ function HeroAction() {
         />
         <button
           type="submit"
-          disabled={busy || !draft.trim()}
+          disabled={busy}
           aria-label="Begin"
           style={{
             position: "relative",
@@ -591,10 +634,12 @@ function HeroAction() {
             fontWeight: 600,
             border: "none",
             borderRadius: 999,
-            cursor: busy || !draft.trim() ? "not-allowed" : "pointer",
-            opacity: busy || !draft.trim() ? 0.5 : 1,
+            cursor: busy ? "wait" : "pointer",
+            // Stay sage even when the input is empty — the previous 0.5
+            // opacity made the button read as a gray "disabled" blob.
+            opacity: busy ? 0.6 : !draft.trim() ? 0.82 : 1,
             transition:
-              "background 200ms, transform 200ms, box-shadow 200ms",
+              "background 200ms, transform 200ms, box-shadow 200ms, opacity 200ms",
             boxShadow:
               "inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 28px -10px rgba(79,93,68,0.55), 0 3px 8px -2px rgba(110,128,104,0.30)",
             flexShrink: 0,
@@ -686,6 +731,7 @@ function Trust() {
   return (
     <section
       ref={ref}
+      className="trust-section"
       style={{
         background: PAPER,
         borderTop: `1px solid ${HAIRLINE}`,
@@ -693,6 +739,11 @@ function Trust() {
           "clamp(96px, 16vh, 180px) clamp(28px, 5vw, 80px)",
       }}
     >
+      <style jsx>{`
+        @media (max-width: 960px) {
+          .trust-section { padding: 56px 24px !important; }
+        }
+      `}</style>
       <div
         className="trust-grid"
         style={{
@@ -760,6 +811,7 @@ function Trust() {
         </div>
 
         <div
+          className="trust-rows"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -767,6 +819,11 @@ function Trust() {
             paddingTop: 12,
           }}
         >
+          <style jsx>{`
+            @media (max-width: 960px) {
+              .trust-rows { gap: 22px !important; padding-top: 4px !important; }
+            }
+          `}</style>
           {[
             { label: "Emails", body: "Drafted, queued, awaiting your tap.", d: 220 },
             { label: "Contracts", body: "Reviewed, scored, never signed without you.", d: 340 },
@@ -825,7 +882,7 @@ function Trust() {
         @media (max-width: 900px) {
           .trust-grid {
             grid-template-columns: 1fr !important;
-            gap: 56px !important;
+            gap: 32px !important;
           }
         }
       `}</style>
