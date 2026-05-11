@@ -76,6 +76,50 @@ export function Landing() {
         @media (prefers-reduced-motion: reduce) {
           .cat-rise, .cat-fade, .cat-pulse, .cat-pan { animation: none !important; }
         }
+
+        /* =========================================================
+           MOBILE LANDING — strip-down. Photo + headline overlay,
+           one input below, sign-in link. Everything else hidden.
+           Global so it beats styled-jsx scoping. Use !important
+           to overpower inline minHeight/heights on the photo.
+           ========================================================= */
+        @media (max-width: 720px) {
+          /* Hero grid collapses to single column with no min-height */
+          .hero-spread {
+            grid-template-columns: 1fr !important;
+            min-height: 0 !important;
+          }
+          /* Photo capped at ~58vh, never more than ~500px */
+          .hero-photo {
+            min-height: 0 !important;
+            height: 58vh !important;
+            max-height: 500px !important;
+          }
+          /* Show mobile overlay headline on the photo */
+          .hero-photo-mobile-headline {
+            display: block !important;
+          }
+          /* Hide the desktop photo decorations */
+          .hero-figcaption,
+          .hero-est-mark {
+            display: none !important;
+          }
+          /* Tighten the editorial column to JUST the input + sign-in */
+          .hero-editorial {
+            padding: 22px 22px 28px !important;
+            gap: 0 !important;
+          }
+          /* Hide everything in the editorial column except the input */
+          .hero-mobile-hide,
+          .hero-ornament {
+            display: none !important;
+          }
+          /* Sign-in link sits closer below the input on mobile */
+          .hero-editorial form > div:last-child {
+            margin-top: 18px !important;
+            text-align: center !important;
+          }
+        }
       `}</style>
     </div>
   );
@@ -214,12 +258,6 @@ function Hero() {
 
       <style jsx>{`
         .hero-spread { min-height: 100vh; }
-        @media (max-width: 960px) {
-          .hero-spread {
-            grid-template-columns: 1fr !important;
-            min-height: 0 !important;
-          }
-        }
       `}</style>
     </section>
   );
@@ -265,9 +303,10 @@ function HeroPhoto() {
         }}
       />
 
-      {/* Editorial caption. bottom left */}
+      {/* Editorial caption. bottom left. desktop only; mobile shows
+          the headline overlay below instead. */}
       <figcaption
-        className="cat-fade"
+        className="cat-fade hero-figcaption"
         style={{
           position: "absolute",
           left: "clamp(20px, 4vw, 44px)",
@@ -308,8 +347,9 @@ function HeroPhoto() {
         </p>
       </figcaption>
 
-      {/* Top-right tiny mark on the image */}
+      {/* Top-right tiny mark on the image. desktop only. */}
       <span
+        className="hero-est-mark"
         style={{
           position: "absolute",
           top: "clamp(20px, 3vw, 28px)",
@@ -323,6 +363,48 @@ function HeroPhoto() {
       >
         AISLE · est. 2026
       </span>
+
+      {/* MOBILE-ONLY headline overlay at the bottom of the photo. Hidden on
+          desktop (HeroEditorial owns the headline there). Display flipped
+          to block in the global mobile media query. */}
+      <div
+        className="hero-photo-mobile-headline"
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          padding: "0 22px 26px",
+          color: IVORY,
+          display: "none",
+          pointerEvents: "none",
+          zIndex: 2,
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: DISPLAY,
+            fontWeight: 300,
+            fontSize: 40,
+            lineHeight: 1.0,
+            letterSpacing: "-0.022em",
+            margin: 0,
+            color: IVORY,
+            textShadow: "0 2px 18px rgba(0,0,0,0.6)",
+          }}
+        >
+          <span style={{ display: "block" }}>Plan a wedding.</span>
+          <span
+            style={{
+              display: "block",
+              fontStyle: "italic",
+              color: "#D9E1CD",
+            }}
+          >
+            Skip the planning.
+          </span>
+        </h1>
+      </div>
     </div>
   );
 }
@@ -344,7 +426,7 @@ function HeroEditorial() {
     >
       {/* Eyebrow */}
       <p
-        className="cat-rise"
+        className="cat-rise hero-mobile-hide"
         style={{
           fontFamily: MONO,
           fontSize: 11,
@@ -370,9 +452,10 @@ function HeroEditorial() {
         By invitation
       </p>
 
-      {/* Headline. refined scale, fits */}
+      {/* Headline. refined scale, fits. mobile shows headline over the
+          photo instead — this h1 is hidden via .hero-mobile-hide. */}
       <h1
-        className="cat-rise"
+        className="cat-rise hero-mobile-hide"
         style={{
           fontFamily: DISPLAY,
           fontWeight: 300,
@@ -398,7 +481,7 @@ function HeroEditorial() {
 
       {/* Sub-line. single italic, restrained */}
       <p
-        className="cat-rise"
+        className="cat-rise hero-mobile-hide"
         style={{
           fontFamily: DISPLAY,
           fontWeight: 300,
@@ -420,7 +503,7 @@ function HeroEditorial() {
       {/* Hairline rule */}
       <div
         aria-hidden
-        className="cat-fade"
+        className="cat-fade hero-mobile-hide"
         style={{
           height: 1,
           background: HAIRLINE,
@@ -444,7 +527,7 @@ function HeroEditorial() {
 
       {/* Microcopy below action */}
       <p
-        className="cat-fade"
+        className="cat-fade hero-mobile-hide"
         style={{
           fontFamily: MONO,
           fontSize: 10.5,
@@ -494,27 +577,10 @@ function HeroEditorial() {
         />
       </div>
 
-      {/* All mobile overrides for the hero editorial column live here in
-          a single style block — SWC trips when multiple `<style jsx>`
-          blocks are nested in deep children. */}
-      <style jsx>{`
-        @media (max-width: 960px) {
-          .hero-photo {
-            min-height: 0 !important;
-            height: 52vh !important;
-            max-height: 460px !important;
-          }
-          .hero-editorial {
-            padding: 36px 24px 32px !important;
-          }
-          .hero-editorial h1 {
-            font-size: 42px !important;
-          }
-          .hero-ornament {
-            display: none !important;
-          }
-        }
-      `}</style>
+      {/* All mobile overrides live in the GLOBAL style block at the
+          top-level Landing component — scoped <style jsx> didn't
+          consistently win specificity over the inline minHeight on
+          .hero-photo. Global media query handles every mobile case. */}
     </div>
   );
 }
@@ -546,9 +612,10 @@ function HeroAction() {
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); void send(); }}>
-      {/* Field label */}
+      {/* Field label. hidden on mobile — placeholder carries the prompt. */}
       <label
         htmlFor="hero-input"
+        className="hero-mobile-hide"
         style={{
           display: "block",
           fontFamily: MONO,
@@ -578,7 +645,7 @@ function HeroAction() {
           onChange={(e) => setDraft(e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          placeholder="Saturday in October, Hudson Valley, ~120…"
+          placeholder="Tell us about your dream wedding…"
           disabled={busy || !!state?.paused}
           style={{
             flex: 1,
@@ -690,7 +757,7 @@ function HeroAction() {
             e.currentTarget.style.borderColor = HAIRLINE;
           }}
         >
-          Already begun? Sign in
+          Already have an account? Sign in
         </Link>
       </div>
     </form>
