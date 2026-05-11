@@ -79,11 +79,20 @@ export function Landing() {
 
         /* =========================================================
            MOBILE LANDING — strip-down. Photo + headline overlay,
-           one input below, sign-in link. Everything else hidden.
-           Global so it beats styled-jsx scoping. Use !important
-           to overpower inline minHeight/heights on the photo.
+           one input below, sign-in link. EVERYTHING ELSE pushed
+           below ~100vh of whitespace so the first two scrolls feel
+           like an App Store hero page, not a magazine article.
+           Global so it beats styled-jsx scoping. !important to
+           overpower inline styles.
            ========================================================= */
         @media (max-width: 720px) {
+          /* Header: kill the SIGN IN + BEGIN nav. Just the "aisle"
+             mark in the top-left. One action — the input below —
+             is enough. */
+          .header-nav {
+            display: none !important;
+          }
+
           /* Hero grid collapses to single column with no min-height */
           .hero-spread {
             grid-template-columns: 1fr !important;
@@ -104,9 +113,11 @@ export function Landing() {
           .hero-est-mark {
             display: none !important;
           }
-          /* Tighten the editorial column to JUST the input + sign-in */
+          /* Tighten the editorial column to JUST the input + sign-in.
+             padding-bottom is huge (60vh) so the next section sits
+             well below the fold. */
           .hero-editorial {
-            padding: 22px 22px 28px !important;
+            padding: 22px 22px 60vh !important;
             gap: 0 !important;
           }
           /* Hide everything in the editorial column except the input */
@@ -114,10 +125,18 @@ export function Landing() {
           .hero-ornament {
             display: none !important;
           }
-          /* Sign-in link sits closer below the input on mobile */
+          /* Sign-in link centered + close beneath the input */
           .hero-editorial form > div:last-child {
-            margin-top: 18px !important;
+            margin-top: 22px !important;
             text-align: center !important;
+          }
+          /* Trust / "OUR PROMISE" section starts way below the fold.
+             Combined with the 60vh padding-bottom on .hero-editorial,
+             the user scrolls past ~150vh of whitespace before any
+             of the product copy appears. */
+          .trust-section {
+            margin-top: 40vh !important;
+            padding-top: 0 !important;
           }
         }
       `}</style>
@@ -184,6 +203,7 @@ function Header() {
         </Link>
 
         <nav
+          className="header-nav"
           style={{
             display: "flex",
             alignItems: "center",
