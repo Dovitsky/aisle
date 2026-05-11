@@ -33,7 +33,7 @@ Output JSON only:
 Constraints: no orange/teal/gen-z palettes. No "boho" — that word is exhausted. Palettes should look like adults could live in them.`;
 
 export async function designerDirections(brief: Brief): Promise<MoodDirection[]> {
-  if (!hasApiKey()) return offline();
+  if (!hasApiKey()) return offline(brief);
   const prompt = `Brief vibe: ${brief.vibe}
 Region: ${brief.region}
 Date window: ${brief.dateWindow}
@@ -41,7 +41,7 @@ Guest count: ${brief.guestCount}
 
 Produce six directions now.`;
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 2500,
     system: SYSTEM,
     messages: [{ role: "user", content: prompt }],
@@ -56,7 +56,7 @@ Produce six directions now.`;
     const dirs = (parsed?.directions ?? []) as unknown[];
     return dirs.slice(0, 6).map(coerce).filter(Boolean) as MoodDirection[];
   } catch {
-    return offline();
+    return offline(brief);
   }
 }
 
@@ -72,4 +72,51 @@ function coerce(raw: unknown): MoodDirection | null {
   };
 }
 
-function offline(..._: unknown[]): { title: string; description: string; palette: string[]; refs: string[] }[] { return []; }
+// Offline mood directions — three taste-distinct palettes derived from the
+// brief's vibe text. Lets /design and the dashboard cards populate without
+// an API key. Each direction is a real-feeling design route, not a stub.
+function offline(brief: Brief): MoodDirection[] {
+  const v = (brief.vibe || "").toLowerCase();
+  const region = brief.region || "your region";
+  const isMoody = /candlelit|moody|editorial|dark|deep|jewel|black\s*tie|noir/.test(v);
+  const isCoastal = /coast|sea|cliff|beach|amalfi|sand|salt/.test(v);
+  const isGarden = /garden|botanical|wildflower|field|barn|farm|rustic/.test(v);
+  return [
+    {
+      title: isMoody ? "Candlelit Editorial" : isCoastal ? "Sun-Bleached Linen" : "Heirloom Garden",
+      description: isMoody
+        ? `Dark wood, deep oxblood florals, ivory taper candles in clusters, vintage silver. Slow film photography. The room reads like a painting.`
+        : isCoastal
+        ? `Pale linen, weathered terracotta, dried grasses, oyster-shell accents. Open-air ceremony into a long communal dinner. Mediterranean restraint.`
+        : `Cream and sage, bud vases of cosmos and ranunculus, beeswax tapers, white-painted chairs, grass underfoot. Photographs feel like a memory you almost have.`,
+      palette: isMoody
+        ? ["#1A1814", "#5B1A1A", "#7C5E3A", "#FBF8F1", "#A88E6A"]
+        : isCoastal
+        ? ["#F5EFDF", "#C9967A", "#7C8A6E", "#1A2A2E", "#E8DCC4"]
+        : ["#FAF7EE", "#C8D2BB", "#8F9B7F", "#5B5034", "#E2D9C4"],
+      refs: isMoody
+        ? ["clustered ivory tapers", "oxblood ranunculus", "vintage silver flatware", "raw walnut tabletops"]
+        : isCoastal
+        ? ["sun-bleached oak chairs", "terracotta urns", "dried grass garlands", "open-air olive groves"]
+        : ["cosmos in bud vases", "beeswax tapers", "white painted chairs", "linen napkins three tones"],
+    },
+    {
+      title: isGarden ? "Wildflower Field & Linen" : "Modern Minimal",
+      description: isGarden
+        ? `Loose, organic florals — cosmos, queen anne's lace, dahlias direct from local farms. Long farmhouse tables, mismatched cane chairs, linen napkins in three soft tones. Unfussy, abundant.`
+        : `Architectural floral installs, no centerpieces; sculptural taper candles; brushed-brass flatware; ivory linen with no overlay. Reception lit from above. ${region} feels reset.`,
+      palette: isGarden
+        ? ["#E8E5D8", "#D5BFA0", "#A88E6A", "#525443", "#FAF6E9"]
+        : ["#F8F6F1", "#D6CFC2", "#3F3D38", "#1A1814", "#B5AB9A"],
+      refs: isGarden
+        ? ["farmhouse long tables", "cane chairs mismatched", "queen anne's lace", "linen in three tones"]
+        : ["overhead floral install", "sculptural taper candles", "brushed-brass flatware", "ivory linen no overlay"],
+    },
+    {
+      title: "Soft Romantic",
+      description: `Pale blush and butter, soft pinks, garden roses with trailing greenery. Beeswax candles, gold-rim glassware, hand-calligraphed place cards. Reads warm in photos. Pairs well with sunset ceremonies.`,
+      palette: ["#FCF4ED", "#F1D6C9", "#E0AC8A", "#9C7B57", "#5C4B36"],
+      refs: ["garden roses + trailing greenery", "beeswax candles", "gold-rim glassware", "hand-calligraphed place cards"],
+    },
+  ];
+}

@@ -9,6 +9,7 @@
 
 import { google, gmail_v1 } from "googleapis";
 import type { OAuth2Client } from "google-auth-library";
+import { getGoogleOAuthConfig, hasGoogleOAuthAsync } from "./credentials";
 
 export const GMAIL_SCOPES = [
   "https://www.googleapis.com/auth/gmail.readonly",
@@ -17,23 +18,27 @@ export const GMAIL_SCOPES = [
   "https://www.googleapis.com/auth/userinfo.email",
 ];
 
+// Sync check that only looks at process.env. Use hasGoogleOAuthAsync to also
+// consult the runtime credentials file (preferred path for new callers).
 export function hasGoogleOAuth(): boolean {
   return !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 }
 
-export function oauthClient(): OAuth2Client {
-  if (!hasGoogleOAuth()) {
-    throw new Error("Google OAuth not configured. Set GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GOOGLE_REDIRECT_URI in .env.local.");
+export { hasGoogleOAuthAsync };
+
+export async function oauthClient(): Promise<OAuth2Client> {
+  const cfg = await getGoogleOAuthConfig();
+  if (!cfg) {
+    throw new Error(
+      "Google OAuth not configured. Paste your client ID + secret in Settings → Integrations, or set GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET in .env.local.",
+    );
   }
-  return new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI ?? "http://localhost:3000/api/gmail/callback",
-  );
+  return new google.auth.OAuth2(cfg.clientId, cfg.clientSecret, cfg.redirectUri);
 }
 
-export function consentUrl(state: string): string {
-  return oauthClient().generateAuthUrl({
+export async function consentUrl(state: string): Promise<string> {
+  const client = await oauthClient();
+  return client.generateAuthUrl({
     access_type: "offline",
     prompt: "consent",
     scope: GMAIL_SCOPES,
@@ -48,7 +53,7 @@ export async function exchangeCode(code: string): Promise<{
   scopes: string[];
   email: string;
 }> {
-  const client = oauthClient();
+  const client = await oauthClient();
   const { tokens } = await client.getToken(code);
   if (!tokens.access_token || !tokens.refresh_token) {
     throw new Error("Did not receive both access and refresh tokens. Re-run consent with prompt=consent.");
@@ -74,8 +79,8 @@ export interface GmailTokens {
   expiresAt: Date;
 }
 
-export function authedGmail(tokens: GmailTokens): gmail_v1.Gmail {
-  const client = oauthClient();
+export async function authedGmail(tokens: GmailTokens): Promise<gmail_v1.Gmail> {
+  const client = await oauthClient();
   client.setCredentials({
     access_token: tokens.accessToken,
     refresh_token: tokens.refreshToken,
@@ -93,7 +98,7 @@ export async function listMessages(
   query: string,
   max = 50,
 ): Promise<gmail_v1.Schema$Message[]> {
-  const gmail = authedGmail(tokens);
+  const gmail = await authedGmail(tokens);
   const res = await gmail.users.messages.list({
     userId: "me",
     q: query,
@@ -115,7 +120,7 @@ export interface ParsedMessage {
 }
 
 export async function getMessage(tokens: GmailTokens, id: string): Promise<ParsedMessage | null> {
-  const gmail = authedGmail(tokens);
+  const gmail = await authedGmail(tokens);
   const res = await gmail.users.messages.get({ userId: "me", id, format: "full" });
   const m = res.data;
   if (!m) return null;
@@ -170,7 +175,7 @@ export async function sendEmail(
   tokens: GmailTokens,
   args: { to: string; subject: string; body: string; threadId?: string; inReplyTo?: string },
 ): Promise<{ id: string; threadId: string }> {
-  const gmail = authedGmail(tokens);
+  const gmail = await authedGmail(tokens);
   const messageLines = [
     `To: ${args.to}`,
     `Subject: ${args.subject}`,

@@ -57,4 +57,22 @@ Compose the welcome bag now.`;
   }
 }
 
-function offline(..._: unknown[]): WelcomeBagItem[] { return []; }
+function offline(brief: Brief): WelcomeBagItem[] {
+  const region = (brief.region || "").toLowerCase();
+  const isCoastal = /coast|sea|beach|amalfi|charleston/.test(region);
+  const isWine = /napa|tuscany|hudson|sonoma/.test(region);
+  const id = () => Math.random().toString(36).slice(2, 10);
+  const items: WelcomeBagItem[] = [
+    { id: id(), item: "Hand-illustrated weekend itinerary card",          unitCostUsd: 3,  rationale: "Sets expectations and reduces texts-to-host volume." },
+    { id: id(), item: "Custom bottled water with monogram label",         unitCostUsd: 2,  rationale: "Hydration is the single highest-impact welcome-bag item." },
+    { id: id(), item: "Locally-roasted single-origin coffee, 4oz",        unitCostUsd: 8,  rationale: isWine ? "Regional roaster — supports local economy." : "Boutique coffee for in-room brewing." },
+    { id: id(), item: "Artisan granola bars (2 ea)",                      unitCostUsd: 4,  rationale: "Day-of fuel during the morning timeline gap." },
+    { id: id(), item: "Local chocolate or sweet specialty",               unitCostUsd: 6,  rationale: isCoastal ? "Salt-water taffy or local fudge." : "Regional confectioner." },
+    { id: id(), item: "Hangover kit (electrolytes + ibuprofen + mint)",   unitCostUsd: 5,  rationale: "Quietly indispensable; guests notice." },
+    { id: id(), item: "Lavender / chamomile sleep sachet",                unitCostUsd: 3,  rationale: "For unfamiliar hotel rooms; subtle hospitality signal." },
+    { id: id(), item: "Reusable cotton tote, undyed",                     unitCostUsd: 4,  rationale: "Carries the bag itself, then becomes the weekend tote." },
+    { id: id(), item: "Hand-drawn neighborhood map",                      unitCostUsd: 2,  rationale: "Coffee, breakfast, walking trails near the hotel." },
+    { id: id(), item: "Curated playlist QR code card",                    unitCostUsd: 1,  rationale: "Pre-event mood; mirrors the wedding setlist." },
+  ];
+  return items;
+}

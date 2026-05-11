@@ -261,7 +261,7 @@ Always reference guests and tables by their literal id (uppercase or lowercase a
 Conservative defaults: when in doubt, prefer "soft_affinity" over "strong_affinity" and "soft" over "hard".`;
 
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 1500,
     system: SYSTEM,
     messages: [{ role: "user", content: prompt }],

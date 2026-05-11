@@ -1,18 +1,18 @@
 // Step 1 of OAuth: redirect the user to Google's consent screen.
 
 import { NextResponse } from "next/server";
-import { consentUrl, hasGoogleOAuth } from "@/lib/gmail/client";
+import { consentUrl, hasGoogleOAuthAsync } from "@/lib/gmail/client";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  if (!hasGoogleOAuth()) {
+  if (!(await hasGoogleOAuthAsync())) {
     return NextResponse.json({
-      error: "GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET not set. Add them to .env.local + restart dev.",
+      error: "Gmail isn't set up yet. Open Settings → Integrations and paste your Google OAuth client ID and secret.",
     }, { status: 412 });
   }
   // CSRF state — simple random; in real builds tie to session.
   const state = Math.random().toString(36).slice(2, 14);
-  const url = consentUrl(state);
+  const url = await consentUrl(state);
   return NextResponse.redirect(url);
 }

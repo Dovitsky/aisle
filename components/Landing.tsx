@@ -1,0 +1,1298 @@
+"use client";
+
+// Landing. THE CATALOG.
+//
+// A magazine spread, not a typography poster. Asymmetric two-column:
+// full-bleed wedding photograph on the left, ivory editorial column on
+// the right with restrained type and one unmistakable CTA. Below the
+// fold, a single trust monument and a product moment showing the
+// decision card on cream so the user actually sees what AISLE does.
+//
+// Aesthetic: refined editorial. Cream / ink / sage. No tan-warm SaaS
+// background; no obsidian poster. Photography carries the mood.
+
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { useProject } from "./StateProvider";
+import type { ProjectState } from "@/lib/types";
+import { Spinner } from "./Pending";
+
+// =====================================================================
+// COLOR + TYPE TOKENS. kept local so this page can carry its own
+// editorial identity without leaking into the dashboard.
+// =====================================================================
+const IVORY = "#F8F6F1";
+const PAPER = "#FFFFFF";
+const INK = "#0E0F0D";
+const INK_MUTED = "#5A5C57";
+const INK_FAINT = "#9A9C97";
+const SAGE = "#6E8068";
+const SAGE_DEEP = "#4F5D44";
+const SAGE_DARK = "#2F3A29";
+const SAGE_PALE = "#E2E6DC";
+const HAIRLINE = "#E5E2D8";
+// Canonical primary-CTA gradient. Matches `.cta-sage` in globals.css so
+// Landing's editorial buttons feel like the rest of the app.
+const CTA_BG = `linear-gradient(135deg, ${SAGE} 0%, ${SAGE_DEEP} 100%)`;
+const CTA_BG_HOVER = `linear-gradient(135deg, ${SAGE_DEEP} 0%, ${SAGE_DARK} 100%)`;
+
+const DISPLAY = '"Cormorant Garamond","Cormorant",Georgia,serif';
+const MONO = '"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace';
+
+export function Landing() {
+  return (
+    <div
+      style={{
+        background: IVORY,
+        color: INK,
+        minHeight: "100vh",
+        width: "100%",
+      }}
+    >
+      <Header />
+      <Hero />
+      <Trust />
+      <ProductMoment />
+      <Footer />
+
+      {/* Page-load orchestration. one-time stagger */}
+      <style jsx global>{`
+        @keyframes cat-rise {
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cat-fade {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes cat-pulse {
+          0%, 100% { opacity: 0.85; transform: scale(1); }
+          50%      { opacity: 0.45; transform: scale(0.85); }
+        }
+        @keyframes cat-pan {
+          from { transform: scale(1.05) translateX(0); }
+          to   { transform: scale(1.10) translateX(-1.5%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cat-rise, .cat-fade, .cat-pulse, .cat-pan { animation: none !important; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// =====================================================================
+// HEADER
+// =====================================================================
+
+function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <header
+      className="cat-fade"
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 30,
+        background: scrolled ? "rgba(248,246,241,0.86)" : "transparent",
+        backdropFilter: scrolled ? "saturate(160%) blur(16px)" : undefined,
+        WebkitBackdropFilter: scrolled ? "saturate(160%) blur(16px)" : undefined,
+        borderBottom: scrolled
+          ? `1px solid ${HAIRLINE}`
+          : "1px solid transparent",
+        transition: "background 220ms, border-color 220ms",
+        animation: "cat-fade 600ms ease-out both",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1440,
+          margin: "0 auto",
+          padding: "22px clamp(20px, 4vw, 40px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 16,
+        }}
+      >
+        <Link
+          href="/"
+          style={{
+            fontFamily: DISPLAY,
+            fontStyle: "italic",
+            fontWeight: 400,
+            fontSize: 24,
+            lineHeight: 1,
+            letterSpacing: "-0.01em",
+            color: INK,
+            textDecoration: "none",
+          }}
+        >
+          aisle
+        </Link>
+
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 28,
+          }}
+        >
+          <Link
+            href="/login"
+            style={{
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: INK_FAINT,
+              textDecoration: "none",
+              transition: "color 200ms",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = INK)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = INK_FAINT)}
+          >
+            Sign in
+          </Link>
+          <Link
+            href="#begin"
+            style={{
+              padding: "10px 20px",
+              borderRadius: 999,
+              background: CTA_BG,
+              color: IVORY,
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              textDecoration: "none",
+              transition: "background 200ms, transform 200ms",
+              boxShadow:
+                "inset 0 1px 0 rgba(255,255,255,0.20), 0 10px 22px -10px rgba(79,93,68,0.45)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = CTA_BG_HOVER;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = CTA_BG;
+            }}
+          >
+            Begin
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+// =====================================================================
+// HERO. full-height catalog spread
+// =====================================================================
+
+function Hero() {
+  return (
+    <section
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1.05fr) minmax(0, 1fr)",
+        background: IVORY,
+      }}
+      className="hero-spread"
+    >
+      <HeroPhoto />
+      <HeroEditorial />
+
+      <style jsx>{`
+        @media (max-width: 960px) {
+          .hero-spread {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function HeroPhoto() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        background: "#1A1A18",
+        minHeight: "min(100vh, 880px)",
+      }}
+      className="hero-photo"
+    >
+      {/* The actual photograph. long candlelit dinner, treated warm */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80"
+        alt="A long candlelit wedding table at golden hour"
+        loading="eager"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          animation: "cat-pan 22s ease-in-out alternate infinite",
+        }}
+      />
+
+      {/* Soft warm vignette overlay so type can sit on it later if needed */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse 80% 70% at 50% 60%, transparent 50%, rgba(20,18,12,0.42) 100%), linear-gradient(160deg, rgba(20,18,12,0.04) 0%, rgba(20,18,12,0.32) 100%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Editorial caption. bottom left */}
+      <figcaption
+        className="cat-fade"
+        style={{
+          position: "absolute",
+          left: "clamp(20px, 4vw, 44px)",
+          bottom: "clamp(20px, 4vw, 36px)",
+          color: IVORY,
+          maxWidth: 360,
+          animation: "cat-fade 1200ms 700ms ease-out both",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: MONO,
+            fontSize: 10,
+            letterSpacing: "0.32em",
+            textTransform: "uppercase",
+            color: "rgba(248,246,241,0.66)",
+            marginBottom: 10,
+          }}
+        >
+          Issue №01 · Spring
+        </div>
+        <p
+          style={{
+            fontFamily: DISPLAY,
+            fontStyle: "italic",
+            fontWeight: 300,
+            fontSize: 18,
+            lineHeight: 1.45,
+            color: "rgba(248,246,241,0.92)",
+            margin: 0,
+            letterSpacing: "-0.005em",
+          }}
+        >
+          Val d&apos;Orcia, April. A hundred and twenty around one table, the
+          last olive light, then candles.
+        </p>
+      </figcaption>
+
+      {/* Top-right tiny mark on the image */}
+      <span
+        style={{
+          position: "absolute",
+          top: "clamp(20px, 3vw, 28px)",
+          right: "clamp(20px, 3vw, 28px)",
+          fontFamily: MONO,
+          fontSize: 10,
+          letterSpacing: "0.30em",
+          textTransform: "uppercase",
+          color: "rgba(248,246,241,0.55)",
+        }}
+      >
+        AISLE · est. 2026
+      </span>
+    </div>
+  );
+}
+
+function HeroEditorial() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        background: IVORY,
+        padding:
+          "clamp(120px, 14vh, 160px) clamp(28px, 5vw, 80px) clamp(48px, 8vh, 96px)",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        gap: 0,
+      }}
+    >
+      {/* Eyebrow */}
+      <p
+        className="cat-rise"
+        style={{
+          fontFamily: MONO,
+          fontSize: 11,
+          letterSpacing: "0.32em",
+          textTransform: "uppercase",
+          color: SAGE_DEEP,
+          margin: 0,
+          marginBottom: 28,
+          animation: "cat-rise 700ms 100ms ease-out both",
+        }}
+      >
+        <span
+          aria-hidden
+          style={{
+            display: "inline-block",
+            width: 32,
+            height: 1,
+            background: SAGE,
+            marginRight: 14,
+            verticalAlign: "middle",
+          }}
+        />
+        By invitation
+      </p>
+
+      {/* Headline. refined scale, fits */}
+      <h1
+        className="cat-rise"
+        style={{
+          fontFamily: DISPLAY,
+          fontWeight: 300,
+          fontSize: "clamp(44px, 5.4vw, 78px)",
+          lineHeight: 1.0,
+          letterSpacing: "-0.022em",
+          color: INK,
+          margin: 0,
+          animation: "cat-rise 800ms 200ms ease-out both",
+        }}
+      >
+        <span style={{ display: "block" }}>Plan a wedding.</span>
+        <span
+          style={{
+            display: "block",
+            fontStyle: "italic",
+            color: SAGE_DEEP,
+          }}
+        >
+          Skip the planning.
+        </span>
+      </h1>
+
+      {/* Sub-line. single italic, restrained */}
+      <p
+        className="cat-rise"
+        style={{
+          fontFamily: DISPLAY,
+          fontWeight: 300,
+          fontSize: "clamp(16px, 1.5vw, 19px)",
+          lineHeight: 1.5,
+          color: INK_MUTED,
+          margin: "32px 0 0",
+          maxWidth: 460,
+          letterSpacing: "-0.005em",
+          animation: "cat-rise 800ms 320ms ease-out both",
+        }}
+      >
+        <span style={{ color: INK, fontStyle: "italic" }}>
+          You decide what matters.
+        </span>{" "}
+        We handle everything else.
+      </p>
+
+      {/* Hairline rule */}
+      <div
+        aria-hidden
+        className="cat-fade"
+        style={{
+          height: 1,
+          background: HAIRLINE,
+          margin: "44px 0 36px",
+          maxWidth: 460,
+          animation: "cat-fade 800ms 460ms ease-out both",
+        }}
+      />
+
+      {/* The action. single decisive composition */}
+      <div
+        id="begin"
+        className="cat-rise"
+        style={{
+          maxWidth: 460,
+          animation: "cat-rise 900ms 540ms ease-out both",
+        }}
+      >
+        <HeroAction />
+      </div>
+
+      {/* Microcopy below action */}
+      <p
+        className="cat-fade"
+        style={{
+          fontFamily: MONO,
+          fontSize: 10.5,
+          letterSpacing: "0.24em",
+          textTransform: "uppercase",
+          color: INK_FAINT,
+          margin: "20px 0 0",
+          animation: "cat-fade 900ms 740ms ease-out both",
+        }}
+      >
+        Takes about a minute · No card required
+      </p>
+
+      {/* Bottom-right ornamental mark on the column */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          right: "clamp(28px, 5vw, 80px)",
+          bottom: "clamp(36px, 6vh, 56px)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: 8,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: MONO,
+            fontSize: 10,
+            letterSpacing: "0.30em",
+            textTransform: "uppercase",
+            color: INK_FAINT,
+          }}
+        >
+          № 01
+        </span>
+        <span
+          style={{
+            display: "block",
+            width: 60,
+            height: 1,
+            background: HAIRLINE,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function HeroAction() {
+  const { setChatOpen, setState, state } = useProject();
+  const [draft, setDraft] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [focused, setFocused] = useState(false);
+
+  const send = async () => {
+    const m = draft.trim();
+    if (!m) return;
+    setBusy(true);
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: m }),
+      });
+      const j = (await r.json()) as { state?: ProjectState };
+      if (j.state) setState(j.state);
+      setChatOpen(true);
+      setDraft("");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); void send(); }}>
+      {/* Field label */}
+      <label
+        htmlFor="hero-input"
+        style={{
+          display: "block",
+          fontFamily: MONO,
+          fontSize: 10.5,
+          letterSpacing: "0.26em",
+          textTransform: "uppercase",
+          color: INK_FAINT,
+          marginBottom: 12,
+        }}
+      >
+        Tell us when, where, who
+      </label>
+
+      {/* Input row. refined: input on top, button below at full width */}
+      <div
+        style={{
+          display: "flex",
+          gap: 10,
+          alignItems: "stretch",
+        }}
+        className="hero-action-row"
+      >
+        <input
+          id="hero-input"
+          type="text"
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder="Saturday in October, Hudson Valley, ~120…"
+          disabled={busy || !!state?.paused}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            fontFamily: DISPLAY,
+            fontWeight: 400,
+            fontStyle: "italic",
+            fontSize: 17,
+            color: INK,
+            background: PAPER,
+            border: `1px solid ${focused ? SAGE : HAIRLINE}`,
+            borderRadius: 999,
+            outline: "none",
+            padding: "16px 22px",
+            transition: "border-color 200ms, box-shadow 200ms",
+            boxShadow: focused
+              ? `0 0 0 4px ${SAGE_PALE}`
+              : "0 1px 2px rgba(14,15,13,0.04)",
+            letterSpacing: "-0.005em",
+          }}
+        />
+        <button
+          type="submit"
+          disabled={busy || !draft.trim()}
+          aria-label="Begin"
+          style={{
+            position: "relative",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            padding: "0 26px",
+            background: CTA_BG,
+            color: IVORY,
+            fontFamily: MONO,
+            fontSize: 11,
+            letterSpacing: "0.26em",
+            textTransform: "uppercase",
+            fontWeight: 600,
+            border: "none",
+            borderRadius: 999,
+            cursor: busy || !draft.trim() ? "not-allowed" : "pointer",
+            opacity: busy || !draft.trim() ? 0.5 : 1,
+            transition:
+              "background 200ms, transform 200ms, box-shadow 200ms",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 28px -10px rgba(79,93,68,0.55), 0 3px 8px -2px rgba(110,128,104,0.30)",
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => {
+            if (!busy && draft.trim()) {
+              e.currentTarget.style.background = CTA_BG_HOVER;
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = CTA_BG;
+            e.currentTarget.style.transform = "translateY(0)";
+          }}
+        >
+          {busy ? (
+            <>
+              <Spinner size={13} tone="paper" />
+              <span>Going</span>
+            </>
+          ) : (
+            <>
+              <span>Begin</span>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Tertiary fallback */}
+      <div style={{ marginTop: 14 }}>
+        <Link
+          href="/login"
+          style={{
+            fontFamily: DISPLAY,
+            fontStyle: "italic",
+            fontSize: 14,
+            color: INK_FAINT,
+            textDecoration: "none",
+            borderBottom: `1px solid ${HAIRLINE}`,
+            paddingBottom: 1,
+            transition: "color 200ms, border-color 200ms",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = INK;
+            e.currentTarget.style.borderColor = INK_MUTED;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = INK_FAINT;
+            e.currentTarget.style.borderColor = HAIRLINE;
+          }}
+        >
+          Already begun? Sign in
+        </Link>
+      </div>
+    </form>
+  );
+}
+
+// =====================================================================
+// TRUST. single monumental statement, three columns of consequence
+// =====================================================================
+
+function Trust() {
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(
+      ([e]) => e.isIntersecting && setVisible(true),
+      { threshold: 0.18 },
+    );
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={ref}
+      style={{
+        background: PAPER,
+        borderTop: `1px solid ${HAIRLINE}`,
+        padding:
+          "clamp(96px, 16vh, 180px) clamp(28px, 5vw, 80px)",
+      }}
+    >
+      <div
+        className="trust-grid"
+        style={{
+          maxWidth: 1240,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)",
+          gap: "clamp(48px, 8vw, 112px)",
+          alignItems: "start",
+        }}
+      >
+        <div>
+          <p
+            style={{
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.32em",
+              textTransform: "uppercase",
+              color: SAGE_DEEP,
+              margin: 0,
+              marginBottom: 22,
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(8px)",
+              transition: "opacity 600ms, transform 600ms",
+            }}
+          >
+            <span
+              aria-hidden
+              style={{
+                display: "inline-block",
+                width: 32,
+                height: 1,
+                background: SAGE,
+                marginRight: 14,
+                verticalAlign: "middle",
+              }}
+            />
+            Our promise
+          </p>
+          <h2
+            style={{
+              fontFamily: DISPLAY,
+              fontWeight: 300,
+              fontSize: "clamp(36px, 5vw, 68px)",
+              lineHeight: 1.05,
+              letterSpacing: "-0.02em",
+              color: INK,
+              margin: 0,
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 800ms 120ms, transform 800ms 120ms",
+            }}
+          >
+            <span style={{ display: "block" }}>We never send, sign,</span>
+            <span
+              style={{
+                display: "block",
+                fontStyle: "italic",
+                color: SAGE_DEEP,
+              }}
+            >
+              or spend without you.
+            </span>
+          </h2>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 36,
+            paddingTop: 12,
+          }}
+        >
+          {[
+            { label: "Emails", body: "Drafted, queued, awaiting your tap.", d: 220 },
+            { label: "Contracts", body: "Reviewed, scored, never signed without you.", d: 340 },
+            { label: "Payments", body: "Scheduled, never sent without your nod.", d: 460 },
+          ].map((c) => (
+            <div
+              key={c.label}
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(14px)",
+                transition: `opacity 700ms ${c.d}ms, transform 700ms ${c.d}ms`,
+              }}
+            >
+              <span
+                aria-hidden
+                style={{
+                  display: "block",
+                  width: 32,
+                  height: 1,
+                  background: SAGE,
+                  marginBottom: 14,
+                }}
+              />
+              <p
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 10.5,
+                  letterSpacing: "0.26em",
+                  textTransform: "uppercase",
+                  color: INK_FAINT,
+                  margin: 0,
+                  marginBottom: 8,
+                }}
+              >
+                {c.label}
+              </p>
+              <p
+                style={{
+                  fontFamily: DISPLAY,
+                  fontWeight: 300,
+                  fontSize: 22,
+                  lineHeight: 1.3,
+                  color: INK,
+                  margin: 0,
+                  letterSpacing: "-0.005em",
+                }}
+              >
+                {c.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 900px) {
+          .trust-grid {
+            grid-template-columns: 1fr !important;
+            gap: 56px !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+// =====================================================================
+// PRODUCT MOMENT. show the actual decision card on cream so the user
+// sees what AISLE actually does.
+// =====================================================================
+
+function ProductMoment() {
+  return (
+    <section
+      style={{
+        background: IVORY,
+        padding: "clamp(96px, 16vh, 180px) clamp(28px, 5vw, 80px)",
+        position: "relative",
+      }}
+    >
+      <div
+        className="moment-grid"
+        style={{
+          maxWidth: 1240,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1.1fr)",
+          gap: "clamp(48px, 7vw, 96px)",
+          alignItems: "center",
+        }}
+      >
+        {/* Left. copy */}
+        <div>
+          <p
+            style={{
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.32em",
+              textTransform: "uppercase",
+              color: SAGE_DEEP,
+              margin: 0,
+              marginBottom: 22,
+            }}
+          >
+            <span
+              aria-hidden
+              style={{
+                display: "inline-block",
+                width: 32,
+                height: 1,
+                background: SAGE,
+                marginRight: 14,
+                verticalAlign: "middle",
+              }}
+            />
+            How it works
+          </p>
+          <h2
+            style={{
+              fontFamily: DISPLAY,
+              fontWeight: 300,
+              fontSize: "clamp(34px, 4.4vw, 56px)",
+              lineHeight: 1.05,
+              letterSpacing: "-0.02em",
+              color: INK,
+              margin: 0,
+            }}
+          >
+            <span style={{ display: "block" }}>We draft.</span>
+            <span
+              style={{
+                display: "block",
+                fontStyle: "italic",
+                color: SAGE_DEEP,
+              }}
+            >
+              You decide.
+            </span>
+          </h2>
+          <p
+            style={{
+              fontFamily: DISPLAY,
+              fontWeight: 300,
+              fontStyle: "italic",
+              fontSize: 19,
+              lineHeight: 1.55,
+              color: INK_MUTED,
+              maxWidth: 480,
+              margin: "28px 0 0",
+              letterSpacing: "-0.005em",
+            }}
+          >
+            Every email, contract, and payment lands here as a card. Approve, edit, or pass. One tap.
+          </p>
+        </div>
+
+        {/* Right. the actual decision card */}
+        <DecisionCard />
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 900px) {
+          .moment-grid {
+            grid-template-columns: 1fr !important;
+            gap: 48px !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function DecisionCard() {
+  return (
+    <div style={{ position: "relative", width: "100%", maxWidth: 520, justifySelf: "center" }}>
+      {/* Stacked card behind for depth */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: -16,
+          background: PAPER,
+          borderRadius: 28,
+          border: `1px solid ${HAIRLINE}`,
+          opacity: 0.5,
+          transform: "rotate(-1.4deg) translateY(20px)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Live card */}
+      <article
+        style={{
+          position: "relative",
+          background: PAPER,
+          borderRadius: 28,
+          border: `1px solid ${HAIRLINE}`,
+          padding: 28,
+          boxShadow:
+            "0 30px 60px -28px rgba(14,15,13,0.18), 0 8px 22px -8px rgba(110,128,104,0.12)",
+          zIndex: 1,
+        }}
+      >
+        {/* Top row */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+            gap: 12,
+            marginBottom: 18,
+          }}
+        >
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              fontFamily: MONO,
+              fontSize: 10.5,
+              letterSpacing: "0.26em",
+              textTransform: "uppercase",
+              color: INK_FAINT,
+            }}
+          >
+            <span
+              aria-hidden
+              style={{
+                display: "inline-block",
+                width: 6,
+                height: 6,
+                borderRadius: 999,
+                background: SAGE,
+                animation: "cat-pulse 2s ease-in-out infinite",
+              }}
+            />
+            Today · 8:42 AM
+          </span>
+          <span
+            style={{
+              fontFamily: MONO,
+              fontSize: 10.5,
+              letterSpacing: "0.26em",
+              textTransform: "uppercase",
+              color: SAGE_DEEP,
+            }}
+          >
+            Worth a look
+          </span>
+        </div>
+
+        {/* Headline */}
+        <h3
+          style={{
+            fontFamily: DISPLAY,
+            fontWeight: 300,
+            fontSize: 28,
+            lineHeight: 1.15,
+            letterSpacing: "-0.012em",
+            color: INK,
+            margin: 0,
+          }}
+        >
+          Tre Posti revised the contract.
+        </h3>
+        <p
+          style={{
+            fontFamily: DISPLAY,
+            fontStyle: "italic",
+            fontWeight: 300,
+            fontSize: 16,
+            lineHeight: 1.5,
+            color: INK_MUTED,
+            margin: "10px 0 0",
+            maxWidth: 420,
+          }}
+        >
+          Counsel raised the deal score from 62 to 78. Cancellation window
+          tightened, deposit non-refundable, force-majeure now mutual.
+        </p>
+
+        {/* Score visual */}
+        <div
+          style={{
+            marginTop: 22,
+            display: "flex",
+            alignItems: "center",
+            gap: 14,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: MONO,
+              fontSize: 10.5,
+              letterSpacing: "0.26em",
+              textTransform: "uppercase",
+              color: INK_FAINT,
+            }}
+          >
+            Deal score
+          </span>
+          <span
+            style={{
+              fontFamily: DISPLAY,
+              fontStyle: "italic",
+              fontSize: 22,
+              color: INK_FAINT,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            62
+          </span>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={INK_FAINT}
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+          <span
+            style={{
+              fontFamily: DISPLAY,
+              fontStyle: "italic",
+              fontSize: 32,
+              fontWeight: 400,
+              color: SAGE_DEEP,
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+            }}
+          >
+            78
+          </span>
+        </div>
+
+        {/* Hairline */}
+        <div
+          aria-hidden
+          style={{
+            margin: "22px 0",
+            height: 1,
+            background: HAIRLINE,
+          }}
+        />
+
+        {/* Actions. three clear, decisive buttons */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr auto auto",
+            gap: 10,
+          }}
+        >
+          <button
+            type="button"
+            onClick={(e) => e.preventDefault()}
+            style={{
+              padding: "14px 22px",
+              borderRadius: 999,
+              background: CTA_BG,
+              color: IVORY,
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.26em",
+              textTransform: "uppercase",
+              fontWeight: 600,
+              border: "none",
+              cursor: "pointer",
+              boxShadow:
+                "inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 26px -10px rgba(79,93,68,0.50)",
+              transition: "background 200ms, transform 200ms",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = CTA_BG_HOVER;
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = CTA_BG;
+              e.currentTarget.style.transform = "translateY(0)";
+            }}
+          >
+            Approve
+          </button>
+          <button
+            type="button"
+            onClick={(e) => e.preventDefault()}
+            style={{
+              padding: "14px 18px",
+              borderRadius: 999,
+              background: PAPER,
+              color: INK,
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              border: `1px solid ${HAIRLINE}`,
+              cursor: "pointer",
+              transition: "border-color 200ms, color 200ms",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = INK;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = HAIRLINE;
+            }}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={(e) => e.preventDefault()}
+            style={{
+              padding: "14px 14px",
+              borderRadius: 999,
+              background: "transparent",
+              color: INK_FAINT,
+              fontFamily: MONO,
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+              border: "none",
+              cursor: "pointer",
+              transition: "color 200ms",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = INK;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = INK_FAINT;
+            }}
+          >
+            Pass
+          </button>
+        </div>
+
+        {/* Caption. what's happening behind the scenes */}
+        <p
+          style={{
+            marginTop: 22,
+            fontFamily: DISPLAY,
+            fontStyle: "italic",
+            fontWeight: 300,
+            fontSize: 14,
+            lineHeight: 1.55,
+            color: SAGE_DEEP,
+            margin: "22px 0 0",
+          }}
+        >
+          drafting Emiliano&apos;s tasting follow-up · scheduling the florist
+          consult · reconciling the hotel block deposit
+        </p>
+      </article>
+    </div>
+  );
+}
+
+// =====================================================================
+// FOOTER
+// =====================================================================
+
+function Footer() {
+  return (
+    <footer
+      style={{
+        background: PAPER,
+        borderTop: `1px solid ${HAIRLINE}`,
+        padding: "44px clamp(28px, 5vw, 80px)",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1320,
+          margin: "0 auto",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 16,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: DISPLAY,
+            fontStyle: "italic",
+            fontSize: 18,
+            color: INK,
+            letterSpacing: "-0.005em",
+          }}
+        >
+          aisle
+        </span>
+        <span
+          style={{
+            fontFamily: MONO,
+            fontSize: 10.5,
+            letterSpacing: "0.30em",
+            textTransform: "uppercase",
+            color: INK_FAINT,
+          }}
+        >
+          Plan less · Decide better
+        </span>
+        <a
+          href="mailto:hello@aisle.com"
+          style={{
+            fontFamily: MONO,
+            fontSize: 10.5,
+            letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: INK_FAINT,
+            textDecoration: "none",
+            transition: "color 200ms",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = INK)}
+          onMouseLeave={(e) => (e.currentTarget.style.color = INK_FAINT)}
+        >
+          hello@aisle.com
+        </a>
+      </div>
+    </footer>
+  );
+}

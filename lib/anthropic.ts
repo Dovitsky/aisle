@@ -17,10 +17,26 @@ export function client(): Anthropic {
   return _client;
 }
 
+// Three-tier model strategy (cost-optimized).
+//
+//   orchestrator — Opus. Maestro chat (multi-turn tool use, brief extraction
+//                  reasoning, decision routing). The single agent that needs
+//                  full Opus depth.
+//   specialist   — Sonnet. Most domain agents — drafting emails, ceremony
+//                  scripts, music setlists, cake specs, contract redlines,
+//                  mood directions, etc. Sonnet is plenty for structured
+//                  generation and saves real money at scale.
+//   triage       — Haiku. High-volume / low-latency parsing — email intent
+//                  classification, RSVP parse, dietary parse.
+//
+// Anything web-search-driven (Scout, Locator, Itinerist, Curator,
+// Quartermaster, Cantor) stays on Opus by default — the larger model
+// reads search results substantially better, which more than pays back
+// its premium when the alternative is hallucinated vendor names.
 export const MODELS = {
-  // Per PRD §4: Opus for orchestration + most specialists, Haiku for triage.
   orchestrator: process.env.ANTHROPIC_MODEL_ORCHESTRATOR ?? "claude-opus-4-7",
-  triage: process.env.ANTHROPIC_MODEL_TRIAGE ?? "claude-haiku-4-5-20251001",
+  specialist:   process.env.ANTHROPIC_MODEL_SPECIALIST   ?? "claude-sonnet-4-6",
+  triage:       process.env.ANTHROPIC_MODEL_TRIAGE       ?? "claude-haiku-4-5-20251001",
 } as const;
 
 export function hasApiKey(): boolean {

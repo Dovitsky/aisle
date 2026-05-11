@@ -1,21 +1,28 @@
 "use client";
 
-// ChatDock — the always-visible liquid-glass conversation surface.
+// ChatDock. the always-visible liquid-glass conversation surface.
 //
 // The dock supports rich agent messages: light Markdown (bold, italic, lists,
 // headings) and structured UI blocks (choice cards, confirm buttons, summary
 // cards, quick replies) that the Maestro emits via tools.
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useProject } from "./StateProvider";
+import { useToast } from "./Toast";
 import type { ChatMessage, ChatUI, ProjectState } from "@/lib/types";
 import { maestroName } from "@/lib/displayName";
+import { pageContextForPath } from "@/lib/pageContext";
+import { ThoughtStream } from "./ThoughtStream";
 
 export function ChatDock() {
-  const { state, setState, pollForUpdates } = useProject();
+  const { state, setState, pollForUpdates, chatOpen, setChatOpen, pendingChatPrompt, clearPendingChatPrompt } = useProject();
+  const { notify } = useToast();
+  const pathname = usePathname();
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
-  const [open, setOpen] = useState(false);
+  const open = chatOpen;
+  const setOpen = setChatOpen;
   const [error, setError] = useState<string | null>(null);
   // Client-side memory of message IDs whose ui block has been answered.
   // Stays for the session; chat replays from server but the server doesn't
@@ -33,6 +40,21 @@ export function ChatDock() {
     return () => clearTimeout(t);
   }, [state?.chat.length, open]);
 
+  // Other surfaces (vendor detail, brief loaded handoff, etc.) push a
+  // ready-made prompt into the dock via sendChatMessage(). When that lands,
+  // open the panel and fire it as if the user typed it. Clear immediately so
+  // a re-render doesn't double-send.
+  useEffect(() => {
+    if (!pendingChatPrompt) return;
+    if (!state) return;
+    setOpen(true);
+    void send(pendingChatPrompt);
+    clearPendingChatPrompt();
+    // Intentionally exclude `send` from deps. we only want to fire on the
+    // prompt landing, not on every render of the send callback.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingChatPrompt, state, setOpen, clearPendingChatPrompt]);
+
   const send = useCallback(async (override?: string) => {
     const msg = (override ?? draft).trim();
     if (!msg) return;
@@ -49,21 +71,61 @@ export function ChatDock() {
           { id: "tmp-" + Date.now().toString(36), role: "user", content: msg, createdAt: new Date().toISOString() },
         ],
       });
+      const ctx = pageContextForPath(pathname);
       const r = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message: msg }),
+        body: JSON.stringify({ message: msg, pageContext: ctx ?? undefined }),
       });
-      const j = (await r.json()) as { state?: ProjectState; error?: string };
+      const j = (await r.json()) as {
+        state?: ProjectState;
+        dispatched?: string[];
+        error?: string;
+      };
       if (j.state) {
         // If the brief just transitioned to locked OR Scout was kicked off
         // post-pivot, the server fired Scout in the background. Poll for the
         // resulting vendors + approval cards.
         const wasLocked = state?.brief?.locked ?? false;
         const isLocked = j.state.brief?.locked ?? false;
-        if ((!wasLocked && isLocked) || (isLocked && (j.state.chat[j.state.chat.length - 1]?.content ?? "").toLowerCase().includes("scout"))) {
+        const justLocked = !wasLocked && isLocked;
+        const dispatched = j.dispatched ?? [];
+        const lastReply = (j.state.chat[j.state.chat.length - 1]?.content ?? "").toLowerCase();
+        const refireSignal = isLocked && (lastReply.includes("scout") || lastReply.includes("re-run"));
+        if (justLocked || refireSignal) {
           pollForUpdates(120_000);
         }
+
+        // Concierge toasts for the two big chat-driven moments.
+        if (justLocked) {
+          notify({
+            kind: "agent",
+            agent: "Maestro",
+            title: "Foundation in flight",
+            detail: "Scout, Designer, and Treasurer are working. decisions will land as they finish.",
+            hrefOnClick: "/approvals",
+          });
+        } else if (
+          isLocked
+          && dispatched.includes("dispatch_email_vendor")
+        ) {
+          notify({
+            kind: "agent",
+            agent: "Outreach",
+            title: "Email drafted for your approval",
+            detail: "Open Decisions to review before it sends.",
+            hrefOnClick: "/approvals",
+          });
+        } else if (refireSignal && !justLocked) {
+          notify({
+            kind: "agent",
+            agent: "Scout",
+            title: "Re-running the shortlist",
+            detail: "Your pivot just opened a fresh search.",
+            hrefOnClick: "/vendors",
+          });
+        }
+
         setState(j.state);
       }
       if (j.error) setError(j.error);
@@ -72,24 +134,44 @@ export function ChatDock() {
     } finally {
       setSending(false);
     }
-  }, [draft, state, setState]);
+  }, [draft, state, setState, pathname, pollForUpdates, setOpen, notify]);
 
   const resolveUI = (msgId: string, replyText: string) => {
     setAnswered((prev) => new Set(prev).add(msgId));
     void send(replyText);
   };
 
+  // When any other surface calls sendChatMessage(), pendingChatPrompt fills
+  // in. Auto-open the dock and fire the message, then clear so it doesn't
+  // re-fire on the next render.
+  useEffect(() => {
+    if (!pendingChatPrompt) return;
+    if (sending) return;
+    setOpen(true);
+    void send(pendingChatPrompt);
+    clearPendingChatPrompt();
+  }, [pendingChatPrompt, sending, send, setOpen, clearPendingChatPrompt]);
+
   if (!state) return null;
   const me = maestroName(state);
   const disabled = state.paused || state.dayOfMode || sending;
+
+  // If the latest agent reply ends with a question, prompt the user to answer
+  // it directly. generic "tell Maestro anything" copy is wrong when Maestro
+  // just asked a specific thing.
+  const lastAgent = [...state.chat].reverse().find((m) => m.role === "agent");
+  const lastAgentEndsInQuestion =
+    !!lastAgent?.content && /\?\s*$/.test(lastAgent.content.trim());
 
   const placeholder = state.paused
     ? "Paused. Resume in settings."
     : state.dayOfMode
     ? "Today is the wedding. The dock is quiet."
+    : lastAgentEndsInQuestion
+    ? "Type your answer…"
     : state.brief?.locked
     ? `Ask ${me}…`
-    : `Tell ${me} anything — the date you're thinking, the city, the feeling.`;
+    : `Tell ${me} anything. the date you're thinking, the city, the feeling.`;
 
   // Recent chat tail to show when expanded.
   const tail = state.chat.slice(-8);
@@ -97,62 +179,164 @@ export function ChatDock() {
     new Date(iso).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
 
   return (
-    <div
-      className="fixed left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-[760px] lg:max-w-[840px]"
-      style={{ bottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
-    >
-      <div className="lg:hidden" aria-hidden style={{ marginBottom: "calc(64px - 1.25rem)" }} />
-
-      <div
-        className={`relative glass-strong rounded-[28px] transition-all duration-500 ${open ? "pt-3" : "pt-2"}`}
-      >
-        {/* Conversation tail */}
-        {open && tail.length > 0 && (
-          <div
-            ref={scrollRef}
-            className="px-4 pb-3 max-h-[52vh] overflow-y-auto no-scrollbar flex flex-col gap-3"
+    <>
+      {/* Closed-state launcher tab. slim vertical strip on the right edge.
+          Renders when the panel is closed; one click opens the panel.
+          The /timeline page embeds Maestro inline (per its revision spec)
+          so the floating pill is suppressed there. */}
+      {!open && pathname !== "/timeline" && (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Open Maestro"
+          className="fixed top-1/2 -translate-y-1/2 z-40 right-0 group flex items-center"
+          style={{ touchAction: "manipulation" }}
+        >
+          <span
+            className="rounded-l-full bg-ink text-paper-50 pl-3 pr-3 py-4 flex flex-col items-center gap-1 shadow-cardHover"
+            style={{
+              boxShadow:
+                "0 14px 36px -18px rgba(14,14,12,0.30), 0 4px 14px -8px rgba(79,93,68,0.30)",
+            }}
           >
-            {tail.map((m) => (
-              <MessageRow
-                key={m.id}
-                msg={m}
-                isResolved={answered.has(m.id)}
-                onChoice={(text) => resolveUI(m.id, text)}
-                fmtTime={fmtTime}
-              />
-            ))}
-            {sending && (
-              <div className="flex items-center gap-1.5 pl-1 animate-fade-in-soft">
-                <span className="w-1.5 h-1.5 rounded-full bg-ink-300 animate-pulse-soft" />
-                <span className="w-1.5 h-1.5 rounded-full bg-ink-300 animate-pulse-soft" style={{ animationDelay: "120ms" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-ink-300 animate-pulse-soft" style={{ animationDelay: "240ms" }} />
+            <span className="text-[9.5px] uppercase tracking-[0.22em] font-mono">
+              {me}
+            </span>
+            <span aria-hidden className="text-[14px] leading-none -translate-x-0.5 transition-transform group-hover:-translate-x-1">
+              ←
+            </span>
+          </span>
+        </button>
+      )}
+
+      {/* Mobile-only backdrop when the panel is open. taps anywhere outside
+          the panel close it. Hidden on lg+ where the panel reflows the page. */}
+      {open && (
+        <button
+          type="button"
+          aria-label="Close Maestro"
+          onClick={() => setOpen(false)}
+          className="lg:hidden fixed inset-0 z-30 bg-ink/30 backdrop-blur-[2px] animate-fade-in-soft"
+        />
+      )}
+
+      {/* The panel itself. full-height, docked to the right.
+          On lg+ it sits beside the page content (AppShell adds matching
+          right-padding so nothing is ever hidden behind it).
+          On mobile it overlays as a slide-in over the backdrop above. */}
+      <aside
+        className={`fixed top-0 right-0 z-40 h-[100dvh] flex flex-col
+          chat-ivory transition-transform duration-300 ease-out
+          ${open ? "translate-x-0" : "translate-x-full"}`}
+        style={{
+          width: "min(440px, 92vw)",
+        }}
+        aria-hidden={!open}
+        aria-label="Maestro chat"
+      >
+        {/* Panel header. Pure-white, flat. Name + status + close. */}
+        <header className="relative px-6 pt-6 pb-5 shrink-0 z-10 border-b border-ink/5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="chat-orbit-ivory" aria-hidden>
+                <span className="chat-orbit-ivory__core" />
+              </span>
+              <div className="min-w-0 flex items-baseline gap-2">
+                <h2
+                  className="leading-none"
+                  style={{
+                    fontFamily:
+                      '"Cormorant Garamond","Cormorant",Georgia,serif',
+                    fontWeight: 500,
+                    fontSize: 20,
+                    letterSpacing: "-0.005em",
+                    color: "#1A1A18",
+                  }}
+                >
+                  {me}
+                </h2>
+                <p
+                  className="text-[10px] uppercase tracking-[0.22em] font-mono"
+                  style={{ color: "rgba(26,26,24,0.42)" }}
+                >
+                  {sending
+                    ? "composing"
+                    : state.brief?.locked
+                    ? "concierge"
+                    : "listening"}
+                </p>
               </div>
-            )}
+            </div>
+            <button
+              type="button"
+              aria-label="Close Maestro"
+              onClick={() => setOpen(false)}
+              className="w-7 h-7 inline-flex items-center justify-center rounded-full text-ink/40 hover:text-ink hover:bg-ink/[0.04] transition-all"
+            >
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
+                <path d="M2 2 L10 10 M10 2 L2 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+              </svg>
+            </button>
           </div>
-        )}
+        </header>
+
+        {/* Conversation tail. fills available height between header and
+            input. Empty-state hint when no messages yet. */}
+        <div
+          ref={scrollRef}
+          className="relative flex-1 min-h-0 overflow-y-auto no-scrollbar px-5 py-5 flex flex-col gap-4 z-10"
+        >
+          {tail.length === 0 ? (
+            <div className="m-auto text-center max-w-[300px] py-8">
+              <p
+                className="text-[18px] leading-tight"
+                style={{ color: "#1A1A18", fontWeight: 500 }}
+              >
+                {state.brief?.locked
+                  ? `Ask ${me} anything.`
+                  : "Tell me about your wedding."}
+              </p>
+              <p className="text-[13px] leading-relaxed mt-2 chat-ink-soft">
+                {state.brief?.locked
+                  ? "Vendors, budget, the day-of timeline. I hold the whole picture."
+                  : "Names, the date, where, the feeling. Start anywhere."}
+              </p>
+            </div>
+          ) : (
+            <>
+              {tail.map((m) => (
+                <MessageRow
+                  key={m.id}
+                  msg={m}
+                  isResolved={answered.has(m.id)}
+                  onChoice={(text) => resolveUI(m.id, text)}
+                  fmtTime={fmtTime}
+                />
+              ))}
+              {sending && (
+                <div className="pl-1 animate-fade-in-soft">
+                  <ThoughtStream kind="chat-thinking" size="sm" tone="ink" intervalMs={1800} />
+                </div>
+              )}
+            </>
+          )}
+        </div>
 
         {error && (
-          <div className="px-4 -mt-1 mb-2 text-[12px] text-risk-high animate-fade-in-soft">
+          <div className="relative px-5 pb-2 text-[12px] animate-fade-in-soft shrink-0 z-10" style={{ color: "#A8341A" }}>
             {error}
           </div>
         )}
 
-        {/* Input row */}
-        <div className="flex items-end gap-2 px-3 pb-3">
-          <button
-            type="button"
-            aria-label={open ? "Collapse" : "Expand"}
-            onClick={() => setOpen((v) => !v)}
-            className="shrink-0 w-9 h-9 rounded-full text-ink-300 hover:text-ink hover:bg-paper-200/70 transition-all flex items-center justify-center"
-          >
-            <span className={`inline-block transition-transform ${open ? "rotate-180" : ""}`} aria-hidden>⌃</span>
-          </button>
-
+        {/* Command bar. Flat. Textarea + send button. */}
+        <div
+          className="chat-cmd-bar-ivory flex items-end gap-3 px-5 py-4 shrink-0 z-10"
+          style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+        >
           <textarea
             ref={taRef}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            onFocus={() => setOpen(true)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -163,35 +347,26 @@ export function ChatDock() {
             placeholder={placeholder}
             rows={1}
             disabled={disabled}
-            className="flex-1 resize-none bg-transparent border-none outline-none px-2 py-2 text-[15px] leading-relaxed placeholder:text-ink-200 disabled:opacity-50 max-h-32"
+            className="chat-input-ivory flex-1 resize-none bg-transparent border-none outline-none py-2 text-[15px] leading-relaxed disabled:opacity-50 max-h-32"
           />
 
           <button
             onClick={() => send()}
             disabled={disabled || !draft.trim()}
             aria-label="Send"
-            className="relative shrink-0 w-10 h-10 rounded-full bg-ink text-paper-50 disabled:opacity-25 disabled:cursor-not-allowed transition-all hover:scale-[1.04] active:scale-95 hover:bg-ink-400 flex items-center justify-center overflow-hidden group/send"
-            style={{
-              boxShadow:
-                "inset 0 1px 0 rgba(255,255,255,0.10), 0 1px 0 rgba(14,14,12,0.08), 0 8px 22px -8px rgba(14,14,12,0.45), 0 4px 12px -4px rgba(79,93,68,0.25)",
-            }}
+            className="chat-send-ink shrink-0 inline-flex items-center justify-center"
           >
             {sending ? (
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-paper-50 animate-pulse-soft" />
+              <span className="inline-block w-2 h-2 rounded-full bg-paper-50 animate-pulse-soft" />
             ) : (
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="transition-transform group-hover/send:translate-x-0.5">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             )}
-            <span
-              className="absolute inset-0 -translate-x-full group-hover/send:translate-x-full transition-transform duration-700 ease-out pointer-events-none"
-              style={{ background: "linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%)" }}
-              aria-hidden
-            />
           </button>
         </div>
-      </div>
-    </div>
+      </aside>
+    </>
   );
 }
 
@@ -212,13 +387,18 @@ function MessageRow({
   const showAgent = !isUser && msg.agent && msg.agent !== "Maestro";
   return (
     <div className={`flex flex-col ${isUser ? "items-end" : "items-start"} animate-fade-in-soft`}>
-      {showAgent && <div className="eyebrow text-[10px] mb-0.5 px-1">{msg.agent}</div>}
+      {showAgent && (
+        <div className="text-[10px] uppercase tracking-[0.18em] font-mono mb-1 px-1 chat-ink-faint inline-flex items-center gap-1.5">
+          <span aria-hidden className="inline-block w-1 h-1 rounded-full bg-sage-500" />
+          {msg.agent}
+        </div>
+      )}
       {msg.content && (
         <div
           className={`max-w-[92%] text-[14px] leading-relaxed ${
             isUser
-              ? "bg-ink text-paper-50 rounded-2xl rounded-br-md px-3.5 py-2"
-              : "text-ink rounded-2xl rounded-bl-md px-1 py-0.5"
+              ? "chat-bubble-user-ivory rounded-2xl rounded-br-md px-3.5 py-2"
+              : "chat-bubble-agent-ivory text-[15px]"
           }`}
         >
           {isUser ? (
@@ -236,7 +416,9 @@ function MessageRow({
         </div>
       )}
 
-      <time className="text-[10px] text-ink-200 mt-1 px-1">{fmtTime(msg.createdAt)}</time>
+      <time className="text-[10px] mt-1.5 px-1 chat-ink-hush font-mono tracking-[0.10em]">
+        {fmtTime(msg.createdAt)}
+      </time>
     </div>
   );
 }
@@ -245,35 +427,37 @@ function UIBlock({ ui, onChoose }: { ui: ChatUI; onChoose: (text: string) => voi
   switch (ui.kind) {
     case "choice":
       return (
-        <div className="rounded-2xl border hairline bg-white/85 p-3 shadow-card animate-fade-in-soft">
+        <div className="chat-card-ivory rounded-2xl p-3 animate-fade-in-soft">
           {ui.question && (
-            <div className="text-[13px] text-ink-400 leading-snug mb-2.5 px-0.5">{ui.question}</div>
+            <div className="text-[13px] leading-snug mb-2.5 px-0.5 chat-ink-soft">{ui.question}</div>
           )}
           <div className="flex flex-col gap-1.5">
             {ui.options.map((o, i) => (
               <button
                 key={o.id}
                 onClick={() => onChoose(o.label)}
-                className="group flex items-baseline justify-between gap-3 text-left rounded-xl border border-transparent hover:border-sage-300/60 hover:bg-sage-50/50 px-3.5 py-2.5 transition-all"
+                className="group flex items-baseline justify-between gap-3 text-left rounded-xl border border-ink/10 hover:border-sage-deep/45 hover:bg-ink/[0.03] px-3.5 py-2.5 transition-all"
               >
                 <span className="flex items-baseline gap-2 min-w-0">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-ink-200 mt-0.5 font-mono shrink-0">
+                  <span className="text-[10px] uppercase tracking-[0.22em] mt-0.5 font-mono shrink-0 chat-ink-faint">
                     {String.fromCharCode(65 + i)}
                   </span>
                   <span className="min-w-0">
-                    <span className="display italic text-[17px] text-ink leading-tight block">{o.label}</span>
+                    <span className="display italic text-[17px] leading-tight block" style={{ color: "#1A1A18" }}>
+                      {o.label}
+                    </span>
                     {o.description && (
-                      <span className="text-[12px] text-ink-300 leading-snug block mt-0.5">{o.description}</span>
+                      <span className="text-[12px] leading-snug block mt-0.5 chat-ink-soft">{o.description}</span>
                     )}
                   </span>
                 </span>
-                <span className="text-ink-300 group-hover:text-sage-500 transition-colors shrink-0" aria-hidden>→</span>
+                <span className="chat-ink-faint group-hover:text-sage-deep transition-colors shrink-0" aria-hidden>→</span>
               </button>
             ))}
             {ui.allowOther && (
               <button
                 onClick={() => onChoose("Something else")}
-                className="text-[12px] text-ink-300 hover:text-ink mt-1 px-3.5 py-1.5 text-left transition-colors"
+                className="text-[12px] mt-1 px-3.5 py-1.5 text-left transition-colors chat-ink-faint hover:text-ink"
               >
                 Something else…
               </button>
@@ -283,21 +467,26 @@ function UIBlock({ ui, onChoose }: { ui: ChatUI; onChoose: (text: string) => voi
       );
     case "confirm":
       return (
-        <div className="rounded-2xl border hairline bg-white/85 p-3.5 shadow-card animate-fade-in-soft">
+        <div className="chat-card-ivory rounded-2xl p-3.5 animate-fade-in-soft">
           {ui.question && (
-            <div className="text-[14px] text-ink leading-snug mb-3">{ui.question}</div>
+            <div className="text-[14px] leading-snug mb-3" style={{ color: "#1A1A18" }}>{ui.question}</div>
           )}
           <div className="flex gap-2">
             <button
               onClick={() => onChoose(ui.no || "No")}
-              className="flex-1 rounded-full border hairline bg-white text-ink-400 hover:bg-paper-200/70 hover:text-ink px-4 py-2 text-[13px] font-medium transition-all"
+              className="flex-1 rounded-full border border-ink/14 bg-ink/[0.02] hover:bg-ink/[0.06] hover:border-ink/30 px-4 py-2 text-[13px] font-medium transition-all chat-ink-soft"
             >
               {ui.no || "No"}
             </button>
             <button
               onClick={() => onChoose(ui.yes || "Yes")}
-              className="flex-1 rounded-full bg-ink text-paper-50 hover:bg-ink-400 px-4 py-2 text-[13px] font-medium transition-all"
-              style={{ boxShadow: "0 8px 22px -10px rgba(79,93,68,0.55)" }}
+              className="flex-1 rounded-full px-4 py-2 text-[13px] font-semibold transition-all"
+              style={{
+                background: "linear-gradient(135deg, #C7D1BD 0%, #6E8068 100%)",
+                color: "#0E110F",
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,0.55), 0 8px 22px -10px rgba(110,128,104,0.40)",
+              }}
             >
               {ui.yes || "Yes"}
             </button>
@@ -306,16 +495,16 @@ function UIBlock({ ui, onChoose }: { ui: ChatUI; onChoose: (text: string) => voi
       );
     case "summary":
       return (
-        <div className="rounded-2xl border hairline bg-white/90 overflow-hidden shadow-card animate-fade-in-soft">
-          <div className="px-4 pt-3 pb-2 border-b hairline">
-            <div className="text-[10px] uppercase tracking-[0.22em] text-sage-500 font-mono mb-0.5">Summary</div>
-            <div className="display text-[18px] text-ink leading-tight">{ui.title}</div>
+        <div className="chat-card-ivory rounded-2xl overflow-hidden animate-fade-in-soft">
+          <div className="px-4 pt-3 pb-2 border-b border-ink/10">
+            <div className="text-[10px] uppercase tracking-[0.30em] font-mono mb-0.5" style={{ color: "#6E8068" }}>Summary</div>
+            <div className="display text-[18px] leading-tight" style={{ color: "#1A1A18" }}>{ui.title}</div>
           </div>
           <dl className="px-4 py-3 grid grid-cols-[110px_1fr] gap-x-4 gap-y-1.5 text-[13px]">
             {ui.rows.map((r, i) => (
               <div key={i} className="contents">
-                <dt className="text-ink-300">{r.label}</dt>
-                <dd className="text-ink font-medium truncate">{r.value}</dd>
+                <dt className="chat-ink-faint">{r.label}</dt>
+                <dd className="font-medium truncate" style={{ color: "#1A1A18" }}>{r.value}</dd>
               </div>
             ))}
           </dl>
@@ -328,7 +517,7 @@ function UIBlock({ ui, onChoose }: { ui: ChatUI; onChoose: (text: string) => voi
             <button
               key={i}
               onClick={() => onChoose(r)}
-              className="rounded-full border hairline bg-white/70 hover:bg-white hover:border-sage-300 px-3 py-1.5 text-[12.5px] text-ink-400 hover:text-ink transition-all"
+              className="rounded-full border border-ink/12 bg-ink/[0.02] hover:bg-ink/[0.06] hover:border-sage-deep/45 px-3.5 py-1.5 text-[12.5px] transition-all chat-ink-soft hover:text-ink"
             >
               {r}
             </button>
@@ -356,7 +545,11 @@ function Markdown({ text }: { text: string }) {
       {blocks.map((b, i) => {
         if (b.kind === "h") {
           return (
-            <div key={i} className="display text-[17px] text-ink mt-1.5 first:mt-0 leading-tight">
+            <div
+              key={i}
+              className="display text-[17px] mt-1.5 first:mt-0 leading-tight"
+              style={{ color: "#1A1A18" }}
+            >
               <Inline text={b.text} />
             </div>
           );
@@ -366,7 +559,7 @@ function Markdown({ text }: { text: string }) {
             <ul key={i} className="list-none pl-0 space-y-1">
               {b.items.map((it, j) => (
                 <li key={j} className="flex gap-2">
-                  <span className="text-sage-500 leading-relaxed select-none">·</span>
+                  <span className="leading-relaxed select-none" style={{ color: "#6E8068" }}>·</span>
                   <span className="flex-1"><Inline text={it} /></span>
                 </li>
               ))}

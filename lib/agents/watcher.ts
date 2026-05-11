@@ -9,7 +9,7 @@
 
 import { ProjectState } from "../types";
 import { assertBudgetInvariant } from "./treasurer";
-import { appendApproval, readState } from "../store";
+import { appendApproval, appendChat, readState } from "../store";
 import { negotiatorDraft } from "./negotiator";
 
 export interface WatcherFlag {
@@ -148,12 +148,20 @@ export interface WatcherActResult {
   nudgesQueued: number;
   vendorsNudged: string[];
   skipped: { vendor: string; reason: string }[];
+  chatNotices: string[];   // markers for any chat messages Watcher posted this run
 }
 
 export async function watcherAct(state?: ProjectState): Promise<WatcherActResult> {
   const s = state ?? (await readState());
-  const result: WatcherActResult = { nudgesQueued: 0, vendorsNudged: [], skipped: [] };
+  const result: WatcherActResult = { nudgesQueued: 0, vendorsNudged: [], skipped: [], chatNotices: [] };
   if (!s.brief?.locked) return result;
+
+  // ----- New: budget-over-envelope chat notice -----
+  await maybePostBudgetOver(s, result);
+  // ----- New: missing foundation (no venue) late in the planning window -----
+  await maybePostMissingFoundation(s, result);
+  // ----- New: RSVP cadence stalled after invitations went out -----
+  await maybePostRsvpStalled(s, result);
 
   const now = Date.now();
   for (const v of s.vendors) {
@@ -200,4 +208,102 @@ export async function watcherAct(state?: ProjectState): Promise<WatcherActResult
   }
 
   return result;
+}
+
+// --------------------------------------------------------------------
+// Chat-surfaced notices.
+//
+// Each emits an `agent: "Watcher"` chat message tagged with a marker like
+// `[watcher:budget-over]`. The marker gives us a 7-day idempotency window —
+// we don't re-post the same flag if it's already in recent chat.
+// --------------------------------------------------------------------
+
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+function postedRecently(s: ProjectState, marker: string, withinDays: number): boolean {
+  const cutoff = Date.now() - withinDays * ONE_DAY_MS;
+  return s.chat.some((m) =>
+    m.agent === "Watcher" &&
+    m.content.includes(marker) &&
+    new Date(m.createdAt).getTime() >= cutoff
+  );
+}
+
+function daysUntilWedding(s: ProjectState): number | null {
+  if (!s.brief) return null;
+  const m =
+    (s.brief.weddingDate?.match(/(\d{4})-(\d{2})-(\d{2})/)) ??
+    s.brief.dateWindow.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  const t = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00`).getTime();
+  return Math.round((t - Date.now()) / ONE_DAY_MS);
+}
+
+async function maybePostBudgetOver(s: ProjectState, result: WatcherActResult) {
+  if (!s.brief) return;
+  if (postedRecently(s, "[watcher:budget-over]", 7)) return;
+  const envelope = s.brief.budgetUsd;
+  if (envelope <= 0) return;
+  const planSum = s.budget.reduce((sum, l) => sum + l.planUsd, 0);
+  if (planSum <= envelope) return;
+
+  const overBy = planSum - envelope;
+  const overPct = Math.round((overBy / envelope) * 100);
+
+  // Top 3 lines by plan size — the realistic trim candidates.
+  const top = [...s.budget]
+    .sort((a, b) => b.planUsd - a.planUsd)
+    .slice(0, 3)
+    .map((l) => `${l.category} ($${l.planUsd.toLocaleString()})`)
+    .join(", ");
+
+  const body = `Watcher · Budget is $${overBy.toLocaleString()} over envelope (${overPct}% over). The biggest lines are ${top}. Want me to ask Treasurer for a trim plan, or are you raising the envelope? [watcher:budget-over]`;
+
+  await appendChat({ role: "agent", agent: "Watcher", content: body });
+  result.chatNotices.push("budget-over");
+}
+
+async function maybePostMissingFoundation(s: ProjectState, result: WatcherActResult) {
+  if (!s.brief) return;
+  if (postedRecently(s, "[watcher:missing-venue]", 7)) return;
+  const days = daysUntilWedding(s);
+  if (days === null) return;
+  if (days < 30) return;            // too late to act on this notice
+  if (days > 240) return;           // 8+ months out — not yet urgent
+
+  const venue = s.vendors.find(
+    (v) => v.category === "Venue" && (v.status === "contracted" || v.status === "paid"),
+  );
+  if (venue) return;
+
+  const body = `Watcher · It's ${days} days out and no venue is contracted yet. Most other dates depend on the venue locking — want me to refresh Scout's shortlist or push outreach on the current candidates? [watcher:missing-venue]`;
+
+  await appendChat({ role: "agent", agent: "Watcher", content: body });
+  result.chatNotices.push("missing-venue");
+}
+
+async function maybePostRsvpStalled(s: ProjectState, result: WatcherActResult) {
+  if (!s.brief) return;
+  if (postedRecently(s, "[watcher:rsvp-stalled]", 7)) return;
+
+  // Did invitations actually go out? Look for an approved send_invitations card.
+  const inviteCard = s.approvals
+    .filter((a) => a.action.kind === "send_invitations" && a.status === "approved")
+    .sort((a, b) => (b.resolvedAt ?? "").localeCompare(a.resolvedAt ?? ""))[0];
+  if (!inviteCard?.resolvedAt) return;
+
+  const sentDays = (Date.now() - new Date(inviteCard.resolvedAt).getTime()) / ONE_DAY_MS;
+  if (sentDays < 14) return;         // give guests two weeks before nudging
+
+  const total = s.guests.length;
+  if (total < 10) return;            // not enough to compute a meaningful rate
+  const responded = s.guests.filter((g) => g.rsvp !== "no_response").length;
+  const pct = Math.round((responded / total) * 100);
+  if (pct >= 70) return;             // healthy rate — quiet
+
+  const awaiting = total - responded;
+  const body = `Watcher · ${Math.round(sentDays)} days since invitations went out and ${pct}% have responded — ${awaiting} household${awaiting === 1 ? "" : "s"} still pending. Want Outreach to send a polite reminder cadence? [watcher:rsvp-stalled]`;
+
+  await appendChat({ role: "agent", agent: "Watcher", content: body });
+  result.chatNotices.push("rsvp-stalled");
 }

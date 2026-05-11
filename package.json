@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
-    "test": "tsx tests/run.ts"
+    "test": "tsx tests/run.ts && tsx tests/offline-maestro.ts && tsx tests/demo-state.ts && tsx tests/dashboard-renders.ts && tsx tests/lanes-flow.ts && tsx tests/ambient-ticker.ts && AISLE_STORE_FILE=tests/.tmp.store.json tsx tests/smoke-onboarding.ts && AISLE_STORE_FILE=tests/.tmp.integration.json tsx tests/integration-flow.ts && AISLE_STORE_FILE=tests/.tmp.inbox.json tsx tests/inbox-flow.ts && AISLE_STORE_FILE=tests/.tmp.email.json tsx tests/email-vendor-flow.ts && AISLE_STORE_FILE=tests/.tmp.roundtrip.json tsx tests/demo-roundtrip.ts && AISLE_STORE_FILE=tests/.tmp.pagectx.json tsx tests/page-context-chat.ts && rm -f tests/.tmp.store.json tests/.tmp.integration.json tests/.tmp.inbox.json tests/.tmp.email.json tests/.tmp.roundtrip.json tests/.tmp.pagectx.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",

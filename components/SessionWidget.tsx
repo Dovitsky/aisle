@@ -23,7 +23,7 @@ export function SessionWidget() {
 
   if (!status) return null;
   if (!status.supabase) {
-    // Quietly nothing — don't surface infra state to the couple.
+    // Quietly nothing. don't surface infra state to the couple.
     return null;
   }
   if (!status.signedIn) {

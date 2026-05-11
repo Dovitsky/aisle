@@ -1,0 +1,237 @@
+{
+  "brief": {
+    "organizerName": "",
+    "partnerName": "",
+    "dateWindow": "Early April 2026",
+    "region": "Charleston, SC",
+    "guestCount": 140,
+    "budgetUsd": 110000,
+    "vibe": "Spanish moss and pastel blooms. Antique-feeling china. Southern elegance — black-tie but warm. Hand-written calligraphy on everything.",
+    "plannerStatus": "have_one",
+    "cultural": "secular",
+    "formalityTone": "formal",
+    "destination": false,
+    "locked": false
+  },
+  "chat": [
+    {
+      "id": "mowa4axu00kcy",
+      "createdAt": "2026-05-08T02:11:40.770Z",
+      "role": "user",
+      "content": "hey we want something sun-drenched, candlelit, intimate dinner-party feel — somewhere small with great light"
+    },
+    {
+      "id": "mowa551zvlq49",
+      "createdAt": "2026-05-08T02:12:19.799Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Got it. What's your first name?",
+      "ui": {
+        "kind": "choice",
+        "question": "Where does this take you?",
+        "options": [
+          {
+            "id": "Amalfi Coast, Italy",
+            "label": "Amalfi Coast, Italy",
+            "description": "Ravello · Cliffside villas with terraced gardens deliver that golden, lemon-grove Mediterranean light by day and candlelit-on-the-terrace magic by night — quieter and more intimate than Positano. · Best: Late May or mid-September"
+          },
+          {
+            "id": "Alentejo, Portugal",
+            "label": "Alentejo, Portugal",
+            "description": "Monsaraz / Reguengos de Monsaraz · The wildcard pick: whitewashed estates and minimalist quintas with stone walls and huge windows — wide skies, golden plains, and a slow, candlelit dinner-party rhythm baked into the region's DNA. · Best: Late April–June or September"
+          },
+          {
+            "id": "Provence, France",
+            "label": "Provence, France",
+            "description": "Paradou / Les Baux-de-Provence · Stone farmhouses, plane-tree canopies, and that unmistakable lavender-tinted afternoon light. Built for long tables, hand-poured rosé, and three-day slow weddings. · Best: Mid-May or early September"
+          },
+          {
+            "id": "Ibiza (interior), Spain",
+            "label": "Ibiza (interior), Spain",
+            "description": "Santa Gertrudis de Fruitera · Skip the coastline clubs — the inland agroturismos are whitewashed, quiet, and stylish, with sunlit courtyards perfect for barefoot-luxury, long-lunch-into-candlelit-dinner energy. · Best: Late May or late September"
+          },
+          {
+            "id": "Val d'Orcia, Tuscany, Italy",
+            "label": "Val d'Orcia, Tuscany, Italy",
+            "description": "Pienza / Montalcino · The blueprint for the candlelit-dinner-under-string-lights wedding — cypress-lined drives, golden hills, and family-run estates that lean into farm-to-table, intimate scale. · Best: Early June or mid-September"
+          }
+        ],
+        "allowOther": true
+      }
+    },
+    {
+      "id": "mowa5qg4t3jol",
+      "createdAt": "2026-05-08T02:12:47.524Z",
+      "role": "user",
+      "content": "i booked the photogrpaher for 4.5k update the budget"
+    },
+    {
+      "id": "mowa5teqyi3sd",
+      "createdAt": "2026-05-08T02:12:51.362Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "We haven't set a total budget yet, and I don't have your names or date window on file — so I want to be careful before I record a $4.5k photographer line against nothing.\n\nQuick reset: what's your first name, your partner's, and roughly when and where you're thinking? Once the brief is locked I can track vendor commitments against the budget properly."
+    },
+    {
+      "id": "mowauc3hp9uui",
+      "createdAt": "2026-05-08T02:31:55.325Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Starting from \"Tuscan villa weekend\". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?"
+    },
+    {
+      "id": "mowauh9jp9orv",
+      "createdAt": "2026-05-08T02:32:02.023Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Starting from \"Tuscan villa weekend\". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?"
+    },
+    {
+      "id": "mowb8ntxshix5",
+      "createdAt": "2026-05-08T02:43:03.717Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Starting from \"City Hall, then dinner\". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?"
+    },
+    {
+      "id": "mowb8opd68wod",
+      "createdAt": "2026-05-08T02:43:04.849Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Starting from \"City Hall, then dinner\". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?"
+    },
+    {
+      "id": "mowb8pb5saedk",
+      "createdAt": "2026-05-08T02:43:05.633Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Starting from \"City Hall, then dinner\". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?"
+    },
+    {
+      "id": "mowb8ph547xly",
+      "createdAt": "2026-05-08T02:43:05.849Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Starting from \"City Hall, then dinner\". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?"
+    },
+    {
+      "id": "mowd52oczqz55",
+      "createdAt": "2026-05-08T03:36:15.564Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Starting from \"Charleston garden party\". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?"
+    }
+  ],
+  "approvals": [],
+  "ledger": [
+    {
+      "id": "mowa4dvp3n4c1",
+      "at": "2026-05-08T02:11:44.581Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mowauc3ghgo35",
+      "at": "2026-05-08T02:31:55.324Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mowauh9jrfoai",
+      "at": "2026-05-08T02:32:02.023Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mowb8ntwqy8k7",
+      "at": "2026-05-08T02:43:03.716Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mowb8opbz81c8",
+      "at": "2026-05-08T02:43:04.847Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mowb8pb2c0t45",
+      "at": "2026-05-08T02:43:05.630Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mowb8ph3lv0m0",
+      "at": "2026-05-08T02:43:05.847Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mowd52obakiov",
+      "at": "2026-05-08T03:36:15.563Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    }
+  ],
+  "paused": false,
+  "vendors": [],
+  "budget": [],
+  "households": [],
+  "guests": [],
+  "designs": [],
+  "seating": {
+    "tables": [],
+    "assignments": {},
+    "constraints": [],
+    "cost": 0
+  },
+  "dayOf": [],
+  "thanks": [],
+  "gates": {
+    "dress": false,
+    "partner_gift": false,
+    "honeymoon": false,
+    "speech": false,
+    "vows_organizer": false,
+    "vows_partner": false
+  },
+  "viewer": "organizer",
+  "stationery": [],
+  "hotelBlocks": [],
+  "shuttles": [],
+  "welcomeBag": [],
+  "contingencies": [],
+  "engagement": [],
+  "vows": [],
+  "speeches": [],
+  "registry": [],
+  "honeymoon": [],
+  "dayOfMode": false,
+  "plan": "couple_plus",
+  "approvedTokens": [],
+  "music": [],
+  "ceremony": [],
+  "ceremonyTradition": "humanist",
+  "cake": null,
+  "bar": null,
+  "florals": [],
+  "rentals": [],
+  "beauty": [],
+  "visits": [],
+  "license": null,
+  "site": null,
+  "weddingParty": [],
+  "preEvents": [],
+  "tips": [],
+  "memorials": [],
+  "menu": [],
+  "dietaryResolutions": {}
+}

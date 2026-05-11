@@ -35,7 +35,7 @@ ${lastInbound ? `\nVendor's last reply:\n${lastInbound.body}` : ""}
 Draft the counter-proposal now.`;
 
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 500,
     system: SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
@@ -46,7 +46,22 @@ Draft the counter-proposal now.`;
   return text || offline(args);
 }
 
-function offline(..._: unknown[]): string { return ""; }
+function offline(args: { brief: Brief; vendor: Vendor; goal: string }): string {
+  const b = args.brief;
+  const v = args.vendor;
+  return `Hello ${v.name},
+
+Thank you for the proposal — we've shared it with ${b.organizerName} & ${b.partnerName} and they'd like to come back to you with a small counter.
+
+${args.goal || `Could you take another look at the package scope or pricing? We're trying to fit this comfortably inside the budget envelope.`}
+
+If that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.
+
+Looking forward to your reply.
+
+Warmly,
+AISLE on behalf of ${b.organizerName} & ${b.partnerName}`;
+}
 
 export function synthesizeInbound(vendor: Vendor): VendorMessage {
   return {

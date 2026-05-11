@@ -75,9 +75,9 @@ export function StationeryView() {
   return (
     <div className="flex flex-col gap-5">
       <PageHeader
-        eyebrow="Stationer"
+        eyebrow="The paper goods"
         title="Stationery suite"
-        subtitle="Save-the-dates, invitations, response cards, details, menus, programs, place cards, thank-yous — one coherent suite from your locked design direction."
+        subtitle="Save-the-dates, invitations, response cards, details, menus, programs, place cards, thank-yous. one coherent suite from your locked design direction."
       />
 
       {!state.brief?.locked && (
@@ -90,7 +90,7 @@ export function StationeryView() {
         moodboards.length === 0 ? (
           <EmptyState
             title="Need a design direction first"
-            hint="Stationer extends a locked mood-board direction. Have Designer propose six, lock one, then come back."
+            hint="The paper suite picks up the look you locked on the mood board. Pick a direction over there first, then come back here for invitations, programs, menus, place cards."
             action={{ label: "Open Design", href: "/design", primary: true }}
           />
         ) : (
@@ -169,7 +169,7 @@ export function StationeryView() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <button onClick={() => sendStd(suite.id)} disabled={!!busy || Boolean(suite.saveTheDateSentAt)} className="rounded-2xl bg-ink text-paper-50 px-4 py-2 text-sm font-medium hover:bg-ink-400 transition-colors disabled:opacity-50">
+            <button onClick={() => sendStd(suite.id)} disabled={!!busy || Boolean(suite.saveTheDateSentAt)} className="cta-sage rounded-2xl px-4 py-2 text-sm font-medium transition-all disabled:opacity-50">
               {suite.saveTheDateSentAt ? "Save-the-dates sent" : "Send save-the-dates"}
             </button>
             <button onClick={() => sendInv(suite.id)} disabled={!!busy || Boolean(suite.invitationsSentAt)} className="rounded-2xl border hairline bg-white/80 hover:bg-white px-4 py-2 text-sm transition-colors disabled:opacity-50">
@@ -186,7 +186,7 @@ export function StationeryView() {
               }}
               disabled={!!busy || state.menu.length === 0}
               className="rounded-2xl border hairline bg-white/80 hover:bg-white px-4 py-2 text-sm transition-colors disabled:opacity-50"
-              title={state.menu.length === 0 ? "No menu yet — load one in /dietary first" : "Re-render the menu card from the locked menu, including allergen icons"}
+              title={state.menu.length === 0 ? "No menu yet. load one in /dietary first" : "Re-render the menu card from the locked menu, including allergen icons"}
             >
               {busy === "refresh-" + suite.id ? "Refreshing…" : "Refresh menu card from /dietary"}
             </button>

@@ -1,6 +1,6 @@
 "use client";
 
-// Vendors — left category rail + status-grouped pipeline.
+// Vendors. left category rail + status-grouped pipeline.
 //
 // Categories live in a fixed left rail with live counts. The main pane shows
 // the active category's pipeline broken into stages:
@@ -14,16 +14,23 @@
 //   8. Passed
 // Empty stages are hidden so the page stays tight.
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import type { ProjectState, Vendor, VendorShortlistItem } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
+import type { ProjectState, Vendor, VendorCategory, VendorShortlistItem } from "@/lib/types";
 import { useProject } from "./StateProvider";
+import { useDialog } from "./Dialog";
+import { VendorMap } from "./VendorMap";
+import { ThoughtStream } from "./ThoughtStream";
 
+// Categories live in the sidebar now (see SectionSidebar BUILD_VENDOR_ITEMS).
+// Kept here only so older imports don't break. Reference value, do not extend.
 const CATEGORIES = [
   "Venue", "Photographer", "Florist", "Caterer", "Officiant",
   "Band", "DJ", "Stationer", "Hair & Makeup", "Videographer",
   "Cake", "Calligrapher", "Bartending", "Rentals", "Transportation",
-];
+] as const;
+void CATEGORIES;
 
 type Stage = {
   key: string;
@@ -44,7 +51,7 @@ const STAGES: Stage[] = [
   {
     key: "outreach",
     label: "Outreach drafted",
-    hint: "Email queued — approve in Decisions",
+    hint: "Email queued. approve in Decisions",
     match: (v) =>
       v.status === "contacted" &&
       hasOutbound(v) &&
@@ -54,7 +61,7 @@ const STAGES: Stage[] = [
   {
     key: "awaiting",
     label: "Awaiting reply",
-    hint: "We've reached out — waiting on the vendor",
+    hint: "We've reached out. waiting on the vendor",
     match: (v) =>
       v.status === "contacted" &&
       hasOutbound(v) &&
@@ -64,7 +71,7 @@ const STAGES: Stage[] = [
   {
     key: "quoting",
     label: "Quoting",
-    hint: "Vendor sent a price — review and counter",
+    hint: "Vendor sent a price. review and counter",
     match: (v) => v.status === "quoting",
     tone: "amber",
   },
@@ -78,7 +85,7 @@ const STAGES: Stage[] = [
   {
     key: "booked",
     label: "Booked",
-    hint: "Contracted or paid — locked in",
+    hint: "Contracted or paid. locked in",
     match: (v) => v.status === "contracted" || v.status === "paid",
     tone: "low",
   },
@@ -100,18 +107,28 @@ const TONE_CLASSES: Record<Stage["tone"], { dot: string; label: string }> = {
 };
 
 export function VendorsView() {
-  const { state, setState, loading } = useProject();
-  const [activeCategory, setActiveCategory] = useState<string>("Venue");
+  const { state, setState, loading, sendChatMessage } = useProject();
+  const dialog = useDialog();
+  const searchParams = useSearchParams();
+  // Category is sourced from the URL so the left sidebar's category links
+  // are the canonical entry point. Defaults to Venue when no param is set.
+  const activeCategory = searchParams.get("category") ?? "Venue";
   const [openId, setOpenId] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Clear the open vendor when the category switches via URL.
+  useEffect(() => {
+    setOpenId(null);
+  }, [activeCategory]);
 
-  const countsByCategory = useMemo(() => {
-    const map: Record<string, number> = {};
-    if (!state) return map;
-    for (const v of state.vendors) map[String(v.category)] = (map[String(v.category)] ?? 0) + 1;
-    return map;
-  }, [state]);
+  /** Open Maestro and ask it to draft outreach for this vendor.
+   * The draft lands in the chat panel inline (right side) instead of as
+   * a separate approval card buried below the search results. */
+  const askMaestroDraftOutreach = (v: Vendor) => {
+    sendChatMessage(
+      `Draft an outreach email to ${v.name} (${v.category}) in ${v.city}. Keep it warm, short, and concrete. ask about availability for our date and rough pricing for our guest count.`
+    );
+  };
 
   const inCategory = useMemo(() => {
     if (!state) return [] as Vendor[];
@@ -165,51 +182,23 @@ export function VendorsView() {
   };
 
   const draftCounter = async (v: Vendor) => {
-    const goal = window.prompt("Negotiation goal", "Ask for 10% off in exchange for a non-peak Friday.");
+    const goal = await dialog.prompt({
+      title: `Counter-proposal to ${v.name}`,
+      label: "Negotiation goal",
+      body: "What are you asking for? Negotiator will draft the email.",
+      placeholder: "Ask for 10% off in exchange for a non-peak Friday.",
+      defaultValue: "Ask for 10% off in exchange for a non-peak Friday.",
+      type: "textarea",
+      confirmLabel: "Draft counter",
+    });
     if (!goal) return;
     await post({ op: "draft_counter", vendorId: v.id, goal }, "counter-" + v.id);
   };
 
   return (
-    <div className="grid lg:grid-cols-[200px_minmax(0,1fr)] gap-8 lg:gap-12">
-      {/* Left rail — categories */}
-      <aside className="lg:sticky lg:top-20 lg:self-start">
-        <div className="text-[10px] uppercase tracking-[0.26em] text-sage-500 font-mono mb-4">
-          Categories
-        </div>
-        <ul className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible no-scrollbar -mx-2 px-2 lg:mx-0 lg:px-0 pb-2 lg:pb-0">
-          {CATEGORIES.map((c) => {
-            const count = countsByCategory[c] ?? 0;
-            const active = activeCategory === c;
-            return (
-              <li key={c} className="shrink-0">
-                <button
-                  onClick={() => { setActiveCategory(c); setOpenId(null); }}
-                  className={`group w-full flex items-baseline justify-between gap-3 rounded-md px-2.5 py-1.5 transition-colors text-left ${
-                    active ? "bg-ink text-paper-50" : "text-ink hover:bg-paper-200/60"
-                  }`}
-                  style={{
-                    fontFamily: '"Cormorant","Cormorant Garamond",Georgia,serif',
-                    fontWeight: 300,
-                    fontStyle: "italic",
-                    fontSize: "18px",
-                    lineHeight: 1.15,
-                  }}
-                >
-                  <span>{c}</span>
-                  {count > 0 && (
-                    <span className={`text-[10px] font-mono not-italic ${
-                      active ? "text-paper-50/70" : "text-ink-300"
-                    }`}>
-                      {count}
-                    </span>
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </aside>
+    <div className="flex flex-col gap-6">
+      {/* Categories live in the left sidebar now (Build → Vendors group)
+          so this page is just the active category's pipeline. */}
 
       {/* Main pane */}
       <section className="min-w-0">
@@ -227,14 +216,24 @@ export function VendorsView() {
               <button
                 onClick={() => runScout(activeCategory)}
                 disabled={busy?.startsWith("scout-")}
-                className="text-[11px] uppercase tracking-[0.18em] text-ink hover:text-sage-500 transition-colors disabled:opacity-50"
+                className="rounded-2xl cta-sage disabled:opacity-50 px-5 py-2.5 text-[13px] font-semibold transition-all shrink-0 inline-flex items-center gap-2"
               >
                 {busy === "scout-" + activeCategory
-                  ? "Scout searching…"
-                  : inCategory.length === 0 ? "Run Scout →" : "Re-run Scout →"}
+                  ? "Searching…"
+                  : inCategory.length === 0
+                    ? `Find ${activeCategory.toLowerCase()}s`
+                    : "Find more"}
+                {busy !== "scout-" + activeCategory && (
+                  <span aria-hidden className="text-paper-50/80">→</span>
+                )}
               </button>
             )}
           </div>
+          {busy === "scout-" + activeCategory && (
+            <div className="mt-3">
+              <ThoughtStream kind="scout-search" tone="sage" size="sm" />
+            </div>
+          )}
         </header>
 
         {!briefLocked && (
@@ -245,7 +244,18 @@ export function VendorsView() {
 
         {error && <p className="text-sm text-risk-high mb-4">{error}</p>}
 
-        {/* Recommended pick — single hero card */}
+        {/* Geographic context. Google Maps embed for the current category */}
+        {briefLocked && (
+          <div className="mb-12">
+            <VendorMap
+              state={state}
+              category={activeCategory as VendorCategory}
+              focusCity={open?.city ?? null}
+            />
+          </div>
+        )}
+
+        {/* Recommended pick. single hero card */}
         {recommended && (
           <div className="mb-12">
             <div className="flex items-baseline justify-between mb-3">
@@ -260,7 +270,7 @@ export function VendorsView() {
               v={recommended}
               busy={busy}
               onOpen={() => setOpenId(recommended.id)}
-              onOutreach={() => post({ op: "draft_outreach", vendorId: recommended.id }, "outreach-" + recommended.id)}
+              onOutreach={() => askMaestroDraftOutreach(recommended)}
             />
           </div>
         )}
@@ -270,7 +280,7 @@ export function VendorsView() {
           <div className="rounded-card border hairline bg-white/60 px-6 py-10 text-center max-w-lg">
             <p className="display text-xl text-ink leading-tight">No {activeCategory.toLowerCase()}s yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Tap "Run Scout" above and we'll find five matches against your brief.
+              Tap <span className="italic text-ink">Find {activeCategory.toLowerCase()}s</span> above and we'll pull five strong matches based on your brief.
             </p>
           </div>
         )}
@@ -306,7 +316,9 @@ export function VendorsView() {
           ))}
         </div>
 
-        {/* Detail drawer (anchored below the stages) */}
+        {/* Detail drawer. only rendered if openId is set programmatically
+            (vendor cards now route to /vendors/[id], so this is rarely
+            reached. Kept as a fallback so existing flows don't break). */}
         {open && (
           <aside className="mt-12 surface rounded-card border hairline shadow-card p-5 animate-fade-in">
             <div className="flex items-baseline justify-between gap-3">
@@ -327,13 +339,13 @@ export function VendorsView() {
             <p className="text-[14px] mt-4 leading-relaxed text-ink-400">{open.notes}</p>
 
             <div className="grid grid-cols-3 gap-3 mt-5">
-              <Pill label="Estimate" value={open.estimateUsd ? `$${open.estimateUsd.toLocaleString()}` : "—"} />
-              <Pill label="Contracted" value={open.contractedUsd ? `$${open.contractedUsd.toLocaleString()}` : "—"} />
-              <Pill label="Paid" value={open.paidUsd ? `$${open.paidUsd.toLocaleString()}` : "—"} />
+              <Pill label="Estimate" value={open.estimateUsd ? `$${open.estimateUsd.toLocaleString()}` : ","} />
+              <Pill label="Contracted" value={open.contractedUsd ? `$${open.contractedUsd.toLocaleString()}` : ","} />
+              <Pill label="Paid" value={open.paidUsd ? `$${open.paidUsd.toLocaleString()}` : ","} />
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-2">
-              <ActionButton onClick={() => post({ op: "draft_outreach", vendorId: open.id }, "outreach-" + open.id)} disabled={!!busy} busy={busy === "outreach-" + open.id}>
+              <ActionButton onClick={() => askMaestroDraftOutreach(open)} disabled={!!busy} busy={false}>
                 Draft outreach
               </ActionButton>
               <ActionButton onClick={() => post({ op: "simulate_inbound", vendorId: open.id }, "inbound-" + open.id)} disabled={!!busy} busy={busy === "inbound-" + open.id}>
@@ -345,25 +357,38 @@ export function VendorsView() {
               <ActionButton onClick={() => post({ op: "review_contract", vendorId: open.id }, "counsel-" + open.id)} disabled={!!busy} busy={busy === "counsel-" + open.id}>
                 Review contract
               </ActionButton>
-              <ActionButton onClick={() => {
+              <ActionButton onClick={async () => {
                 const guess = open.estimateUsd ?? Math.round(((state.brief?.budgetUsd ?? 50000) * 0.1));
-                const raw = window.prompt(`Estimated contract value for ${open.name}`, String(guess));
+                const raw = await dialog.prompt({
+                  title: `Sign with ${open.name}`,
+                  label: "Estimated contract value (USD)",
+                  body: "Counsel will draft the redline against this number.",
+                  type: "number",
+                  defaultValue: String(guess),
+                  confirmLabel: "Propose signing",
+                });
                 if (!raw) return;
-                const n = Number(raw.replace(/[^0-9.]/g, ""));
+                const n = Number(String(raw).replace(/[^0-9.]/g, ""));
                 if (!Number.isFinite(n) || n <= 0) return;
                 post({ op: "propose_signing", vendorId: open.id, estimate: n }, "sign-" + open.id);
               }} disabled={!!busy} busy={busy === "sign-" + open.id}>
                 Propose signing
               </ActionButton>
-              <ActionButton onClick={() => {
+              <ActionButton onClick={async () => {
                 const guess = Math.round(((open.contractedUsd ?? open.estimateUsd ?? 5000) * 0.5));
-                const raw = window.prompt(`Payment amount for ${open.name}`, String(guess));
-                if (!raw) return;
-                const n = Number(raw.replace(/[^0-9.]/g, ""));
+                const data = await dialog.form({
+                  title: `Schedule payment to ${open.name}`,
+                  body: "Treasurer will queue the payment as an Approval Card.",
+                  fields: [
+                    { id: "amount", label: "Amount (USD)", type: "number", default: String(guess), required: true, placeholder: "5000" },
+                    { id: "due", label: "Due date", type: "date", default: new Date().toISOString().slice(0, 10), required: true },
+                  ],
+                  confirmLabel: "Schedule",
+                });
+                if (!data) return;
+                const n = Number(String(data.amount).replace(/[^0-9.]/g, ""));
                 if (!Number.isFinite(n) || n <= 0) return;
-                const due = window.prompt("Due date (YYYY-MM-DD)", new Date().toISOString().slice(0, 10));
-                if (!due) return;
-                post({ op: "schedule_payment", vendorId: open.id, amountUsd: n, dueDate: due }, "pay-" + open.id);
+                post({ op: "schedule_payment", vendorId: open.id, amountUsd: n, dueDate: data.due }, "pay-" + open.id);
               }} disabled={!!busy} busy={busy === "pay-" + open.id}>
                 Schedule payment
               </ActionButton>
@@ -405,21 +430,24 @@ export function VendorsView() {
 // --------------------------------------------------------------------
 
 function RecommendedCard({
-  v, busy, onOpen, onOutreach,
+  v, busy, onOutreach,
 }: {
   v: Vendor;
   busy: string | null;
-  onOpen: () => void;
+  onOpen?: () => void;
   onOutreach: () => void;
 }) {
   return (
-    <article className="relative surface rounded-card card-shell shadow-card hover:shadow-cardHover transition-all overflow-hidden">
+    <Link
+      href={`/vendors/${v.id}`}
+      className="group block relative surface rounded-card card-shell shadow-card hover:shadow-cardHover transition-all overflow-hidden"
+    >
       <div className="px-6 py-6 flex flex-col sm:flex-row sm:items-end gap-5">
         <div className="flex-1 min-w-0">
           <p className="text-[10px] uppercase tracking-[0.22em] text-sage-500 font-mono mb-1.5">
             Top fit · {v.fitScore}/100 · {v.priceBracket}
           </p>
-          <h3 className="display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em]">
+          <h3 className="display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em] group-hover:text-sage-500 transition-colors">
             {v.name}
           </h3>
           <p className="text-[13.5px] text-ink-300 mt-1">{v.city}</p>
@@ -427,30 +455,35 @@ function RecommendedCard({
         </div>
         <div className="flex flex-col gap-2 shrink-0 sm:items-end">
           <button
-            onClick={onOutreach}
+            onClick={(e) => {
+              // Don't let the click bubble into the wrapping <Link>.
+              e.preventDefault();
+              e.stopPropagation();
+              onOutreach();
+            }}
             disabled={!!busy}
             className="btn-primary"
             style={{ paddingInline: "1.4rem" }}
           >
             {busy === "outreach-" + v.id ? "Drafting…" : "Open outreach"}
           </button>
-          <button
-            onClick={onOpen}
-            className="text-[11px] uppercase tracking-[0.18em] text-ink-300 hover:text-ink transition-colors"
-          >
+          <span className="text-[11px] uppercase tracking-[0.18em] text-ink-300 group-hover:text-ink transition-colors">
             See details →
-          </button>
+          </span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
 
-function VendorCard({ v, onClick }: { v: Vendor; onClick: () => void }) {
+function VendorCard({ v, onClick }: { v: Vendor; onClick?: () => void }) {
+  // Whole card is a link to the detail page now. The optional onClick is
+  // kept for backward compat; we ignore it in favour of routing.
+  void onClick;
   return (
-    <button
-      onClick={onClick}
-      className={`group text-left surface rounded-card border hairline shadow-card hover:shadow-cardHover transition-all hover:-translate-y-0.5 px-4 py-4 ${
+    <Link
+      href={`/vendors/${v.id}`}
+      className={`group block text-left surface rounded-card border hairline shadow-card hover:shadow-cardHover transition-all hover:-translate-y-0.5 px-4 py-4 ${
         v.status === "passed" ? "opacity-55" : ""
       }`}
     >
@@ -462,15 +495,30 @@ function VendorCard({ v, onClick }: { v: Vendor; onClick: () => void }) {
           {v.priceBracket}
         </span>
       </div>
-      <div className="text-[12px] text-ink-300 mt-1 truncate">
-        {v.city} · fit {v.fitScore}/100
+      <div className="text-[12px] text-ink-300 mt-1 truncate flex items-center gap-1.5 flex-wrap">
+        <span>{v.city} · fit {v.fitScore}/100</span>
+        {v.discoveryMethod === "open_web" && (
+          <span
+            title={v.sourceProvenance ?? "Found via open web at the couple's request"}
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full font-mono"
+            style={{
+              fontSize: 9,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              background: "rgba(110,128,104,0.12)",
+              color: "#4F5D44",
+            }}
+          >
+            via web
+          </span>
+        )}
       </div>
       {v.notes && (
         <p className="text-[12.5px] text-ink-400 mt-2 leading-snug line-clamp-2">
           {v.notes}
         </p>
       )}
-    </button>
+    </Link>
   );
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-// Guests — household-first list with RSVP segment overview, dietary chips,
+// Guests. household-first list with RSVP segment overview, dietary chips,
 // and inline RSVP edits. Feeds Larder (allergens), Cartographer (seating),
 // Quartermaster (welcome bags), and the Cantor playlist (song requests).
 
@@ -102,7 +102,7 @@ export function GuestsView() {
         <div className="flex items-baseline justify-between gap-6 flex-wrap">
           <h1 className="display text-[36px] sm:text-[44px] lg:text-[52px] leading-[1.02] tracking-[-0.01em]">
             {totals.all === 0 ? (
-              <>Your <span className="italic text-sage-500">people</span>.</>
+              <>Guests.</>
             ) : (
               <>
                 <CountUp value={totals.all} /> on the list.
@@ -121,8 +121,7 @@ export function GuestsView() {
           )}
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
-          RSVPs flow into seating, catering, transport, and thank-yous in real time.
-          Dietary entries reach Larder; song requests reach Cantor.
+          As guests RSVP, we update seating, catering, transport, and the thank-you list. Dietary needs feed the menu. Song requests feed the playlist.
         </p>
       </header>
 
@@ -235,7 +234,7 @@ export function GuestsView() {
               disabled={busy}
               className="text-[11px] uppercase tracking-[0.18em] text-ink-300 hover:text-ink transition-colors disabled:opacity-50"
             >
-              {busy ? "Seeding…" : "Or seed demo →"}
+              {busy ? "Loading…" : "Or load a sample list →"}
             </button>
           )}
         </div>
@@ -251,7 +250,7 @@ export function GuestsView() {
               No guests yet.
             </p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Add a household manually, or seed ten demo households to play with the seating + RSVP flows.
+              Add a household yourself. or load ten sample ones to play with the seating and RSVP flow first.
             </p>
             <div className="mt-5 flex items-center gap-4">
               <button onClick={() => setAdding(true)} className="btn-primary">+ Add household</button>
@@ -260,7 +259,7 @@ export function GuestsView() {
                 disabled={busy}
                 className="text-[11px] uppercase tracking-[0.2em] text-ink-300 hover:text-ink transition-colors disabled:opacity-50"
               >
-                {busy ? "Seeding…" : "Or seed 10 demo →"}
+                {busy ? "Loading…" : "Or load 10 samples →"}
               </button>
             </div>
           </div>

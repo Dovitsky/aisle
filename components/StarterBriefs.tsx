@@ -1,17 +1,19 @@
 "use client";
 
-// StarterBriefs — six taste-level templates shown on the Welcome screen.
+// StarterBriefs. six taste-level templates shown on the Welcome screen.
 // One click loads the template into state, posts an opening chat from
 // Maestro asking for names, and the user lands on the locked-brief flow
 // without ever filling out the form.
 
 import { useState } from "react";
 import { useProject } from "./StateProvider";
+import { useToast } from "./Toast";
 import { STARTER_BRIEFS } from "@/lib/starterBriefs";
 import type { ProjectState } from "@/lib/types";
 
 export function StarterBriefs() {
-  const { setState } = useProject();
+  const { setState, setChatOpen } = useProject();
+  const { notify } = useToast();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +31,21 @@ export function StarterBriefs() {
         setError(j.error);
         return;
       }
-      if (j.state) setState(j.state);
+      if (j.state) {
+        setState(j.state);
+        const tpl = STARTER_BRIEFS.find((s) => s.id === id);
+        notify({
+          kind: "agent",
+          agent: "Maestro",
+          title: tpl ? `Starting from ${tpl.title}` : "Starter loaded",
+          detail: "Tell me your names and we're off.",
+          duration: 5000,
+        });
+        // Open the ChatDock so the user immediately sees Maestro's first
+        // question. without this, the brief loads but the user lands back
+        // on the Welcome screen with no visible next step.
+        setTimeout(() => setChatOpen(true), 350);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -59,9 +75,9 @@ export function StarterBriefs() {
             disabled={!!busy}
             className="brief-card group text-left relative overflow-hidden rounded-card border hairline bg-paper-50 disabled:opacity-50"
           >
-            {/* Hero image — the main visual identity */}
+            {/* Hero image. the main visual identity */}
             <div className="relative aspect-[4/3] overflow-hidden bg-paper-200">
-              {/* Tinted accent wash — visible during image load, also peeks through edges */}
+              {/* Tinted accent wash. visible during image load, also peeks through edges */}
               <div
                 className="absolute inset-0 transition-opacity duration-700 group-hover:opacity-0"
                 style={{
@@ -80,7 +96,7 @@ export function StarterBriefs() {
                 style={{ objectPosition: s.imagePosition ?? "center" }}
               />
 
-              {/* Top vignette — keeps the eyebrow readable on light photos */}
+              {/* Top vignette. keeps the eyebrow readable on light photos */}
               <div
                 className="absolute inset-x-0 top-0 h-20 pointer-events-none opacity-70 group-hover:opacity-50 transition-opacity duration-700"
                 style={{
@@ -89,7 +105,7 @@ export function StarterBriefs() {
                 aria-hidden
               />
 
-              {/* Bottom fade INTO the paper panel — makes the seam feel deliberate */}
+              {/* Bottom fade INTO the paper panel. makes the seam feel deliberate */}
               <div
                 className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
                 style={{

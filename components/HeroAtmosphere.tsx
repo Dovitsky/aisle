@@ -1,13 +1,13 @@
 "use client";
 
-// HeroAtmosphere — editorial photo stack on the right of the Welcome hero.
+// HeroAtmosphere. editorial photo stack on the right of the Welcome hero.
 //
 // Three small framed photographs, slightly rotated, with tiny serif captions.
 // Each fades in with a stagger after the headline, then settles. On hover the
 // active card lifts slightly. Hidden below the lg breakpoint to keep the
 // mobile hero focused on the headline.
 //
-// The photos are atmospheric — they're not the brand, they're the *mood*.
+// The photos are atmospheric. they're not the brand, they're the *mood*.
 // Sage tinted, slightly desaturated, treated like Polaroids in a designer's
 // scrapbook.
 

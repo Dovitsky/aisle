@@ -44,7 +44,7 @@ export function EmptyState({
           <Link
             href={action.href}
             className={`inline-block mt-4 rounded-2xl px-4 py-2 text-sm font-medium transition-colors ${
-              action.primary ? "bg-ink text-paper-50 hover:bg-ink-400" : "border hairline bg-white/80 hover:bg-white"
+              action.primary ? "cta-sage" : "border hairline bg-white/80 hover:bg-white"
             }`}
           >
             {action.label}
@@ -53,7 +53,7 @@ export function EmptyState({
           <button
             onClick={action.onClick}
             className={`mt-4 rounded-2xl px-4 py-2 text-sm font-medium transition-colors ${
-              action.primary ? "bg-ink text-paper-50 hover:bg-ink-400" : "border hairline bg-white/80 hover:bg-white"
+              action.primary ? "cta-sage" : "border hairline bg-white/80 hover:bg-white"
             }`}
           >
             {action.label}

@@ -5,9 +5,9 @@ Sorted by priority, then impact-per-effort. The top item is what the next sessio
 
 ## P0 — Blocking
 
-- [P0] No git repo initialized — the loop expects `git status`, `git log`, branch commits per iteration. Initialize, set `main` branch, add `.gitignore` already present, make initial commit. (effort: S)
-- [P0] `npm test` fails in non-darwin envs because esbuild's platform package is pinned to darwin-arm64 in `node_modules`. Switch tsx to a wasm fallback or add `optionalDependencies` for cross-platform esbuild so cron-driven CI can run tests. (effort: S)
-- [P0] No CI / pre-commit hooks — gitleaks, prettier, eslint, type-check, vitest are all listed as deferred in BUILD_LOG. At minimum add a Husky pre-commit running `npx tsc --noEmit` + a tests trip. (effort: M)
+- [P0] Cron sandbox cannot complete git operations — `.git/HEAD.lock` and `.git/refs/heads/loop/iter-N` cannot be `unlink`ed inside the bwrap sandbox even when owned by the running user. Iteration 1 hit this. Investigate: run cron outside bwrap, host-side git wrapper, or use a non-git change journal (JSONL append) the host then commits. (effort: M)
+- [P0] No CI / pre-commit hooks — gitleaks, prettier, eslint, type-check, vitest are all listed as deferred in BUILD_LOG. At minimum add a Husky pre-commit running `npx tsc --noEmit` + `npm test`. (effort: M)
+- [P0] After iteration 1, two test artifacts cannot be removed by the sandbox (`data/store.backup.1778211965.json`, `tests/.tmp.store.json`). The host can rm them; until then they shouldn't be committed. Add `.gitignore` rules for `data/store.backup.*.json` and `tests/.tmp.store.json`. (effort: S)
 
 ## P1 — Important (PRD-specified, hero features below acceptance)
 
@@ -23,27 +23,74 @@ Sorted by priority, then impact-per-effort. The top item is what the next sessio
 - [P1] Dietary brief delivery — Larder `dispatch_larder_brief` lands as approval; UI for resolution workflow on caterer side. (effort: M)
 - [P1] Engagement studio (Concierge) — page exists at 102 lines, polish to /vendors level. (effort: M)
 - [P1] Honeymoon (Itinerist) — gated content, segment cards. 89 lines today, behind dress/honeymoon firewall. Polish + verify firewall holds. (effort: M)
-- [P1] Tests for the chat → update_brief → auto-lock → Scout pipeline. The hero AI flow has no integration coverage. (effort: M)
 - [P1] Vendor portal magic-link auth — the `/portal` route exists but has no auth gate. Build the magic-link issue + verify before marking the surface usable. (effort: M)
+
+## P0 (added by iter-2)
+
+- [P0] Push iter-1 + iter-2 work to git on the host machine. Sandbox cannot
+  unlink `.git/HEAD.lock` — but the iter-1 + iter-2 diffs are intact in the
+  working tree and tested green. Before iter-3 fires, the user's host needs
+  to apply: `git checkout -b loop/iter-2 && git add -A && git commit -m "loop(iter-2): offline maestro + agent fixtures + lock cascade + gmail fixture"`. (effort: S — one host-side commit.)
+
+## Resolved by iter-2 (no longer pending)
+
+- ~~[P1] Tests for the chat → update_brief → auto-lock → Scout pipeline.~~ →
+  `tests/integration-flow.ts` covers it (48 assertions across all specialists).
+
+## Resolved by iter-13
+
+- ~~[P2] Ambient ledger activity ticker on the dashboard.~~ →
+  `components/AmbientTicker.tsx` + `lib/ambient.ts` + 14 selector tests.
+  Mounted between editorial hero and phase strip in `Today.tsx`.
+- ~~[P1-grade UX] Toast on lock cascade in chat flow.~~ → ChatDock now
+  emits a sage "Foundation in flight" toast on lock transition, an
+  Outreach toast when `dispatch_email_vendor` fires, and a Scout toast
+  on material-pivot refire. All click-route to the relevant page.
+- ~~[P2] BeautyView polish.~~ → 94 → 230 lines, hero stat row, tracks
+  grouping (hair / makeup / both), trials secondary panel, propose toast.
+- ~~[P2] BarView polish.~~ → 102 → 235 lines, hero stat row, bar policy
+  chips with humanized labels, signatures panel highlighted in sage,
+  propose + style-change toasts.
+
+## Resolved by iter-3
+
+- ~~[P1] Watcher actions beyond stale-vendor (partial).~~ → 4 proactive
+  reminders fire on lock (license, rehearsal dinner, weather contingency,
+  wedding website). True Watcher cron-style sweep over time still pending.
+- ~~[NEW] Demo Mode (one-click fully populated state).~~ → `lib/demo.ts` +
+  `/api/settings` op:"load_demo". 51 assertions verify completeness.
+- ~~[NEW] Google Maps integration on /vendors.~~ → `components/VendorMap.tsx`
+  using free iframe embed; category-aware query + city focus + chip legend.
+- ~~[NEW] Full agent cascade on lock.~~ → 10 specialists fire on lock now,
+  populating florals + ceremony + music + cake + bar + rentals + welcome
+  bag + registry in addition to the original Scout + Designer + Treasurer.
+- ~~[NEW] Triage offline classifier.~~ → 5 intent classes + USD parsing.
+  Inbox flow (5 fixture messages → matched + classified + Negotiator
+  follow-up cascade) now exercised by `tests/inbox-flow.ts`.
 
 ## P2 — Polish (design-system drift, voice/tone, coverage)
 
 - [P2] Polish thin views to /vendors level (each ~M effort, all separate items):
-  - [P2] /pricing (69 lines)
-  - [P2] /florals (83 lines)
+  - ~~[P2] /pricing (69 lines)~~ → polished in iter-12
+  - ~~[P2] /florals (83 lines)~~ → polished in iter-12
+  - ~~[P2] /beauty (94 lines)~~ → polished in iter-13 (94 → 230 lines)
+  - ~~[P2] /bar (102 lines)~~ → polished in iter-13 (102 → 235 lines)
   - [P2] /planner (85 lines)
   - [P2] /license (87 lines)
   - [P2] /memorials (87 lines)
   - [P2] /pre-events (88 lines)
-  - [P2] /beauty (94 lines)
   - [P2] /tips (95 lines)
   - [P2] /rentals (97 lines)
   - [P2] /registry (99 lines)
   - [P2] /visits (99 lines)
   - [P2] /speeches (101 lines)
-  - [P2] /bar (102 lines)
+  - [P2] /engagement (102 lines)
   - [P2] /thanks (107 lines)
   - [P2] /dress (107 lines)
+- [P2] Extend AmbientTicker to preview in-flight cascade waves before the
+  first ledger entry lands (currently the strip is silent for the first
+  second of a fresh cascade). Consider an in-memory in-flight queue keyed
+  off the wave that fired in `lockAndIgnite`. (effort: M)
 - [P2] Smart RSVP form on the wedding website (BUILD_LOG mandate research angle). (effort: M)
 - [P2] Receipt + email + screenshot ingestion (BUILD_LOG mandate). (effort: L)
 - [P2] Cultural ceremony library expansion beyond the 14/62 ritual baseline. (effort: M)

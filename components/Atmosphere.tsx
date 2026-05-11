@@ -1,17 +1,17 @@
 "use client";
 
 // Visual atmosphere primitives. All low-cost, all subtle, all luxe.
-//   <AuroraBackground /> — fixed sage mesh + film grain, mounted once globally.
-//   <Spotlight />        — wraps cards, paints a sage glow under the cursor.
-//   <CountUp value={N} /> — animates a number in.
-//   <Reveal>             — fades + lifts children when they scroll into view.
-//   <LetterReveal>       — letter-by-letter typographic reveal for hero copy.
-//   <BreathingDot />     — soft pulsing dot for "alive" indicators.
+//   <AuroraBackground />. fixed sage mesh + film grain, mounted once globally.
+//   <Spotlight />       . wraps cards, paints a sage glow under the cursor.
+//   <CountUp value={N} />. animates a number in.
+//   <Reveal>            . fades + lifts children when they scroll into view.
+//   <LetterReveal>      . letter-by-letter typographic reveal for hero copy.
+//   <BreathingDot />    . soft pulsing dot for "alive" indicators.
 
 import { useEffect, useRef, useState } from "react";
 
 // --------------------------------------------------------------------
-// Aurora — mounted once at the top of the tree, fixed behind everything.
+// Aurora. mounted once at the top of the tree, fixed behind everything.
 // --------------------------------------------------------------------
 export function AuroraBackground() {
   return (
@@ -27,7 +27,7 @@ export function AuroraBackground() {
 }
 
 // --------------------------------------------------------------------
-// Spotlight — pointer-tracking glow.
+// Spotlight. pointer-tracking glow.
 // Renders a div that listens for mousemove and writes --mx / --my.
 // Add the .spotlight class on the element you want lit.
 // --------------------------------------------------------------------
@@ -59,7 +59,7 @@ export function Spotlight({
 }
 
 // --------------------------------------------------------------------
-// CountUp — animates from 0 to value when it scrolls into view.
+// CountUp. animates from 0 to value when it scrolls into view.
 // --------------------------------------------------------------------
 export function CountUp({
   value,
@@ -107,7 +107,7 @@ export function CountUp({
 }
 
 // --------------------------------------------------------------------
-// Reveal — fades + lifts children when scrolled into view.
+// Reveal. fades + lifts children when scrolled into view.
 // --------------------------------------------------------------------
 export function Reveal({
   children,
@@ -146,8 +146,8 @@ export function Reveal({
 }
 
 // --------------------------------------------------------------------
-// LetterReveal — splits text into spans with cascading rise+blur.
-// Use sparingly — best for the marquee headline.
+// LetterReveal. splits text into spans with cascading rise+blur.
+// Use sparingly. best for the marquee headline.
 // --------------------------------------------------------------------
 export function LetterReveal({
   text,
@@ -191,7 +191,7 @@ export function LetterReveal({
 }
 
 // --------------------------------------------------------------------
-// BreathingDot — alive indicator.
+// BreathingDot. alive indicator.
 // --------------------------------------------------------------------
 export function BreathingDot({
   className = "bg-sage-400",

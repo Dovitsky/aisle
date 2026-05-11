@@ -1,6 +1,6 @@
 "use client";
 
-// Budget — visual allocation against the brief envelope.
+// Budget. visual allocation against the brief envelope.
 //
 // Hero: italic Cormorant header + envelope number.
 // Master bar: a single horizontal bar of the envelope showing paid / committed
@@ -69,7 +69,7 @@ export function BudgetView() {
   const lines = [...state.budget].sort((a, b) => b.planUsd - a.planUsd);
   const maxLine = Math.max(0, ...lines.map((l) => l.planUsd));
 
-  // Master bar segments — proportional to envelope (or planSum if over-envelope)
+  // Master bar segments. proportional to envelope (or planSum if over-envelope)
   const denom = Math.max(total, planSum, 1);
   const segPaid = (paidSum / denom) * 100;
   const segCommitted = ((committedSum - paidSum) / denom) * 100;
@@ -82,12 +82,11 @@ export function BudgetView() {
       {/* Hero */}
       <header>
         <p className="text-[10px] uppercase tracking-[0.26em] text-sage-500 font-mono mb-2">
-          Where the money goes
+          Budget
         </p>
         <div className="flex items-baseline justify-between gap-6 flex-wrap">
           <h1 className="display text-[36px] sm:text-[44px] lg:text-[52px] leading-[1.02] tracking-[-0.01em]">
-            Allocation,{" "}
-            <span className="italic text-sage-500">in proportion</span>.
+            Where the money goes.
           </h1>
           <div className="text-right">
             <div className="display text-[40px] tabular-nums leading-none">
@@ -106,7 +105,7 @@ export function BudgetView() {
         </div>
       )}
 
-      {/* MASTER BAR — proportional segments */}
+      {/* MASTER BAR. proportional segments */}
       {(planSum > 0 || total > 0) && (
         <Reveal>
           <section>
@@ -174,14 +173,14 @@ export function BudgetView() {
               No allocation yet.
             </p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Treasurer can propose a starting allocation across the standard categories — Venue, Photography, Catering, Florals, Music, and the rest. You can edit any line before locking it as the working plan.
+              We can lay out a starting allocation across the standard categories. venue, photography, catering, florals, music, and the rest. You can edit any line before locking it as the working plan.
             </p>
             <button
               onClick={propose}
               disabled={busy}
               className="btn-primary mt-5"
             >
-              {busy ? "Treasurer drafting…" : "Have Treasurer propose"}
+              {busy ? "Working…" : "Pull a starting budget together"}
             </button>
           </div>
         </Reveal>

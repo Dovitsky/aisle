@@ -1,6 +1,6 @@
 "use client";
 
-// First-run brief intake — PRD §5.1.
+// First-run brief intake. PRD §5.1.
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -152,9 +152,9 @@ export function BriefForm() {
 
         <Field label="Planner">
           <select className={INPUT} value={plannerStatus} onChange={(e) => setPlannerStatus(e.target.value as "none" | "want_one" | "have_one")}>
-            <option value="none">No planner — AISLE concierge handles it</option>
-            <option value="want_one">Want one — match me with a planner</option>
-            <option value="have_one">Already have one — invite them</option>
+            <option value="none">No planner. AISLE concierge handles it</option>
+            <option value="want_one">Want one. match me with a planner</option>
+            <option value="have_one">Already have one. invite them</option>
           </select>
         </Field>
 
@@ -172,7 +172,7 @@ export function BriefForm() {
         <button
           onClick={() => submit(true)}
           disabled={!!busy}
-          className="flex-1 rounded-2xl bg-ink text-paper-50 py-3 text-sm font-semibold hover:bg-ink-400 transition-colors disabled:opacity-50 shadow-cta"
+          className="cta-sage flex-1 rounded-2xl py-3 text-sm font-semibold transition-all disabled:opacity-50"
         >
           {busy === "lock" ? "Locking…" : locked ? "Re-lock" : "Lock brief"}
         </button>

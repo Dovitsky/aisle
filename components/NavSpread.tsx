@@ -1,6 +1,6 @@
 "use client";
 
-// NavSpread — the entire navigation rendered inline on the home page as a
+// NavSpread. the entire navigation rendered inline on the home page as a
 // magazine-style table of contents. Each group is a column. Hover reveals a
 // sage dot; the active route is highlighted in sage.
 

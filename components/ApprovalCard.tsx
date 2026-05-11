@@ -1,6 +1,6 @@
 "use client";
 
-// The decision card — atomic unit of the product.
+// The decision card. atomic unit of the product.
 // Plain language. Quiet chrome. Three actions.
 
 import { useState } from "react";
@@ -8,6 +8,8 @@ import type { ApprovalCard as ApprovalCardT, ProjectState } from "@/lib/types";
 import { useProject } from "./StateProvider";
 import { agentDisplayName } from "@/lib/displayName";
 import { Spotlight } from "./Atmosphere";
+import { useToast } from "./Toast";
+import { Spinner } from "./Pending";
 
 const RISK_COPY: Record<ApprovalCardT["risk"], { label: string; cls: string; dot: string }> = {
   low:    { label: "Easy",        cls: "text-sage-500 border-sage-300/40 bg-sage-50",   dot: "bg-sage-400" },
@@ -199,6 +201,7 @@ function Mini({ children }: { children: React.ReactNode }) {
 
 export function ApprovalCardView({ card }: { card: ApprovalCardT }) {
   const { state, setState } = useProject();
+  const { notify } = useToast();
   const [open, setOpen] = useState(false);
   const [showRationale, setShowRationale] = useState(false);
   const [busy, setBusy] = useState<null | "approve" | "edit" | "reject">(null);
@@ -216,6 +219,21 @@ export function ApprovalCardView({ card }: { card: ApprovalCardT }) {
       });
       const j = (await r.json()) as { state: ProjectState };
       if (j.state) setState(j.state);
+      // Concierge-style confirmation toast.
+      const verb = decision === "approved" ? "Done" : decision === "rejected" ? "Passed" : "Edits sent";
+      const detail = decision === "approved"
+        ? toastDetailForAction(card)
+        : decision === "rejected"
+        ? "Won't proceed."
+        : "Maestro is updating the draft.";
+      notify({
+        kind: decision === "rejected" ? "info" : "approval",
+        agent: agentDisplayName(state, card.agent),
+        title: `${verb}. ${card.title.replace(/\?$/, "")}`,
+        detail,
+      });
+    } catch {
+      notify({ kind: "error", title: "Couldn't reach the agents", detail: "Check your connection and try again." });
     } finally {
       setBusy(null);
     }
@@ -228,50 +246,33 @@ export function ApprovalCardView({ card }: { card: ApprovalCardT }) {
         isResolved ? "opacity-65" : ""
       }`}
     >
-      <header className="px-5 pt-5 pb-3">
-        <div className="flex items-center justify-between gap-3 mb-2">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="relative inline-block w-1.5 h-1.5" aria-hidden>
-              <span className={`absolute inset-0 rounded-full ${risk.dot} animate-breathe`} />
-              <span className={`absolute inset-0 rounded-full ${risk.dot}`} />
-            </span>
-            <span className="eyebrow truncate">{agentDisplayName(state, card.agent)}</span>
-          </div>
-          <span
-            className={`shrink-0 text-[10px] uppercase tracking-[0.16em] border rounded-full px-2 py-0.5 ${risk.cls}`}
-          >
-            {risk.label}
+      <header className="px-5 pt-5 pb-2">
+        <div className="flex items-center gap-2 min-w-0 mb-2">
+          <span className="relative inline-block w-1.5 h-1.5 shrink-0" aria-hidden>
+            <span className={`absolute inset-0 rounded-full ${risk.dot} animate-breathe`} />
+            <span className={`absolute inset-0 rounded-full ${risk.dot}`} />
           </span>
+          <span className="eyebrow truncate">{agentDisplayName(state, card.agent)}</span>
         </div>
-        <h3 className="display text-[22px] leading-[1.15] text-ink text-balance">{card.title}</h3>
+        <h3 className="display text-[20px] leading-[1.18] text-ink text-balance">{card.title}</h3>
       </header>
 
       <div className="px-5 pb-3">
-        {open ? (
-          <div className="animate-fade-in-soft"><ActionPreview a={card.action} /></div>
-        ) : (
-          <button
-            onClick={() => setOpen(true)}
-            className="text-[13px] text-ink-300 underline-offset-4 hover:underline hover:text-ink transition-colors"
-          >
-            See the details
-          </button>
-        )}
-      </div>
-
-      <div className="px-5 pb-3">
         <button
-          onClick={() => setShowRationale((v) => !v)}
-          className="btn-ghost flex items-center gap-1.5"
-          aria-expanded={showRationale}
+          onClick={() => { setOpen((v) => !v); setShowRationale((v) => !v); }}
+          className="text-[12px] text-ink-300 hover:text-ink transition-colors inline-flex items-center gap-1.5"
+          aria-expanded={open || showRationale}
         >
-          <span className={`inline-block w-3 transition-transform ${showRationale ? "rotate-90" : ""}`}>›</span>
-          Why
+          <span className={`inline-block w-3 transition-transform ${open || showRationale ? "rotate-90" : ""}`}>›</span>
+          {open || showRationale ? "Hide details" : "Details"}
         </button>
-        {showRationale && (
-          <p className="mt-2 text-[13.5px] leading-relaxed text-ink-400 whitespace-pre-wrap animate-fade-in-soft">
-            {card.rationale}
-          </p>
+        {(open || showRationale) && (
+          <div className="mt-3 space-y-3 animate-fade-in-soft">
+            <ActionPreview a={card.action} />
+            <p className="text-[13px] leading-relaxed text-ink-400 whitespace-pre-wrap">
+              {card.rationale}
+            </p>
+          </div>
         )}
       </div>
 
@@ -293,9 +294,16 @@ export function ApprovalCardView({ card }: { card: ApprovalCardT }) {
             <button
               onClick={() => decide("rejected")}
               disabled={!!busy}
-              className="py-3.5 text-ink-300 hover:text-risk-high hover:bg-risk-high/5 transition-colors disabled:opacity-50"
+              className="py-3.5 text-ink-300 hover:text-risk-high hover:bg-risk-high/5 transition-colors disabled:opacity-50 inline-flex items-center justify-center gap-2"
             >
-              {busy === "reject" ? "…" : "Pass"}
+              {busy === "reject" ? (
+                <>
+                  <Spinner size={12} tone="ink" />
+                  <span>Passing</span>
+                </>
+              ) : (
+                "Pass"
+              )}
             </button>
             <button
               onClick={() => {
@@ -310,9 +318,16 @@ export function ApprovalCardView({ card }: { card: ApprovalCardT }) {
             <button
               onClick={() => decide("approved")}
               disabled={!!busy}
-              className="py-3.5 text-ink font-semibold bg-sage-50 hover:bg-sage-100 transition-colors disabled:opacity-50"
+              className="cta-sage py-3.5 font-semibold transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2"
             >
-              {busy === "approve" ? "…" : "Yes"}
+              {busy === "approve" ? (
+                <>
+                  <Spinner size={12} tone="paper" />
+                  <span>Approving</span>
+                </>
+              ) : (
+                "Yes"
+              )}
             </button>
           </footer>
         </>
@@ -346,4 +361,28 @@ export function ApprovalCardView({ card }: { card: ApprovalCardT }) {
       )}
     </Spotlight>
   );
+}
+
+// Composes a one-line confirmation for an approval that just got approved.
+// Tells the user what AISLE is now actually doing as a result.
+function toastDetailForAction(card: ApprovalCardT): string {
+  const a = card.action;
+  switch (a.kind) {
+    case "send_email":            return `Email queued to ${a.to}.`;
+    case "schedule_payment":      return `$${a.amountUsd.toLocaleString()} scheduled to ${a.vendor} for ${a.dueDate}.`;
+    case "sign_contract":         return `Contract signed with ${a.vendor}. Treasurer is queuing the deposit.`;
+    case "publish_design":        return `${a.title} locked as the direction. Stationer will draft the suite.`;
+    case "lock_seating":          return `Seating chart locked. ${a.guestCount} guests across ${a.tableCount} tables.`;
+    case "send_save_the_date":    return `Going out to ${a.recipients} addresses (${a.format}).`;
+    case "send_invitations":      return `Going out to ${a.recipients} addresses (${a.format}).`;
+    case "lock_setlist":          return `Setlist locked with ${a.cueCount} cues.`;
+    case "lock_ceremony":         return `Ceremony script locked with ${a.sectionCount} moments.`;
+    case "lock_cake":             return `Cake locked. ${a.tiers}-tier, ${a.servings} servings.`;
+    case "publish_website":       return `aisle.wedding/${a.slug} is live.`;
+    case "file_marriage_license": return `Filing in ${a.county}, ${a.state}.`;
+    case "send_caterer_brief":    return `Brief sent to ${a.vendor}; ${a.allergenCount} allergens flagged.`;
+    case "block_hotel_rooms":     return `${a.rooms} rooms blocked at ${a.hotel} ($${a.nightlyRate}/night).`;
+    case "lock_vows":             return `Vows locked for the ${a.whose}.`;
+    default:                      return "Maestro is taking it from here.";
+  }
 }

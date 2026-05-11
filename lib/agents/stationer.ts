@@ -54,7 +54,7 @@ Design direction: ${args.direction}${menuBlock}
 Return the eight pieces now.`;
 
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 2500,
     system: SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
@@ -82,7 +82,61 @@ function coerce(raw: unknown): StationerySuiteItem | null {
   };
 }
 
-function offline(..._: unknown[]): Omit<StationerySuiteItem, "id">[] { return []; }
+function offline(args: { brief: Brief; direction: string; menu?: MenuItem[] }): Omit<StationerySuiteItem, "id">[] {
+  const b = args.brief;
+  const dateLong = formatLongDate(b.dateWindow);
+  const replyBy = formatReplyByDate(b.dateWindow);
+  const menuLines = (args.menu ?? []).slice(0, 3).map((m) => {
+    const allergens = (m.containsAllergens ?? []).map((a: AllergenCode) => ALLERGEN_LABEL[a]).join(", ");
+    return `${m.name}${allergens ? ` (${allergens})` : ""}`;
+  }).join("\n");
+
+  return [
+    { piece: "save_the_date",
+      copy: `SAVE THE DATE\n\n${b.organizerName} ${maybeAmp()} ${b.partnerName}\n\n${dateLong}\n\n${b.region}\n\nInvitation to follow.` },
+    { piece: "invitation",
+      copy: `Together with their families\n\n${b.organizerName.toUpperCase()}\n${maybeAmp().toUpperCase()}\n${b.partnerName.toUpperCase()}\n\nrequest the pleasure of your company\nat the celebration of their marriage\n\n${dateLong}\nat four o'clock in the afternoon\n\n${b.region}\n\nReception to follow.` },
+    { piece: "response_card",
+      copy: `M ___________________________________\n\n☐ Joyfully accepts\n☐ Regretfully declines\n\nKindly reply by ${replyBy}\n\nMeal selection:\n☐ ${args.menu?.[0]?.name ?? "Chicken"}\n☐ ${args.menu?.[1]?.name ?? "Fish"}\n☐ ${args.menu?.[2]?.name ?? "Vegetarian"}\n\nDietary restrictions: __________________` },
+    { piece: "details_card",
+      copy: `THE WEEKEND\n\nAttire: ${b.formalityTone === "modern" ? "Cocktail attire" : "Black tie optional"}\n\nHotel block: details and code on our website\naisle.wedding/${slugify(b.organizerName)}-${slugify(b.partnerName)}\n\nTransportation: shuttles will run\nfrom the hotel block to the venue\nstarting at 3:30pm\n\nKindly arrive 30 minutes before the\nceremony so we can begin on time.` },
+    { piece: "menu_card",
+      copy: menuLines
+        ? `THE MENU\n\nFirst\n  ${args.menu?.[0]?.name ?? "Seasonal salad"}\n\nSecond\n  ${args.menu?.[1]?.name ?? "Main course"}\n\nThird\n  ${args.menu?.[2]?.name ?? "Dessert"}\n\nWines paired throughout\n\nThank you for joining us.`
+        : `THE MENU\n\nFirst\n  Seasonal salad with shaved fennel\n\nSecond\n  Pan-seared local fish OR\n  braised short rib OR\n  herbed mushroom risotto\n\nThird\n  Olive oil cake with seasonal fruit\n\nWines paired throughout` },
+    { piece: "place_card",
+      copy: `[Guest first name] [Guest last name]\nTable [N]\n\nHand-calligraphed.` },
+    { piece: "program",
+      copy: `THE CEREMONY\n\nProcessional\n  Selected by the couple\n\nWelcome\n  Officiant\n\nReadings\n  By [Family member]\n\nVows + Rings\n  ${b.organizerName} ${maybeAmp()} ${b.partnerName}\n\nPronouncement + Recessional\n\nThank you for being here.` },
+    { piece: "thank_you",
+      copy: `Dear [Guest first name],\n\nThank you for celebrating with us. Your presence on our wedding day meant more than we can say. ${(args.menu?.length ?? 0) > 0 ? "We hope you enjoyed the meal as much as we enjoyed sharing it with you. " : ""}We'll think about that night for the rest of our lives.\n\nWith love,\n${b.organizerName} ${maybeAmp()} ${b.partnerName}` },
+  ];
+}
+
+function maybeAmp() { return "&"; }
+function slugify(s: string): string {
+  return (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "us";
+}
+function formatLongDate(window: string): string {
+  // Try to extract month + year from the window string and format it as
+  // "Saturday, the eighteenth of October, two thousand twenty-six".
+  const iso = window.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    const d = new Date(`${iso[1]}-${iso[2]}-${iso[3]}T12:00:00`);
+    return d.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  }
+  return window;
+}
+function formatReplyByDate(window: string): string {
+  const iso = window.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    const d = new Date(`${iso[1]}-${iso[2]}-${iso[3]}T12:00:00`);
+    d.setDate(d.getDate() - 30);
+    return d.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
+  }
+  // Fall back to "30 days before the wedding" prose.
+  return `30 days before ${window}`;
+}
 
 
 

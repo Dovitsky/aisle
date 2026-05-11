@@ -42,7 +42,7 @@ Organizer notes (optional): ${organizerNotes ?? "(none)"}
 
 Produce six directions now.`;
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 2200,
     system: SYSTEM,
     messages: [{ role: "user", content: prompt }],
@@ -74,4 +74,37 @@ function coerce(raw: unknown): DressDirection | null {
   };
 }
 
-function offline(..._: unknown[]): DressDirection[] { return []; }
+function offline(): DressDirection[] {
+  return [
+    { title: "Slip + Cathedral Veil",
+      silhouette: "Bias-cut silk slip, narrow shoulder strap, low cowl back; lengthy cathedral veil for the aisle moment.",
+      fabrics: ["Silk crepe", "Fine bridal tulle"],
+      designerExamples: ["Galvan", "Danielle Frankel", "Saint Laurent"],
+      rationale: "Quiet drama. The veil does the work; the dress reads modern at dinner without the period feel." },
+    { title: "Architectural Mikado A-line",
+      silhouette: "Strapless mikado A-line with a defined waist seam; structured but not stiff.",
+      fabrics: ["Silk mikado", "Bonded silk"],
+      designerExamples: ["Carolina Herrera", "Markarian", "Vera Wang Haute"],
+      rationale: "Reads as 'wedding' from a distance. Suits formal venues; photographs cleanly." },
+    { title: "Couture Embroidered Long Sleeve",
+      silhouette: "Hand-embroidered illusion bodice into a fluted skirt, full long sleeves.",
+      fabrics: ["Silk organza", "Hand-beaded tulle"],
+      designerExamples: ["Monique Lhuillier", "Reem Acra", "Marchesa"],
+      rationale: "Maximalist option. Best at a black-tie or evening ceremony with cool light." },
+    { title: "Modern Mini + Cape",
+      silhouette: "Tailored mini dress with detachable floor-length cape — mini for reception, cape for ceremony.",
+      fabrics: ["Wool crepe", "Silk faille"],
+      designerExamples: ["Khaite", "Toteme x bridal", "Halfpenny London"],
+      rationale: "Two looks in one for a couple who wants the ceremony moment and freedom to dance." },
+    { title: "Vintage-Inspired Tea Length",
+      silhouette: "Tea-length full-skirt with a fitted bodice; cap sleeves; pleated waist.",
+      fabrics: ["Silk taffeta", "Bonded organza"],
+      designerExamples: ["The Vampire's Wife", "Self-Portrait Bridal", "Loulou de Saison"],
+      rationale: "Garden ceremonies, daytime weddings, retro-leaning vibes." },
+    { title: "Sleek Tuxedo or Suit",
+      silhouette: "Tailored ivory or black wool tuxedo; satin lapels; silk camisole; statement shoe.",
+      fabrics: ["Wool / silk twill", "Italian wool"],
+      designerExamples: ["The Row", "Bode", "Saint Laurent"],
+      rationale: "Modernist alternative. Travels well, photographs editorially, ages out of trend cycles." },
+  ];
+}

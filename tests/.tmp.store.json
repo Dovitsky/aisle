@@ -1,0 +1,219 @@
+{
+  "brief": {
+    "organizerName": "Maya",
+    "partnerName": "Sam",
+    "dateWindow": "Late September 2026",
+    "region": "Hudson Valley, NY",
+    "guestCount": 120,
+    "budgetUsd": 80000,
+    "vibe": "candlelit barn, editorial film photography, no DJ banter",
+    "plannerStatus": "want_one",
+    "cultural": "secular",
+    "formalityTone": "modern",
+    "destination": false,
+    "locked": true,
+    "lockedAt": "2026-05-11T20:18:06.425Z"
+  },
+  "chat": [],
+  "approvals": [
+    {
+      "id": "mp17fzzyoa6dj",
+      "createdAt": "2026-05-11T12:55:38.494Z",
+      "status": "pending",
+      "agent": "Scout",
+      "phase": "foundation",
+      "title": "Open outreach to Hudson Valley Barn for Venue?",
+      "rationale": "test",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn",
+        "subject": "test",
+        "body": "test"
+      }
+    },
+    {
+      "id": "mp1n90ijwglct",
+      "createdAt": "2026-05-11T20:18:06.427Z",
+      "status": "pending",
+      "agent": "Scout",
+      "phase": "foundation",
+      "title": "Open outreach to Hudson Valley Barn for Venue?",
+      "rationale": "test",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn",
+        "subject": "test",
+        "body": "test"
+      }
+    }
+  ],
+  "ledger": [
+    {
+      "id": "mp17fzzvdejds",
+      "at": "2026-05-11T12:55:38.491Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mp17fzzwkn6tj",
+      "at": "2026-05-11T12:55:38.492Z",
+      "actor": "user",
+      "kind": "brief.locked",
+      "summary": "Brief locked"
+    },
+    {
+      "id": "mp17fzzyx86om",
+      "at": "2026-05-11T12:55:38.494Z",
+      "actor": "agent",
+      "agent": "Scout",
+      "kind": "approval.created",
+      "summary": "Open outreach to Hudson Valley Barn for Venue?",
+      "meta": {
+        "approvalId": "mp17fzzyoa6dj",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp1n90igwz0yu",
+      "at": "2026-05-11T20:18:06.424Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mp1n90ihd59z4",
+      "at": "2026-05-11T20:18:06.425Z",
+      "actor": "user",
+      "kind": "brief.locked",
+      "summary": "Brief locked"
+    },
+    {
+      "id": "mp1n90iky1ww0",
+      "at": "2026-05-11T20:18:06.428Z",
+      "actor": "agent",
+      "agent": "Scout",
+      "kind": "approval.created",
+      "summary": "Open outreach to Hudson Valley Barn for Venue?",
+      "meta": {
+        "approvalId": "mp1n90ijwglct",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    }
+  ],
+  "paused": false,
+  "vendors": [
+    {
+      "id": "mp17fzzxf31ip",
+      "status": "shortlisted",
+      "lastTouchAt": "2026-05-11T12:55:38.493Z",
+      "name": "Hudson Valley Barn",
+      "category": "Venue",
+      "city": "Hudson",
+      "fitScore": 96,
+      "priceBracket": "$$",
+      "notes": "Working farm in Hudson with reclaimed-wood interior; right scale for 120 guests, fits the barn-and-meadow vibe."
+    },
+    {
+      "id": "mp17fzzx2g2bi",
+      "status": "shortlisted",
+      "lastTouchAt": "2026-05-11T12:55:38.493Z",
+      "name": "Foxglove Estate",
+      "category": "Venue",
+      "city": "Rhinebeck",
+      "fitScore": 90,
+      "priceBracket": "$$",
+      "notes": "Private estate near Rhinebeck with on-site lodging for the bridal party; accommodates 120 comfortably."
+    },
+    {
+      "id": "mp17fzzxtvznx",
+      "status": "shortlisted",
+      "lastTouchAt": "2026-05-11T12:55:38.493Z",
+      "name": "The Hudson Valley Vineyard",
+      "category": "Venue",
+      "city": "Hudson",
+      "fitScore": 84,
+      "priceBracket": "$",
+      "notes": "Tasting-room ceremony, terrace dinner, indoor backup. Strong fit for barn-and-meadow weddings."
+    },
+    {
+      "id": "mp17fzzxvym3b",
+      "status": "shortlisted",
+      "lastTouchAt": "2026-05-11T12:55:38.493Z",
+      "name": "Atelier Maison",
+      "category": "Venue",
+      "city": "Hudson",
+      "fitScore": 78,
+      "priceBracket": "$$",
+      "notes": "Restored carriage house — editorial photography light, 120-cap seated dinner."
+    },
+    {
+      "id": "mp17fzzxxb2nh",
+      "status": "shortlisted",
+      "lastTouchAt": "2026-05-11T12:55:38.493Z",
+      "name": "Wildflower Field & Hall",
+      "category": "Venue",
+      "city": "Rhinebeck",
+      "fitScore": 72,
+      "priceBracket": "$$",
+      "notes": "Outdoor ceremony into a converted hall. Mature grounds, rain plan included."
+    }
+  ],
+  "budget": [],
+  "households": [],
+  "guests": [],
+  "designs": [],
+  "seating": {
+    "tables": [],
+    "assignments": {},
+    "constraints": [],
+    "cost": 0
+  },
+  "dayOf": [],
+  "thanks": [],
+  "gates": {
+    "dress": false,
+    "partner_gift": false,
+    "honeymoon": false,
+    "speech": false,
+    "vows_organizer": false,
+    "vows_partner": false
+  },
+  "viewer": "organizer",
+  "stationery": [],
+  "hotelBlocks": [],
+  "shuttles": [],
+  "welcomeBag": [],
+  "contingencies": [],
+  "engagement": [],
+  "vows": [],
+  "speeches": [],
+  "registry": [],
+  "honeymoon": [],
+  "dayOfMode": false,
+  "plan": "couple_plus",
+  "approvedTokens": [],
+  "music": [],
+  "ceremony": [],
+  "ceremonyTradition": "humanist",
+  "cake": null,
+  "bar": null,
+  "florals": [],
+  "rentals": [],
+  "beauty": [],
+  "visits": [],
+  "license": null,
+  "site": null,
+  "weddingParty": [],
+  "preEvents": [],
+  "tips": [],
+  "memorials": [],
+  "menu": [],
+  "dietaryResolutions": {}
+}

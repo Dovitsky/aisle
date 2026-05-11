@@ -34,7 +34,7 @@ ${args.alcoholBudget ? `\nAllocated alcohol line: $${args.alcoholBudget}` : ""}
 Design the bar now.`;
 
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 1500,
     system: SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
@@ -69,6 +69,31 @@ Design the bar now.`;
   }
 }
 
-function offline(..._: unknown[]): BarProgram {
-  return { style: "limited", signatureCount: 0, itemMenu: [], estimatedAlcoholBudget: 0, notes: "" };
+function offline(args: { brief: Brief; alcoholBudget?: number }): BarProgram {
+  const guests = args.brief.guestCount || 100;
+  const budget = args.alcoholBudget ?? Math.round(args.brief.budgetUsd * 0.06);
+  const v = (args.brief.vibe || "").toLowerCase();
+  const moody = /candlelit|moody|editorial|black\s*tie/.test(v);
+  const id = () => Math.random().toString(36).slice(2, 10);
+  return {
+    style: "open",
+    signatureCount: 2,
+    itemMenu: [
+      { id: id(), kind: "wine",          name: "Sparkling — Crémant de Loire",                                                                      description: "Toast service + cocktail hour. Drier than Prosecco." },
+      { id: id(), kind: "wine",          name: "White — Sancerre or Albariño",                                                                       description: `Crisp food-friendly white for ${guests} guests.` },
+      { id: id(), kind: "wine",          name: "Red — Pinot Noir, Sonoma Coast",                                                                     description: "Light-medium body; pairs across the menu." },
+      { id: id(), kind: "wine",          name: "Dessert — Sauternes (half bottles)",                                                                description: "Optional cake pour. Budget for 1 half-bottle / 10 guests." },
+      { id: id(), kind: "beer",          name: "Local IPA + Pilsner (kegs)",                                                                          description: "Two-tap mobile setup; reduces glassware load." },
+      { id: id(), kind: "spirit",        name: "Vodka — Grey Goose",                                                                                  description: "Workhorse for both signature cocktails." },
+      { id: id(), kind: "spirit",        name: "Gin — Hendrick's",                                                                                    description: "For cucumber G&T on the rotation." },
+      { id: id(), kind: "spirit",        name: "Bourbon — Buffalo Trace",                                                                             description: "Old-fashioneds + whiskey-Coke for the late set." },
+      { id: id(), kind: "signature",     name: moody ? "Smoked Old Fashioned"           : "French 75 with Elderflower",                              description: moody ? "Set the tone; smoked at the bar with applewood." : "Bright and easy; pairs with first hour of dancing." },
+      { id: id(), kind: "signature",     name: moody ? "Boulevardier"                  : "Cucumber Spritz",                                          description: moody ? "Bittersweet alternative for the second hour."   : "Lower-ABV option; popular with non-spirit drinkers." },
+      { id: id(), kind: "non_alcoholic", name: "Sparkling water + still water",                                                                       description: "Always free, always cold, always visible." },
+      { id: id(), kind: "non_alcoholic", name: "House non-alc spritz (Lyre's + tonic)",                                                              description: "Celebratory option for non-drinkers and pregnant guests." },
+      { id: id(), kind: "non_alcoholic", name: "Espresso bar (after dinner)",                                                                         description: "9pm coffee + biscotti station; pre-empts the energy dip." },
+    ],
+    estimatedAlcoholBudget: budget,
+    notes: `Estimated ${Math.round(guests * 1.5)} drinks served (1.5/guest avg). Bar staffed at 1:60. Ice budget: ${Math.round(guests * 1.25)} lb. Last call 30 min before scheduled exit.`,
+  };
 }

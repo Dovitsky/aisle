@@ -29,7 +29,7 @@ Guest count: ${args.brief.guestCount}
 Design the cake now.`;
 
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 1200,
     system: SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
@@ -82,6 +82,41 @@ export function inferAllergens(parts: string[]): AllergenCode[] {
   return [...out];
 }
 
-function offline(..._: unknown[]): Omit<CakeSpec, "id" | "vendorId" | "approved"> {
-  return { tiers: 0, flavors: [], fillings: [], frostingStyle: "", decorationNotes: "", servings: 0, allergenNotes: "", allergens: [] };
+function offline(args: { brief: Brief }): Omit<CakeSpec, "id" | "vendorId" | "approved"> {
+  const guests = args.brief.guestCount || 100;
+  const v = (args.brief.vibe || "").toLowerCase();
+  const moody = /candlelit|moody|editorial|deep|jewel|noir|black\s*tie/.test(v);
+  const garden = /garden|wildflower|botanical|barn|farm|rustic/.test(v);
+  const tiers = guests >= 200 ? 5 : guests >= 120 ? 4 : guests >= 60 ? 3 : 2;
+  const flavors = moody
+    ? ["Chocolate stout (top)", "Salted caramel hazelnut", "Vanilla bean with raspberry"]
+    : garden
+    ? ["Lemon elderflower (top)", "Vanilla bean with strawberry", "Almond olive oil"]
+    : ["Vanilla bean (top)", "Lemon raspberry", "Chocolate ganache"];
+  const fillings = moody
+    ? ["Stout buttercream", "Salted caramel + toasted hazelnut", "Raspberry conserve + Italian buttercream"]
+    : garden
+    ? ["Elderflower cream", "Macerated strawberry + crème fraîche", "Almond cream"]
+    : ["Vanilla pastry cream", "Raspberry preserves", "Dark chocolate ganache"];
+  const frostingStyle = garden
+    ? "Soft-swirl Italian buttercream, off-white"
+    : moody
+    ? "Smooth Italian buttercream in deep ivory with restrained piping"
+    : "Smooth Italian buttercream in ivory";
+  const decorationNotes = garden
+    ? "Fresh seasonal blooms applied morning-of (food-safe varieties only); cascading down one side."
+    : moody
+    ? "Single asymmetric drape of fresh oxblood-toned florals; dark wax seal accent."
+    : "Hand-piped soft scallops with a small cluster of fresh garden roses on the top tier.";
+  const allergens = inferAllergens(flavors.slice(0, tiers).concat(fillings.slice(0, tiers), frostingStyle));
+  return {
+    tiers,
+    flavors: flavors.slice(0, tiers),
+    fillings: fillings.slice(0, tiers),
+    frostingStyle,
+    decorationNotes,
+    servings: Math.round(guests * 1.1),
+    allergens,
+    allergenNotes: "Cross-contamination protocol required; tree-nut and peanut prep stations must be separated from this cake.",
+  };
 }

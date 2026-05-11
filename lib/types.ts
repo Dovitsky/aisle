@@ -179,6 +179,17 @@ export interface Brief {
   cultural?: CulturalTradition;
   formalityTone?: "formal" | "modern" | "warm" | "casual";
   destination?: boolean;
+  /** Custom hero image rendered after brief lock from the brief's vibe.
+   *  Used as the moody backdrop on the dashboard so each wedding has a
+   *  one-of-a-kind home page. Stored as a data URL or remote URL. */
+  heroImage?: string;
+  heroPrompt?: string;
+  heroRenderedAt?: string;
+  /** When the OpenAI image call failed, this holds the last error so the
+   *  UI can surface "stuck on placeholder — try again" affordances. */
+  heroError?: string;
+  /** Which OpenAI model produced the live image (gpt-image-1 / dall-e-3 / dall-e-2). */
+  heroModel?: string;
 }
 
 // ---- Vendors ------------------------------------------------------------
@@ -218,6 +229,20 @@ export interface Vendor {
   gateScope?: GateScope;
   thread?: VendorMessage[];
   verified?: boolean;     // AISLE Verified (PRD §9.2)
+  /** Where this vendor came from — the curated marketplace, an open-web
+   *  search at the couple's request, or a manual add. Default treated as
+   *  "marketplace" when undefined. */
+  discoveryMethod?: "marketplace" | "open_web" | "manual";
+  /** Free-form provenance ("Found via open web at the couple's request"). */
+  sourceProvenance?: string;
+  /** Canonical URL Scout verified for this vendor (their site or IG). */
+  sourceUrl?: string;
+  /** Any public contact path Scout located — site form, IG, booking URL. */
+  contactPath?: string;
+  /** One concrete detail from their portfolio Scout used to anchor outreach. */
+  signaturePortfolioNote?: string;
+  /** Honest list of things Scout couldn't confirm publicly. */
+  unverified?: string[];
 }
 
 export interface VendorShortlistItem {
@@ -226,6 +251,13 @@ export interface VendorShortlistItem {
   fitScore: number;
   priceBracket: "$" | "$$" | "$$$" | "$$$$";
   notes: string;
+  /** Set when Scout found this vendor via open-web search (vs. the
+   *  curated marketplace). Carries provenance through to the Vendor row. */
+  sourceUrl?: string;
+  contactPath?: string;
+  signaturePortfolioNote?: string;
+  unverified?: string[];
+  discoveryMethod?: "marketplace" | "open_web";
 }
 
 // ---- Budget -------------------------------------------------------------
@@ -404,6 +436,13 @@ export interface DesignAsset {
   agent: AgentName;
   gateScope?: GateScope;
   approved?: boolean;
+  /** Optional rendered hero image (data URL or remote URL). Populated when
+   *  the couple taps "Render visuals" — calls OpenAI gpt-image-1 if a key
+   *  is set, otherwise falls back to the same sage-pale placeholder used by
+   *  the Mood Board generator. */
+  heroImage?: string;
+  heroPrompt?: string;
+  heroRenderedAt?: string;
 }
 
 // ---- Stationery suite (PRD §5.4.2-5.4.3, §5.4.8) ----------------------
@@ -923,6 +962,203 @@ export interface ProjectState {
   menu: MenuItem[];
   // Couple-set resolutions per conflict, keyed by `${guestId}__${menuItemId}`.
   dietaryResolutions: Record<string, DietaryResolution>;
+  // Demo Mode flag — true when state was loaded via Settings → "Load Demo".
+  // Surfaces a banner in the topbar so the user knows actions in this state
+  // are showcase, not their own data.
+  demoMode?: boolean;
+
+  // Mood-board surfaces (PRD §4 Aesthetic & Design dimension).
+  moodBoards?: MoodBoard[];
+  pins?: Pin[];
+  generations?: ImageGeneration[];
+
+  // Daily generation counter for the cost cap.
+  generationCount?: { dateISO: string; count: number };
+
+  // The Couturier — atelier surfaces. The dress firewall (gates.dress)
+  // hides all of this from the partner viewer.
+  atelier?: AtelierState;
+}
+
+// ---- The Couturier (atelier) -------------------------------------------
+
+export interface AtelierState {
+  /** Private interview the organizer fills out the first time they enter
+   *  /atelier. Powers the prompt builder. */
+  profile?: DressProfile;
+  /** Every saved generation, dress + veil. Versioned via parentConceptId. */
+  concepts: DressConcept[];
+  /** Curated atelier shortlist — Couturier surfaces these once a concept
+   *  is marked "the one". */
+  ateliers?: AtelierVendor[];
+  /** Selected atelier id, set when the user picks one from the shortlist. */
+  selectedAtelierId?: string;
+  /** Fitting plan derived from the wedding date + the selected atelier's
+   *  lead-time profile. */
+  fittingPlan?: FittingPlan;
+  /** Tech-pack export records. */
+  techPacks?: TechPack[];
+  /** Daily generation counters for the sketch + editorial caps. */
+  dailyCaps?: {
+    dateISO: string;
+    sketchCount: number;
+    editorialCount: number;
+  };
+}
+
+export interface DressProfile {
+  story?: string;
+  bodyNotes?: string;
+  venueSeasonNotes?: string;
+  referenceImageUrls: string[];
+  nonNegotiables: string[];
+  twoMoments?: { first?: string; second?: string };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type DressConceptKind = "dress" | "veil";
+export type DressConceptStatus = "in_consideration" | "shortlist" | "the_one";
+export type DressGenerationMode = "sketch" | "editorial";
+
+/** Taxonomy selections for a dress or veil. Free-form so a single shape
+ *  serves both — only the fields relevant to the concept's `kind` are set. */
+export interface DressTaxonomy {
+  // Dress-only
+  silhouette?: string;
+  neckline?: string;
+  sleeves?: string;
+  back?: string;
+  train?: string;
+  // Veil-only
+  length?: string;
+  edge?: string;
+  tier?: string;
+  // Shared
+  fabric?: string[];
+  embellishment?: string[];
+  color?: string;
+}
+
+export interface DressConcept {
+  id: string;
+  kind: DressConceptKind;
+  status: DressConceptStatus;
+  mode: DressGenerationMode;
+  taxonomy: DressTaxonomy;
+  naturalLanguage?: string;
+  /** The exact prompt that was sent to the image model. Persisted so
+   *  refinements can diff against it and the tech pack can show the
+   *  designer brief verbatim. */
+  generatedPrompt: string;
+  /** The four images returned from the 4-up generation. heroImageUrl is
+   *  the one the user selected to save. */
+  images: string[];
+  heroImageUrl: string;
+  parentConceptId?: string;
+  versionNumber: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AtelierVendor {
+  id: string;
+  name: string;
+  /** City + country, e.g. "New York, NY" or "Paris, France" */
+  region: string;
+  /** Tags Couturier uses for matching — "structured", "fluid", "lace",
+   *  "minimal", "drama", "modern", "classic", etc. */
+  specialties: string[];
+  /** Indicative starting price USD. */
+  priceBand: number;
+  leadTimeMonths: number;
+  profileImageUrl?: string;
+  sampleGownUrls: string[];
+  /** Couturier's short "why this match" paragraph, populated when the
+   *  match list is generated. */
+  whyMatch?: string;
+}
+
+export interface FittingPlanItem {
+  id: string;
+  /** "consultation" | "pattern" | "muslin" | "fabric" | "fitting" | "final" | "steam" */
+  kind: string;
+  label: string;
+  /** ISO date (YYYY-MM-DD) */
+  scheduledFor: string;
+  location?: string;
+  bring: string[];
+  note?: string;
+  done?: boolean;
+}
+
+export interface FittingPlan {
+  conceptId: string;
+  atelierVendorId: string;
+  items: FittingPlanItem[];
+  createdAt: string;
+}
+
+export interface TechPack {
+  id: string;
+  conceptId: string;
+  atelierVendorId?: string;
+  generatedAt: string;
+  /** The composed payload that produced the PDF. Inlined so the PDF can
+   *  be re-rendered offline. */
+  payload: TechPackPayload;
+}
+
+export interface TechPackPayload {
+  brideName: string;
+  partnerName?: string;
+  weddingDate?: string;
+  venue?: string;
+  designerBrief: string;
+  taxonomy: DressTaxonomy;
+  veilTaxonomy?: DressTaxonomy;
+  referenceImageUrls: string[];
+  constructionNotes: string[];
+  bodyNotes?: string;
+  twoMoments?: { first?: string; second?: string };
+  fittings?: FittingPlanItem[];
+  heroImageUrl: string;
+}
+
+// ---- Mood-board / Discover ---------------------------------------------
+
+export interface MoodBoard {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  gateScope: GateScope;
+  pinCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Pin {
+  id: string;
+  boardId: string;
+  source: "discover" | "upload" | "generated" | "url";
+  imageUrl: string;
+  caption?: string;
+  /** Original Discover item id, source URL, generation id, etc. */
+  sourceMetadata?: Record<string, unknown>;
+  /** For generated pins, the natural-language prompt that produced it. */
+  generatedPrompt?: string;
+  position: number;
+  createdAt: string;
+}
+
+export interface ImageGeneration {
+  id: string;
+  boardId: string;
+  prompt: string;
+  fullPromptWithPreamble: string;
+  imageUrls: string[];
+  savedPinIds: string[];
+  createdAt: string;
 }
 
 export const DEFAULT_GATES: GateConfig = {

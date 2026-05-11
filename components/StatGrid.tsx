@@ -1,6 +1,6 @@
 "use client";
 
-// StatGrid — four big number moments. Display Cormorant numerals with mono
+// StatGrid. four big number moments. Display Cormorant numerals with mono
 // caps labels and a tiny sage progress bar where there's a target.
 
 import type { ProjectState } from "@/lib/types";

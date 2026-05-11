@@ -39,8 +39,14 @@ export interface InboxMessageRecord {
   scannedAt: string;
 }
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const GMAIL_FILE = path.join(DATA_DIR, "gmail.json");
+const SERVERLESS =
+  !!process.env.VERCEL ||
+  !!process.env.NETLIFY ||
+  !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const DATA_DIR = SERVERLESS ? "/tmp" : path.join(process.cwd(), "data");
+const GMAIL_FILE = SERVERLESS
+  ? "/tmp/aisle-gmail.json"
+  : path.join(DATA_DIR, "gmail.json");
 
 interface GmailJsonFile {
   connection: GmailConnection | null;

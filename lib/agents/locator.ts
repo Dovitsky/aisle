@@ -51,7 +51,7 @@ export async function locatorPropose(args: {
   guestCount?: number;
   partnerHints?: string;
 }): Promise<LocatorSuggestion[]> {
-  if (!hasApiKey()) return [];
+  if (!hasApiKey()) return offlineSuggestions(args.vibe, args.budgetUsd, args.guestCount);
 
   const userPrompt = [
     `Vibe: ${args.vibe}`,
@@ -102,6 +102,54 @@ function extractJsonArray(s: string): string {
     }
   }
   return cleaned.slice(start).trim();
+}
+
+// Offline location suggestions — vibe-shaded baseline so the location-first
+// onboarding moment lights up without a key. Five distinct regions across
+// price points so the choice card has real range.
+function offlineSuggestions(vibe: string, budgetUsd?: number, guestCount?: number): LocatorSuggestion[] {
+  const v = (vibe || "").toLowerCase();
+  const isCoastal = /coast|sea|cliff|beach|island|salt|amalfi|capri/.test(v);
+  const isMoody  = /candlelit|moody|editorial|jewel|noir|black\s*tie|deep|dark/.test(v);
+  const isGarden = /garden|wildflower|botanical|barn|farm|countryside|rustic/.test(v);
+  const isHistoric = /historic|stone|chapel|estate|villa|vintage/.test(v);
+  const modest = budgetUsd !== undefined && budgetUsd < 60000;
+  const small  = guestCount !== undefined && guestCount <= 50;
+
+  const all: LocatorSuggestion[] = [
+    { region: "Amalfi Coast, Italy",        hub: "Maiori / Ravello",    fitScore: isCoastal ? 96 : 78, bestSeason: "Late May or mid-September", estimatedTravelCost: "$$$$",
+      rationale: "Cliffside ceremonies, pergola dinners, Mediterranean light. Reception venues like Belmond Caruso are limited and book 12-18 months out." },
+    { region: "Hudson Valley, NY",          hub: "Hudson / Rhinebeck",  fitScore: isGarden ? 95 : 84, bestSeason: "Late September or early October", estimatedTravelCost: "$$",
+      rationale: "Working farms, restored barns, easy access from NYC. Foliage peaks early October — book against that calendar carefully." },
+    { region: "Tuscany, Italy",             hub: "Cortona / Pienza",    fitScore: isHistoric ? 96 : 82, bestSeason: "Mid-May or early September", estimatedTravelCost: "$$$$",
+      rationale: "Olive-grove villas, long-table dinners under cypress, real stonework. Paolo Genovesi and Borgo Stomennano set the bar." },
+    { region: "Joshua Tree, CA",            hub: "Joshua Tree / Pioneertown", fitScore: isMoody ? 90 : 80, bestSeason: "Late October or early March", estimatedTravelCost: "$$",
+      rationale: "Boulder-and-yucca desert with high-contrast light. Sunsets photograph dramatically; nights are cool. Limited indoor backup options." },
+    { region: "Charleston, SC",             hub: "Charleston historic district", fitScore: isHistoric ? 92 : 80, bestSeason: "Mid-March or early November", estimatedTravelCost: "$$",
+      rationale: "Historic plantation-era venues are now reframed; Cannon Green and Magnolia Plantation are good modern picks. Hot in midsummer." },
+    { region: "Napa Valley, CA",            hub: "St. Helena / Yountville", fitScore: isGarden ? 88 : 82, bestSeason: "Mid-May or late September", estimatedTravelCost: "$$$",
+      rationale: "Vineyard ceremonies, in-house tasting menus. Higher-end pricing; weekday weddings unlock significant savings." },
+    { region: "Big Sur, CA",                hub: "Big Sur / Carmel",     fitScore: isCoastal ? 92 : 78, bestSeason: "Mid-September or early October", estimatedTravelCost: "$$$",
+      rationale: "Cliffside and redwood. Ventana Big Sur is the iconic option; permits for outdoor ceremony locations are tightly limited." },
+    { region: "Lisbon + Comporta, Portugal", hub: "Lisbon → Comporta",   fitScore: isCoastal ? 90 : 80, bestSeason: "Mid-May or late September", estimatedTravelCost: "$$$",
+      rationale: "Editorial weddings under-discovered relative to Italy. Rice fields, pine forests, beach cottages. Strong dollar to euro stretches budget." },
+    { region: "Marfa, TX",                  hub: "Marfa",                fitScore: isMoody ? 88 : 70, bestSeason: "Late October or early November", estimatedTravelCost: "$$",
+      rationale: "High-desert minimalism, art-world crowd, El Cosmico's tents and yurts. Travel logistics are real — guests need 2 days minimum." },
+    { region: "Paris, France",              hub: "Paris (8th, 16th)",    fitScore: isHistoric ? 90 : 78, bestSeason: "Late May or early September", estimatedTravelCost: "$$$$",
+      rationale: "City-hall civil + private hotel reception. Hôtel de Crillon, Shangri-La, or rented private mansions like Hôtel de l'Industrie." },
+  ];
+
+  // Score-and-sort, push budget-friendlier picks higher when budget is modest,
+  // and small-format venues higher when guest count is small.
+  const adjusted = all.map((s) => {
+    let score = s.fitScore;
+    if (modest && (s.estimatedTravelCost === "$$$$" || s.estimatedTravelCost === "$$$")) score -= 12;
+    if (modest && s.estimatedTravelCost === "$$")  score += 6;
+    if (small  && /Joshua|Marfa|Comporta|Big Sur/.test(s.region)) score += 4;
+    return { ...s, fitScore: Math.max(0, Math.min(100, score)) };
+  }).sort((a, b) => b.fitScore - a.fitScore);
+
+  return adjusted.slice(0, 5);
 }
 
 function coerce(raw: unknown): LocatorSuggestion | null {

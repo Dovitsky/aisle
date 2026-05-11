@@ -51,7 +51,7 @@ Couple notes: ${args.notes ?? "(none)"}
 Write the script now. Tag each section with its tradition: "${args.tradition}".`;
 
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 4000,
     system: SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
@@ -82,4 +82,24 @@ function coerce(raw: unknown, tradition: CeremonyTradition): Omit<CeremonySectio
   };
 }
 
-function offline(..._: unknown[]): Omit<CeremonySection, "id">[] { return []; }
+// Offline ceremony — pulls from the local ritual library so /ceremony shows
+// a real, tradition-specific script even without an API key.
+function offline(args: ClericArgs): Omit<CeremonySection, "id">[] {
+  const tradition = args.tradition || "humanist";
+  const keys = DEFAULT_CEREMONIES[tradition] ?? DEFAULT_CEREMONIES.humanist;
+  if (!keys || keys.length === 0) return [];
+  return keys
+    .map((key) => {
+      const ritual = getRitual(key);
+      if (!ritual) return null;
+      return {
+        kind: ritual.kind,
+        title: ritual.title,
+        body: substituteNames(ritual.body, args.brief.organizerName, args.brief.partnerName),
+        reader: ritual.reader,
+        tradition,
+        ritualKey: key,
+      } as Omit<CeremonySection, "id">;
+    })
+    .filter(Boolean) as Omit<CeremonySection, "id">[];
+}

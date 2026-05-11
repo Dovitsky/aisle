@@ -2,17 +2,24 @@
 
 import { NextResponse } from "next/server";
 import { getConnection, listInboxMessages } from "@/lib/gmail/store";
-import { hasGoogleOAuth } from "@/lib/gmail/client";
+import { hasGoogleOAuthAsync } from "@/lib/gmail/client";
 import { hasSupabase } from "@/lib/db/supabase";
+import { hasApiKey as hasAnthropicKey } from "@/lib/anthropic";
+import { hasOpenAIKey } from "@/lib/imagegen";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const conn = await getConnection();
-  const messages = await listInboxMessages(50);
+  const [conn, messages, oauthReady] = await Promise.all([
+    getConnection(),
+    listInboxMessages(50),
+    hasGoogleOAuthAsync(),
+  ]);
   return NextResponse.json({
-    googleOauthConfigured: hasGoogleOAuth(),
+    googleOauthConfigured: oauthReady,
     supabaseConfigured: hasSupabase(),
+    anthropicConfigured: hasAnthropicKey(),
+    openaiConfigured: hasOpenAIKey(),
     connected: !!conn,
     emailAddress: conn?.emailAddress ?? null,
     lastScanAt: conn?.lastScanAt ?? null,

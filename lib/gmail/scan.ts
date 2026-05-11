@@ -54,8 +54,89 @@ export async function scanInbox(opts: { max?: number } = {}): Promise<ScanResult
       return result;
     }
   } else {
-    // Offline simulation — inject a fixture batch on each run.
-    messages = []; void seen;
+    // Offline simulation — inject a 5-message fixture batch on each run.
+    // The fixture is keyed off the existing vendor list so messages match
+    // real entries the cascade just planted, exercising the matcher fully.
+    const state = await readState();
+    const vendors = state.vendors;
+    const top = (cat: string) => vendors.find((v) => v.category === cat);
+    const venue = top("Venue");
+    const photog = top("Photographer");
+    const florist = top("Florist");
+    const caterer = top("Caterer");
+    const fixture: ParsedMessage[] = [];
+
+    if (venue) {
+      const id = `fix-venue-${venue.id}-${Date.now()}`;
+      if (!seen.has(id)) {
+        fixture.push({
+          id,
+          threadId: id,
+          from: `${venue.name} <events@${slugDomain(venue.name)}.com>`,
+          subject: `Re: Inquiry for Venue — ${state.brief?.dateWindow ?? "your dates"}`,
+          snippet: `Thanks for reaching out — we have availability that weekend...`,
+          body: `Hi,\n\nThanks for reaching out about ${state.brief?.organizerName ?? "the couple"} & ${state.brief?.partnerName ?? ""}'s wedding. We do have availability the weekend you're looking at.\n\nFor ${state.brief?.guestCount ?? 120} guests, our typical site fee is $14,500 and we can accommodate up to 180 seated. We require a $4,000 deposit to hold the date and the balance is due 30 days prior.\n\nWould you like to schedule a venue tour? We have openings the next two weekends.\n\nBest,\n${venue.name}`,
+          to: "you@aisle.test", receivedAt: new Date(), labels: ["INBOX"],
+        });
+      }
+    }
+    if (photog) {
+      const id = `fix-photog-${photog.id}-${Date.now()}`;
+      if (!seen.has(id)) {
+        fixture.push({
+          id,
+          threadId: id,
+          from: `${photog.name} <hello@${slugDomain(photog.name)}.com>`,
+          subject: `Re: Inquiry for Photographer`,
+          snippet: `Out of office until next week — back Monday.`,
+          body: `I'm out of office through this Sunday and will reply when I'm back at my desk Monday morning. For urgent inquiries about wedding photography availability, please contact my studio manager at studio@${slugDomain(photog.name)}.com.\n\nThank you,\n${photog.name}`,
+          to: "you@aisle.test", receivedAt: new Date(), labels: ["INBOX"],
+        });
+      }
+    }
+    if (florist) {
+      const id = `fix-florist-${florist.id}-${Date.now()}`;
+      if (!seen.has(id)) {
+        fixture.push({
+          id,
+          threadId: id,
+          from: `${florist.name} <orders@${slugDomain(florist.name)}.com>`,
+          subject: `Re: Inquiry for Florist`,
+          snippet: `Thanks — a few questions before we can quote...`,
+          body: `Hello,\n\nThanks for the inquiry. Before I can put a real number together I need a few more details:\n\n1. Are you using a venue with floral restrictions (no candles, height limits)?\n2. Are bouquets going to be carried by the wedding party, or just the couple?\n3. Are you open to seasonal substitutions if a particular variety is unavailable?\n\nOur weddings in your size range typically run $6,500-$12,000 depending on scope. Looking forward to hearing more.\n\n${florist.name}`,
+          to: "you@aisle.test", receivedAt: new Date(), labels: ["INBOX"],
+        });
+      }
+    }
+    if (caterer) {
+      const id = `fix-caterer-${caterer.id}-${Date.now()}`;
+      if (!seen.has(id)) {
+        fixture.push({
+          id,
+          threadId: id,
+          from: `${caterer.name} <events@${slugDomain(caterer.name)}.com>`,
+          subject: `Re: Inquiry for Catering`,
+          snippet: `Available — sending menu options.`,
+          body: `Hi,\n\nWe're available your weekend and would love to be considered. For ${state.brief?.guestCount ?? 120} guests, our family-style menu is $145/pp inclusive of service, and our plated menu is $185/pp. Both include passed apps, three-course main, late-night station, and bar staff.\n\nWe specialize in dietary accommodations — we can flag every plate to allergens at the line. Happy to share a sample menu when you're ready.\n\nWarmly,\n${caterer.name}`,
+          to: "you@aisle.test", receivedAt: new Date(), labels: ["INBOX"],
+        });
+      }
+    }
+    // One marketing-noise message so triage's filter is exercised.
+    const noiseId = `fix-noise-${Date.now()}`;
+    if (!seen.has(noiseId)) {
+      fixture.push({
+        id: noiseId,
+        threadId: noiseId,
+        from: `Wedding Wire Newsletter <newsletter@weddingwire.com>`,
+        subject: `15 trends for 2026 weddings — must-read`,
+        snippet: `Sponsored content from our partners...`,
+        body: `Hi there!\n\nThis week's top picks from our advertisers...\n\n[unsubscribe]`,
+        to: "you@aisle.test", receivedAt: new Date(), labels: ["INBOX"],
+      });
+    }
+
+    messages = fixture;
   }
 
   result.scanned = messages.length;
@@ -218,3 +299,8 @@ function matchVendor(vendors: Vendor[], email: string, name: string): Vendor | n
 
 // Simulated inbox for offline mode. Returns a small batch of plausible vendor
 // replies so the scan flow is fully exercisable without Google credentials.
+
+// Slugify a vendor name into a domain-safe label for fixture email addresses.
+function slugDomain(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 20) || "vendor";
+}

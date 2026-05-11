@@ -40,7 +40,7 @@ Palette: ${args.palette?.join(", ") ?? "(use the brief's vibe)"}
 Design the florals now.`;
 
   const resp = await client().messages.create({
-    model: MODELS.orchestrator,
+    model: MODELS.specialist,
     max_tokens: 2000,
     system: SYSTEM,
     messages: [{ role: "user", content: userPrompt }],
@@ -70,4 +70,41 @@ function coerce(raw: unknown): Omit<FloralArrangement, "id"> | null {
   };
 }
 
-function offline(..._: unknown[]): Omit<FloralArrangement, "id">[] { return []; }
+// Offline floral program — generates a complete, realistic spec keyed off the
+// brief so /florals is populated and the cascade approval looks credible.
+function offline(args: { brief: Brief; tableCount?: number; weddingPartySize?: number }): Omit<FloralArrangement, "id">[] {
+  const tables = args.tableCount ?? Math.ceil(args.brief.guestCount / 8);
+  const partySize = args.weddingPartySize ?? Math.min(8, Math.max(4, Math.round(args.brief.guestCount / 20)));
+  const v = (args.brief.vibe || "").toLowerCase();
+  const moody = /candlelit|moody|editorial|deep|jewel|noir/.test(v);
+  const garden = /garden|wildflower|botanical|barn|farm|rustic/.test(v);
+  const coastal = /coast|sea|cliff|beach|amalfi/.test(v);
+  const primary = moody
+    ? ["Black Magic roses", "Café au Lait dahlias", "Burgundy ranunculus"]
+    : coastal
+    ? ["White ranunculus", "Jasmine vine", "Olive branches"]
+    : garden
+    ? ["Cosmos", "Queen Anne's lace", "Garden roses"]
+    : ["Garden roses", "Eucalyptus", "Lisianthus"];
+  const secondary = moody
+    ? ["Smokebush", "Dusty miller", "Privet berries"]
+    : coastal
+    ? ["Sea grass", "Eucalyptus", "Statice"]
+    : garden
+    ? ["Snapdragons", "Cosmos seed pods", "Trailing ivy"]
+    : ["Italian ruscus", "Astilbe", "Dusty miller"];
+  return [
+    { piece: "ceremony_arch",      quantity: 1,         primary, secondary, vesselNotes: "Asymmetric installation along one ceremony arch corner; trails to the floor.", unitCost: 1400 },
+    { piece: "ceremony_aisle",     quantity: 6,         primary, secondary: ["Bud cups", "Eucalyptus"],   vesselNotes: "Bud-cup arrangements line the aisle every 4 ft.", unitCost: 60 },
+    { piece: "centerpiece",        quantity: tables,    primary, secondary, vesselNotes: "Low compote bowls; no foam; mixed heights with taper candles.", unitCost: 145 },
+    { piece: "bouquet_organizer",  quantity: 1,         primary, secondary: ["Garden roses", "Trailing greenery"], vesselNotes: "Hand-tied with silk ribbon; loose garden style.", unitCost: 240 },
+    { piece: "bouquet_partner",    quantity: 1,         primary, secondary: ["Garden roses", "Trailing greenery"], vesselNotes: "Hand-tied; matches organizer palette but smaller.", unitCost: 220 },
+    { piece: "bouquet_party",      quantity: partySize, primary, secondary: ["Eucalyptus"],               vesselNotes: "Smaller posy version of the organizer bouquet.", unitCost: 95 },
+    { piece: "boutonniere",        quantity: partySize, primary: ["Single bloom"], secondary: ["Olive sprig"], vesselNotes: "Pinned to lapels; spare set kept with planner.", unitCost: 22 },
+    { piece: "corsage",            quantity: 6,         primary: ["Spray rose"],   secondary: ["Eucalyptus"],     vesselNotes: "For mothers, grandmothers, special guests.", unitCost: 38 },
+    { piece: "cake_florals",       quantity: 1,         primary, secondary,                          vesselNotes: "Fresh florals applied morning-of; food-safe blooms only.", unitCost: 75 },
+    { piece: "head_table",         quantity: 1,         primary, secondary,                          vesselNotes: "Loose runner garland down center of head table.", unitCost: 320 },
+    { piece: "welcome_floral",     quantity: 2,         primary: ["Branches", "Garden roses"], secondary, vesselNotes: "Tall urns flanking the venue entrance.", unitCost: 180 },
+    { piece: "petals",             quantity: 4,         primary: ["Loose petals"], secondary: [],     vesselNotes: "For the recessional toss; biodegradable only.", unitCost: 25 },
+  ];
+}

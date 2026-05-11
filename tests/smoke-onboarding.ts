@@ -28,20 +28,28 @@ async function main() {
   await setBrief({ ...brief, locked: true, lockedAt: new Date().toISOString() });
   console.log("✓ Brief locked");
   
-  // 3. Run Scout (offline path returns seeds)
+  // 3. Run Scout. Offline (no ANTHROPIC_API_KEY) returns []; live mode returns
+  //    a real shortlist. Both outcomes are valid; the test asserts the surface
+  //    is honest and the rest of the flow is wired regardless.
   const items = await scoutShortlist({ brief: { ...brief, locked: true }, category: "Venue", count: 5 });
-  console.log(`✓ Scout returned ${items.length} venue candidates: ${items.map(i => i.name).join(", ")}`);
-  
-  // 4. Add vendors + outreach approval
-  await addVendors(items.map(it => ({
-    name: it.name, category: "Venue", city: it.city,
-    fitScore: it.fitScore, priceBracket: it.priceBracket, notes: it.notes,
-  })));
+  const offline = items.length === 0;
+  console.log(`✓ Scout returned ${items.length} venue candidates${offline ? " (offline; no fixtures by design)" : ": " + items.map(i => i.name).join(", ")}`);
+
+  // 4. Synthesize a representative vendor when offline so we can verify the
+  //    addVendors → approval → readState wiring without depending on a key.
+  const vendorsToAdd = offline
+    ? [{ name: "Hudson Barn (test seed)", category: "Venue", city: "Hudson, NY", fitScore: 0.9, priceBracket: "$$$" as const, notes: "synthesized for smoke test" }]
+    : items.map(it => ({
+        name: it.name, category: "Venue", city: it.city,
+        fitScore: it.fitScore, priceBracket: it.priceBracket, notes: it.notes,
+      }));
+  await addVendors(vendorsToAdd);
+
   await appendApproval({
     agent: "Scout", phase: "foundation",
-    title: `Open outreach to ${items[0].name} for Venue?`,
+    title: `Open outreach to ${vendorsToAdd[0].name} for Venue?`,
     rationale: `test`, risk: "low",
-    action: { kind: "send_email", to: items[0].name, subject: "test", body: "test" },
+    action: { kind: "send_email", to: vendorsToAdd[0].name, subject: "test", body: "test" },
   });
   
   // 5. Read final state

@@ -1,6 +1,6 @@
 "use client";
 
-// Dietary command center — Larder agent.
+// Dietary command center. Larder agent.
 // Per-guest structured allergens + preferences, menu cross-check, caterer brief.
 
 import { useEffect, useMemo, useState } from "react";
@@ -137,7 +137,7 @@ export function DietaryView() {
   return (
     <div className="flex flex-col gap-5">
       <PageHeader
-        eyebrow="Larder"
+        eyebrow="Dietary"
         title="Dietary & allergens"
         subtitle="Allergens, dietary preferences, menu cross-checks, and the brief your caterer actually needs. Critical entries get separate-prep protocol."
       />
@@ -153,7 +153,7 @@ export function DietaryView() {
         <button
           onClick={() => post({ op: "parse_all" }, "parse")}
           disabled={!!busy}
-          className="rounded-2xl bg-ink text-paper-50 hover:bg-ink-400 px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50"
+          className="rounded-2xl cta-sage px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50"
         >
           {busy === "parse" ? "Larder parsing…" : "Parse free-text dietary fields"}
         </button>
@@ -190,7 +190,7 @@ export function DietaryView() {
                 <div className="grid grid-cols-[1fr_auto] gap-2">
                   <div>
                     <span className="font-medium">{c.guestName}</span>
-                    <span className="text-ink-300"> — {c.menuItemName} <span className="text-[11px]">({COURSE_LABEL[c.course]})</span></span>
+                    <span className="text-ink-300">. {c.menuItemName} <span className="text-[11px]">({COURSE_LABEL[c.course]})</span></span>
                   </div>
                   <span className="text-risk-high text-[12px]">{c.reason}</span>
                 </div>
@@ -211,7 +211,7 @@ export function DietaryView() {
                 <div className="grid grid-cols-[1fr_auto] gap-2">
                   <div>
                     <span className="font-medium">{c.guestName}</span>
-                    <span className="text-ink-300"> — {c.menuItemName} <span className="text-[11px]">({COURSE_LABEL[c.course]})</span></span>
+                    <span className="text-ink-300">. {c.menuItemName} <span className="text-[11px]">({COURSE_LABEL[c.course]})</span></span>
                   </div>
                   <span className="text-risk-medium text-[12px]">{c.reason}</span>
                 </div>
@@ -232,7 +232,7 @@ export function DietaryView() {
             {resolvedConflicts.map((c, i) => (
               <li key={i} className="py-2 text-[12px] grid grid-cols-[1fr_auto] gap-2">
                 <div className="text-ink-300">
-                  <span className="text-ink">{c.guestName}</span> — {c.menuItemName} ·{" "}
+                  <span className="text-ink">{c.guestName}</span>. {c.menuItemName} ·{" "}
                   <span className="text-risk-low">{c.resolution!.kind.replace("_", " ")}</span>
                   {c.resolution!.alternateItemName && <> · <span className="italic">{c.resolution!.alternateItemName}</span></>}
                 </div>
@@ -287,14 +287,14 @@ export function DietaryView() {
               disabled={!!busy}
               className="rounded-2xl border hairline bg-white/80 hover:bg-white px-3 py-1.5 text-sm transition-colors disabled:opacity-50"
             >
-              Seed sample 3-course menu
+              Add a sample 3-course menu
             </button>
           )}
         </div>
         {state.menu.length === 0 ? (
           <EmptyState
-            title="No menu loaded"
-            hint="Larder cross-checks every menu item against every guest's allergens and preferences. Add items here or seed a realistic 3-course wedding menu to see conflicts."
+            title="No menu yet"
+            hint="We'll cross-check every dish against every guest's allergens and preferences. Add courses here, or pull in a sample menu to see how it works."
           />
         ) : (
           <ul className="divide-y hairline">
@@ -381,7 +381,7 @@ function ResolutionRow({
   const [showAlt, setShowAlt] = useState(false);
   const [altName, setAltName] = useState("");
 
-  // Suggest alternates from the menu — anything matching the same course family that
+  // Suggest alternates from the menu. anything matching the same course family that
   // does NOT contain the offending allergen.
   const suggestions = state.menu.filter((m) => {
     if (m.id === conflict.menuItemId) return false;
@@ -454,7 +454,7 @@ function ReadOnlyDietary({ guest }: { guest: Guest }) {
         </span>
       ))}
       {guest.dietary && allergens.length === 0 && prefs.length === 0 && (
-        <span className="text-[11px] text-ink-300 italic">free-text only — click Edit to parse: "{guest.dietary}"</span>
+        <span className="text-[11px] text-ink-300 italic">free-text only. click Edit to parse: "{guest.dietary}"</span>
       )}
       {!guest.dietary && allergens.length === 0 && prefs.length === 0 && (
         <span className="text-[11px] text-ink-300 italic">none</span>
@@ -502,7 +502,7 @@ function DietaryEditor({ guest, onSave, onParse, parsing }: {
           disabled={parsing || !notes.trim()}
           className="mt-1 btn-ghost"
         >
-          {parsing ? "Parsing…" : "→ Have Larder parse this"}
+          {parsing ? "Parsing…" : "→ Pull out the dietary notes"}
         </button>
       </div>
 
@@ -556,7 +556,7 @@ function DietaryEditor({ guest, onSave, onParse, parsing }: {
 
       <button
         onClick={() => onSave(allergens, prefs, notes)}
-        className="rounded-2xl bg-ink text-paper-50 hover:bg-ink-400 px-4 py-2 text-sm font-medium transition-colors"
+        className="rounded-2xl cta-sage px-4 py-2 text-sm font-medium transition-colors"
       >
         Save
       </button>

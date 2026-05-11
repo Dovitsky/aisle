@@ -1,13 +1,18 @@
 "use client";
 
-// PhaseStrip — horizontal planning timeline with sage gradient fill.
+// PhaseStrip. single, clear "where you are" indicator.
 //
-// Reads ProjectState and infers the current phase from concrete signals
-// (brief locked, contracts signed, days remaining, day-of mode). The strip
-// shows seven phases as labelled nodes connected by a hairline that fills
-// with sage up to the active node.
+// Shows three things at once in a compact band:
+//   1. The current phase, named clearly with its tagline.
+//   2. A countdown to the wedding day.
+//   3. The 8-phase rail with the current node lit, so the couple can see
+//      the whole arc at a glance.
+//
+// This replaces the previous double-up where the home page rendered both
+// this strip AND a separate "Phase X of 8" bar inside the decisions card.
 
 import type { ProjectState } from "@/lib/types";
+import { laneProgress } from "@/lib/lanes";
 
 const PHASES: { key: string; label: string; tagline: string }[] = [
   { key: "intake",     label: "Intake",     tagline: "Tell us about it" },
@@ -44,23 +49,79 @@ function inferPhaseIndex(state: ProjectState): number {
   return 1; // Foundation
 }
 
+function daysUntil(state: ProjectState): number | null {
+  if (!state.brief?.dateWindow) return null;
+  const m = state.brief.dateWindow.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  const ms = new Date(`${m[1]}-${m[2]}-${m[3]}T00:00:00`).getTime();
+  if (!Number.isFinite(ms)) return null;
+  return Math.round((ms - Date.now()) / (1000 * 60 * 60 * 24));
+}
+
 export function PhaseStrip({ state }: { state: ProjectState }) {
   const active = inferPhaseIndex(state);
-  // sage gradient progress as a percent of the strip width
-  const progressPct = Math.min(100, Math.max(0, (active / (PHASES.length - 1)) * 100));
+  const days = daysUntil(state);
+  const current = PHASES[active];
+
+  // Reuse the lanes module's notion of "lanes sealed" so the count is
+  // consistent with everything else (decisions queue, AmbientTicker).
+  const lanes = laneProgress(state, 0);
+  const sealed = lanes.completed.length;
+
+  // Format the countdown copy. Crisp, no jargon.
+  const countdown =
+    days === null ? null
+      : days < 0  ? `${Math.abs(days)} day${Math.abs(days) === 1 ? "" : "s"} ago`
+      : days === 0 ? "Today"
+      : days === 1 ? "Tomorrow"
+      : days <= 7 ? `${days} days to go`
+      : days <= 30 ? `${days} days to go`
+      : days <= 365 ? `${Math.round(days / 7)} weeks to go`
+      : `${Math.round(days / 30)} months to go`;
 
   return (
-    <section aria-label="Planning phase" className="py-7 border-y hairline relative">
-      <div className="text-[10px] uppercase tracking-[0.26em] text-sage-500 font-mono mb-4">
-        Where you are
+    <section
+      aria-label="Where you are in planning"
+      className="py-7 border-y hairline relative"
+    >
+      {/* Top row. eyebrow on the left, countdown chip on the right */}
+      <div className="flex items-baseline justify-between gap-4 mb-3 flex-wrap">
+        <p className="text-[10px] uppercase tracking-[0.28em] text-sage-500 font-mono">
+          Where you are
+        </p>
+        {countdown && (
+          <p className="text-[10.5px] uppercase tracking-[0.22em] font-mono text-ink-300">
+            <span className="text-ink">{countdown}</span>
+            <span className="text-ink-200 mx-1.5">·</span>
+            <span>
+              {sealed} of {PHASES.length} {sealed === 1 ? "phase" : "phases"} sealed
+            </span>
+          </p>
+        )}
       </div>
 
+      {/* Big current-phase callout */}
+      <div className="flex items-baseline gap-3 mb-5">
+        <span className="text-[11px] uppercase tracking-[0.24em] font-mono text-ink-300 tabular-nums">
+          {String(active + 1).padStart(2, "0")} / {String(PHASES.length).padStart(2, "0")}
+        </span>
+        <h2 className="display text-[26px] lg:text-[30px] leading-[1.05] tracking-[-0.005em]">
+          <span>{current.label}</span>
+          <span className="display italic text-ink-300 ml-2.5 text-[20px] lg:text-[22px]">
+           . {current.tagline.toLowerCase()}
+          </span>
+        </h2>
+      </div>
+
+      {/* Phase rail. dots + connecting line, all 8 phases visible at once */}
       <div className="relative">
         {/* Connecting rail behind the dots */}
         <div className="absolute left-0 right-0 top-[6px] h-px bg-ink/8" aria-hidden />
         <div
           className="absolute left-0 top-[6px] h-px bg-gradient-to-r from-sage-500 via-sage-400 to-sage-300 transition-[width] duration-700"
-          style={{ width: `${progressPct}%` }}
+          style={{
+            width: `${Math.min(100, Math.max(0, (active / (PHASES.length - 1)) * 100))}%`,
+          }}
           aria-hidden
         />
 
@@ -73,7 +134,7 @@ export function PhaseStrip({ state }: { state: ProjectState }) {
               <li key={p.key} className="flex flex-col items-start">
                 <span
                   className={`relative inline-block w-3 h-3 rounded-full -ml-[1px] -mt-[6px] transition-all ${
-                    status === "current" ? "bg-sage-500" :
+                    status === "current" ? "bg-sage-500 scale-125 shadow-[0_0_0_4px_rgba(168,181,160,0.18)]" :
                     status === "done"    ? "bg-sage-400" :
                     "bg-paper border border-ink/15"
                   }`}
@@ -84,17 +145,12 @@ export function PhaseStrip({ state }: { state: ProjectState }) {
                   )}
                 </span>
                 <div className="mt-3">
-                  <div className={`text-[11.5px] uppercase tracking-[0.18em] font-medium ${
+                  <div className={`text-[11px] uppercase tracking-[0.16em] font-medium ${
                     status === "current" ? "text-ink" :
                     status === "done"    ? "text-ink-300" :
                     "text-ink-200"
                   }`}>
                     {p.label}
-                  </div>
-                  <div className={`text-[11px] mt-0.5 leading-snug hidden sm:block ${
-                    status === "next" ? "text-ink-200" : "text-ink-300"
-                  }`}>
-                    {p.tagline}
                   </div>
                 </div>
               </li>

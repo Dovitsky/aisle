@@ -1,6 +1,6 @@
 "use client";
 
-// Decorative line-art botanical accent — sage stroke, hand-drawn feel.
+// Decorative line-art botanical accent. sage stroke, hand-drawn feel.
 // Pure SVG, no images. Sits behind/beside hero copy as quiet ornament.
 
 export function BotanicalAccent({

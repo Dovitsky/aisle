@@ -15,11 +15,26 @@ import {
   RentalItem, BeautyAppt, VisitAppt, MarriageLicense, WeddingSite,
   WeddingPartyMember, PreEvent, TipEnvelope, Memorial,
   MenuItem, DietaryResolution,
+  MoodBoard, Pin, ImageGeneration,
   DEFAULT_GATES, EMPTY_SEATING,
 } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const STORE_FILE = path.join(DATA_DIR, "store.json");
+// AISLE_STORE_FILE lets tests + the autonomous loop point at an isolated store
+// without touching the developer's persistent data/store.json.
+// On serverless hosts (Vercel, Netlify Functions, AWS Lambda) the working
+// directory is read-only — only /tmp is writable. Detect that and fall
+// back to /tmp so the JSON store still works for demos. State persists
+// only within a warm container in that mode; cold starts reset.
+const SERVERLESS =
+  !!process.env.VERCEL ||
+  !!process.env.NETLIFY ||
+  !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const STORE_FILE = process.env.AISLE_STORE_FILE
+  ? path.resolve(process.env.AISLE_STORE_FILE)
+  : SERVERLESS
+  ? "/tmp/aisle-store.json"
+  : path.join(process.cwd(), "data", "store.json");
+const DATA_DIR = path.dirname(STORE_FILE);
 
 const EMPTY: ProjectState = {
   brief: null,
@@ -313,6 +328,41 @@ export async function resolveApproval(
                 paidUsd: 0,
                 vendorId: v.id,
               });
+            }
+
+            // When the Venue contract is signed, the wedding now has a
+            // place and a date locked. Only now does it make sense to
+            // stand up the guest-facing website. Fire that reminder once.
+            if (v.category === "Venue" && s.brief) {
+              const alreadyQueued = s.approvals.some(
+                (x) => x.action.kind === "publish_website",
+              );
+              if (!alreadyQueued) {
+                s.approvals.push(
+                  makeApproval({
+                    agent: "Stationer",
+                    phase: "guest_management",
+                    title: "Stand up the wedding website?",
+                    rationale: `Now that ${v.name} is contracted, you have a venue and a date. Time to stand up the guest-facing site — travel info, hotel block (we'll add it once you pick one), RSVP form, FAQs, and dietary form. Save-the-dates link here.`,
+                    risk: "low",
+                    action: {
+                      kind: "publish_website",
+                      slug: `${s.brief.organizerName}-${s.brief.partnerName}`
+                        .toLowerCase()
+                        .replace(/\s+/g, "-"),
+                    },
+                  }),
+                );
+                s.ledger.push(
+                  makeLedger({
+                    actor: "agent",
+                    agent: "Stationer",
+                    kind: "approval.created",
+                    summary: "Stand up the wedding website?",
+                    meta: { trigger: "venue_contracted" },
+                  }),
+                );
+              }
             }
           }
           break;
@@ -1031,6 +1081,228 @@ export async function setDietaryResolution(
     }));
     return s;
   });
+}
+
+// --- Design hero images ------------------------------------------------
+
+export async function setDesignHero(
+  designId: string,
+  heroImage: string,
+  heroPrompt: string,
+): Promise<DesignAsset | null> {
+  let updated: DesignAsset | null = null;
+  await mutate((s) => {
+    const d = s.designs.find((x) => x.id === designId);
+    if (!d) return s;
+    d.heroImage = heroImage;
+    d.heroPrompt = heroPrompt;
+    d.heroRenderedAt = new Date().toISOString();
+    updated = d;
+    return s;
+  });
+  return updated;
+}
+
+// --- Mood boards + pins -----------------------------------------------
+
+const DEFAULT_BOARDS: { name: string; gateScope: GateScope }[] = [
+  { name: "Overall",   gateScope: null },
+  { name: "Ceremony",  gateScope: null },
+  { name: "Reception", gateScope: null },
+  { name: "Florals",   gateScope: null },
+  { name: "Attire",    gateScope: "dress" },
+];
+
+function rid(prefix: string): string {
+  return `${prefix}-${Math.random().toString(36).slice(2, 12)}`;
+}
+
+async function ensureDefaultBoards(): Promise<MoodBoard[]> {
+  const cur = await readState();
+  if (cur.moodBoards && cur.moodBoards.length > 0) return cur.moodBoards;
+  const now = new Date().toISOString();
+  const boards: MoodBoard[] = DEFAULT_BOARDS.map((b) => ({
+    id: rid("mb"),
+    name: b.name,
+    gateScope: b.gateScope,
+    isDefault: true,
+    pinCount: 0,
+    createdAt: now,
+    updatedAt: now,
+  }));
+  await mutate((s) => {
+    s.moodBoards = boards;
+    s.pins = s.pins ?? [];
+    s.generations = s.generations ?? [];
+    return s;
+  });
+  return boards;
+}
+
+export async function listMoodBoards(): Promise<MoodBoard[]> {
+  return ensureDefaultBoards();
+}
+
+export async function createMoodBoard(name: string, gateScope: GateScope = null): Promise<MoodBoard> {
+  await ensureDefaultBoards();
+  const now = new Date().toISOString();
+  const board: MoodBoard = {
+    id: rid("mb"), name: name.trim().slice(0, 80), gateScope,
+    isDefault: false, pinCount: 0, createdAt: now, updatedAt: now,
+  };
+  await mutate((s) => {
+    s.moodBoards = [...(s.moodBoards ?? []), board];
+    return s;
+  });
+  return board;
+}
+
+export async function updateMoodBoard(
+  boardId: string,
+  patch: { name?: string; gateScope?: GateScope }
+): Promise<MoodBoard | null> {
+  let updated: MoodBoard | null = null;
+  await mutate((s) => {
+    const list = s.moodBoards ?? [];
+    const idx = list.findIndex((b) => b.id === boardId);
+    if (idx === -1) return s;
+    list[idx] = {
+      ...list[idx],
+      ...(patch.name ? { name: patch.name.slice(0, 80) } : {}),
+      ...(patch.gateScope !== undefined ? { gateScope: patch.gateScope } : {}),
+      updatedAt: new Date().toISOString(),
+    };
+    updated = list[idx];
+    s.moodBoards = list;
+    return s;
+  });
+  return updated;
+}
+
+export async function deleteMoodBoard(boardId: string): Promise<boolean> {
+  let ok = false;
+  await mutate((s) => {
+    const board = (s.moodBoards ?? []).find((b) => b.id === boardId);
+    if (!board || board.isDefault) return s;
+    s.moodBoards = (s.moodBoards ?? []).filter((b) => b.id !== boardId);
+    s.pins = (s.pins ?? []).filter((p) => p.boardId !== boardId);
+    ok = true;
+    return s;
+  });
+  return ok;
+}
+
+export async function listPinsForBoard(boardId: string): Promise<Pin[]> {
+  const cur = await readState();
+  return (cur.pins ?? [])
+    .filter((p) => p.boardId === boardId)
+    .sort((a, b) => a.position - b.position);
+}
+
+export async function addPin(input: Omit<Pin, "id" | "position" | "createdAt">): Promise<Pin> {
+  const created: Pin = {
+    ...input,
+    id: rid("pin"),
+    position: 0,
+    createdAt: new Date().toISOString(),
+  };
+  await mutate((s) => {
+    const samePins = (s.pins ?? []).filter((p) => p.boardId === input.boardId);
+    created.position = samePins.length;
+    s.pins = [...(s.pins ?? []), created];
+    const board = (s.moodBoards ?? []).find((b) => b.id === input.boardId);
+    if (board) {
+      board.pinCount = samePins.length + 1;
+      board.updatedAt = new Date().toISOString();
+    }
+    return s;
+  });
+  return created;
+}
+
+export async function removePin(pinId: string): Promise<boolean> {
+  let ok = false;
+  await mutate((s) => {
+    const p = (s.pins ?? []).find((x) => x.id === pinId);
+    if (!p) return s;
+    s.pins = (s.pins ?? []).filter((x) => x.id !== pinId);
+    const board = (s.moodBoards ?? []).find((b) => b.id === p.boardId);
+    if (board) {
+      board.pinCount = Math.max(0, board.pinCount - 1);
+      board.updatedAt = new Date().toISOString();
+    }
+    ok = true;
+    return s;
+  });
+  return ok;
+}
+
+export async function movePin(pinId: string, toBoardId: string): Promise<boolean> {
+  let ok = false;
+  await mutate((s) => {
+    const p = (s.pins ?? []).find((x) => x.id === pinId);
+    const target = (s.moodBoards ?? []).find((b) => b.id === toBoardId);
+    if (!p || !target) return s;
+    const fromId = p.boardId;
+    p.boardId = toBoardId;
+    p.position = (s.pins ?? []).filter((x) => x.boardId === toBoardId).length - 1;
+    const fromBoard = (s.moodBoards ?? []).find((b) => b.id === fromId);
+    if (fromBoard) fromBoard.pinCount = Math.max(0, fromBoard.pinCount - 1);
+    target.pinCount += 1;
+    target.updatedAt = new Date().toISOString();
+    ok = true;
+    return s;
+  });
+  return ok;
+}
+
+export async function reorderPin(pinId: string, newPosition: number): Promise<boolean> {
+  let ok = false;
+  await mutate((s) => {
+    const p = (s.pins ?? []).find((x) => x.id === pinId);
+    if (!p) return s;
+    const sameBoard = (s.pins ?? []).filter((x) => x.boardId === p.boardId).sort((a, b) => a.position - b.position);
+    const without = sameBoard.filter((x) => x.id !== pinId);
+    without.splice(Math.max(0, Math.min(newPosition, without.length)), 0, p);
+    without.forEach((x, i) => { x.position = i; });
+    ok = true;
+    return s;
+  });
+  return ok;
+}
+
+export async function recordGeneration(g: Omit<ImageGeneration, "id" | "createdAt">): Promise<ImageGeneration> {
+  const created: ImageGeneration = {
+    ...g,
+    id: rid("gen"),
+    createdAt: new Date().toISOString(),
+  };
+  await mutate((s) => {
+    s.generations = [...(s.generations ?? []), created];
+    return s;
+  });
+  return created;
+}
+
+export async function bumpGenerationCount(by: number = 4): Promise<{ allowed: boolean; remaining: number }> {
+  const today = new Date().toISOString().slice(0, 10);
+  let allowed = true;
+  let remaining = 40;
+  await mutate((s) => {
+    const cur = s.generationCount && s.generationCount.dateISO === today
+      ? s.generationCount
+      : { dateISO: today, count: 0 };
+    if (cur.count + by > 40) {
+      allowed = false;
+      remaining = Math.max(0, 40 - cur.count);
+      return s;
+    }
+    cur.count += by;
+    remaining = 40 - cur.count;
+    s.generationCount = cur;
+    return s;
+  });
+  return { allowed, remaining };
 }
 
 // --- Generic agent ledger event ---------------------------------------

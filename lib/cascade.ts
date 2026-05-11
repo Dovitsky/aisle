@@ -158,17 +158,22 @@ async function handleLockBrief(_card: ApprovalCard, state: ProjectState): Promis
   const needsShortlist = (cat: string) =>
     state.vendors.filter((v) => v.category === cat).length === 0;
 
-  const phase2: string[] = [];
-  for (const cat of ["Venue", "Photographer"]) {
-    if (!needsShortlist(cat)) continue;
-    try {
-      const items = await scoutShortlist({ brief: state.brief, category: cat, count: 5 });
-      await addVendors(items.map((it) => ({
-        name: it.name, category: cat, city: it.city,
-        fitScore: it.fitScore, priceBracket: it.priceBracket, notes: it.notes,
-      })));
-      const top = items[0];
-      if (top) {
+  // Parallelize Venue + Photographer shortlists. Each scout call is an
+  // Anthropic round-trip; running them serially doubled the lock-cascade
+  // wait. The per-category writes (addVendors → appendApproval) still
+  // sequence within a category, but across categories they fan out.
+  const brief = state.brief;
+  const targets = ["Venue", "Photographer"].filter(needsShortlist);
+  const results = await Promise.all(
+    targets.map(async (cat) => {
+      try {
+        const items = await scoutShortlist({ brief, category: cat, count: 5 });
+        await addVendors(items.map((it) => ({
+          name: it.name, category: cat, city: it.city,
+          fitScore: it.fitScore, priceBracket: it.priceBracket, notes: it.notes,
+        })));
+        const top = items[0];
+        if (!top) return null;
         await appendApproval({
           agent: "Scout", phase: cat === "Venue" ? "foundation" : "discovery",
           title: `Open outreach to ${top.name} for ${cat}?`,
@@ -177,16 +182,18 @@ async function handleLockBrief(_card: ApprovalCard, state: ProjectState): Promis
           action: {
             kind: "send_email",
             to: `${top.name} (via AISLE alias)`,
-            subject: `Inquiry for ${cat} — ${state.brief.dateWindow}`,
-            body: `Hello ${top.name},\n\nWe're reaching out from ${state.brief.organizerName} & ${state.brief.partnerName}'s wedding planning team. They're looking at ${state.brief.dateWindow} in ${state.brief.region} for roughly ${state.brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nAISLE on behalf of ${state.brief.organizerName} & ${state.brief.partnerName}`,
+            subject: `Inquiry for ${cat} — ${brief.dateWindow}`,
+            body: `Hello ${top.name},\n\nWe're reaching out from ${brief.organizerName} & ${brief.partnerName}'s wedding planning team. They're looking at ${brief.dateWindow} in ${brief.region} for roughly ${brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nAISLE on behalf of ${brief.organizerName} & ${brief.partnerName}`,
           },
         });
-        phase2.push(cat);
+        return cat;
+      } catch {
+        // Scout can fail in offline mode without an API key; ignore.
+        return null;
       }
-    } catch {
-      // Scout can fail in offline mode without an API key; ignore.
-    }
-  }
+    }),
+  );
+  const phase2 = results.filter((c): c is string => c !== null);
   if (phase2.length) {
     return `Brief locked. Scout shortlisted ${phase2.join(" + ")} and queued an outreach card for each top match.`;
   }

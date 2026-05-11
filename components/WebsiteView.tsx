@@ -6,7 +6,7 @@
 // editable content cards (story, travel guide, FAQs), and a Smart RSVP
 // section where the couple curates which custom questions guests answer
 // when they reply. Question routing tags show which agent each answer
-// feeds — Larder for dietary, Cantor for songs, etc.
+// feeds. Larder for dietary, Cantor for songs, etc.
 
 import { useState } from "react";
 import Link from "next/link";
@@ -58,7 +58,7 @@ export function WebsiteView() {
         </p>
         <div className="flex items-baseline justify-between gap-6 flex-wrap">
           <h1 className="display text-[36px] sm:text-[44px] lg:text-[52px] leading-[1.02] tracking-[-0.01em]">
-            What guests <span className="italic text-sage-500">see</span>.
+            Wedding website.
           </h1>
           {site && (
             <a
@@ -95,7 +95,7 @@ export function WebsiteView() {
           <div className="rounded-card border hairline bg-white/55 px-7 py-12 max-w-xl">
             <p className="display text-[26px] text-ink leading-tight">No site yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Initialize a wedding site to expose the schedule, smart RSVP form, travel guide, registry links, and FAQs to your guests. We'll seed three RSVP questions to start — meal choice, dietary needs, and a song request — and route their answers to Larder and Cantor automatically.
+              Set up a wedding site for your guests. schedule, RSVP, travel guide, registry, FAQs. We'll start you off with three RSVP questions (meal choice, dietary needs, a song request) and we'll feed the answers right back into your menu and music.
             </p>
             <button
               onClick={() => post({ op: "init" }, "init")}
@@ -129,7 +129,7 @@ export function WebsiteView() {
                 />
                 <Toggle
                   label="Registry"
-                  hint="Cross-link Curator's picks"
+                  hint="Cross-link your registry picks"
                   on={site.registryLinked}
                   onClick={() => post({ op: "update", patch: { registryLinked: !site.registryLinked } }, "rl")}
                 />
@@ -168,7 +168,7 @@ export function WebsiteView() {
             </section>
           </Reveal>
 
-          {/* SMART RSVP — custom questions editor */}
+          {/* SMART RSVP. custom questions editor */}
           <Reveal>
             <section>
               <div className="flex items-baseline justify-between mb-5">

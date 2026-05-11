@@ -7,3 +7,9 @@ out
 .DS_Store
 *.log
 data/store.json
+data/store.backup.*.json
+data/gmail.json
+data/gmail-credentials.json
+tests/.tmp.store.json
+tests/.tmp.*.json
+.claude/scheduled_tasks.lock

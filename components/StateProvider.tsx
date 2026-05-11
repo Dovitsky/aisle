@@ -10,6 +10,15 @@ type Ctx = {
   /** Briefly poll /api/state so background work (Scout, etc.) lands. */
   pollForUpdates: (durationMs?: number) => void;
   loading: boolean;
+  /** Whether the ChatDock is open. controlled globally so other surfaces
+   * (StarterBriefs, brief-loaded handoff) can open it on user action. */
+  chatOpen: boolean;
+  setChatOpen: (open: boolean) => void;
+  /** Pending text the ChatDock should auto-send and clear on mount/change.
+   * Lets any page (vendor detail, etc.) trigger Maestro inline. */
+  pendingChatPrompt: string | null;
+  sendChatMessage: (text: string) => void;
+  clearPendingChatPrompt: () => void;
 };
 
 const StateCtx = createContext<Ctx | null>(null);
@@ -17,8 +26,18 @@ const StateCtx = createContext<Ctx | null>(null);
 export function StateProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<ProjectState | null>(null);
   const [loading, setLoading] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [pendingChatPrompt, setPendingChatPrompt] = useState<string | null>(null);
   const pollUntilRef = useRef<number>(0);
   const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const sendChatMessage = useCallback((text: string) => {
+    setPendingChatPrompt(text);
+    setChatOpen(true);
+  }, []);
+  const clearPendingChatPrompt = useCallback(() => {
+    setPendingChatPrompt(null);
+  }, []);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -34,7 +53,7 @@ export function StateProvider({ children }: { children: React.ReactNode }) {
       const j = (await r.json()) as ProjectState;
       setState(j);
     } catch {
-      // ignore — next tick will retry
+      // ignore. next tick will retry
     }
   }, []);
 
@@ -62,7 +81,20 @@ export function StateProvider({ children }: { children: React.ReactNode }) {
   }, [refresh]);
 
   return (
-    <StateCtx.Provider value={{ state, refresh, setState, pollForUpdates, loading }}>
+    <StateCtx.Provider
+      value={{
+        state,
+        refresh,
+        setState,
+        pollForUpdates,
+        loading,
+        chatOpen,
+        setChatOpen,
+        pendingChatPrompt,
+        sendChatMessage,
+        clearPendingChatPrompt,
+      }}
+    >
       {children}
     </StateCtx.Provider>
   );
