@@ -144,13 +144,34 @@ export function Landing() {
             padding: 16px 26px !important;
           }
 
-          /* App Store-style: just the hero on mobile. Trust section
-             ("OUR PROMISE"), ProductMoment, and Footer all hidden.
-             Brand + photo + headline + one input + sign-in. Done. */
-          .trust-section,
-          .product-moment,
+          /* Trust / "OUR PROMISE" — natural continuation. Single column,
+             tighter padding. Combined with hero-editorial's 32px bottom
+             padding, gap between input and trust = ~88px (premium, not
+             crammed, not a void). */
+          .trust-section {
+            padding: 56px 24px !important;
+          }
+          .trust-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+          .trust-rows {
+            gap: 20px !important;
+            padding-top: 4px !important;
+          }
+
+          /* ProductMoment — single column on mobile */
+          .product-moment {
+            padding: 56px 24px !important;
+          }
+          .product-moment .moment-grid {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+
+          /* Footer — slimmer on mobile */
           .landing-footer {
-            display: none !important;
+            padding: 36px 24px !important;
           }
         }
       `}</style>
@@ -427,7 +448,7 @@ function HeroPhoto() {
             textShadow: "0 2px 18px rgba(0,0,0,0.6)",
           }}
         >
-          <span style={{ display: "block" }}>Plan a wedding.</span>
+          <span style={{ display: "block" }}>Yours to dream.</span>
           <span
             style={{
               display: "block",
@@ -435,7 +456,7 @@ function HeroPhoto() {
               color: "#D9E1CD",
             }}
           >
-            Skip the planning.
+            Ours to tend.
           </span>
         </h1>
       </div>
@@ -501,7 +522,7 @@ function HeroEditorial() {
           animation: "cat-rise 800ms 200ms ease-out both",
         }}
       >
-        <span style={{ display: "block" }}>Plan a wedding.</span>
+        <span style={{ display: "block" }}>Yours to dream.</span>
         <span
           style={{
             display: "block",
@@ -509,7 +530,7 @@ function HeroEditorial() {
             color: SAGE_DEEP,
           }}
         >
-          Skip the planning.
+          Ours to tend.
         </span>
       </h1>
 
