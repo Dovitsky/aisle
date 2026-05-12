@@ -14,6 +14,7 @@ import { useMemo, useState } from "react";
 import type { ProjectState } from "@/lib/types";
 import { useProject } from "./StateProvider";
 import { Reveal, CountUp } from "./Atmosphere";
+import { SeatingDragDrop } from "./SeatingDragDrop";
 
 export function SeatingView() {
   const { state, setState, loading } = useProject();
@@ -327,6 +328,12 @@ export function SeatingView() {
           </section>
         </Reveal>
       )}
+
+      {/* Manual drag-drop layout. Sits below the solver. Couples can use
+          either or both. add tables, drag guests, print the chart. */}
+      <Reveal>
+        <SeatingDragDrop />
+      </Reveal>
 
       {tableCount === 0 && (
         <Reveal>
