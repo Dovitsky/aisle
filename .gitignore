@@ -13,3 +13,6 @@ data/gmail-credentials.json
 tests/.tmp.store.json
 tests/.tmp.*.json
 .claude/scheduled_tasks.lock
+.claude/worktrees/
+.fuse_hidden*
+**/.fuse_hidden*
