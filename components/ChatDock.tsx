@@ -22,6 +22,14 @@ export function ChatDock() {
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const open = chatOpen;
+
+    // Prevent background scroll on mobile when chat is open
+    useEffect(() => {
+          if (!open) return;
+          const sy = window.scrollY;
+          document.documentElement.style.overflow = 'hidden';
+          return () => { document.documentElement.style.overflow = ''; window.scrollTo(0, sy); };
+    }, [open]);
   const setOpen = setChatOpen;
   const [error, setError] = useState<string | null>(null);
   // Client-side memory of message IDs whose ui block has been answered.
