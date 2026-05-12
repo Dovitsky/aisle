@@ -113,11 +113,9 @@ export function Landing() {
           .hero-est-mark {
             display: none !important;
           }
-          /* Tighten the editorial column to JUST the input + sign-in.
-             padding-bottom is huge (60vh) so the next section sits
-             well below the fold. */
+          /* Tighten the editorial column to JUST the input + sign-in. */
           .hero-editorial {
-            padding: 22px 22px 60vh !important;
+            padding: 22px 22px 32px !important;
             gap: 0 !important;
           }
           /* Hide everything in the editorial column except the input */
@@ -130,13 +128,13 @@ export function Landing() {
             margin-top: 22px !important;
             text-align: center !important;
           }
-          /* Trust / "OUR PROMISE" section starts way below the fold.
-             Combined with the 60vh padding-bottom on .hero-editorial,
-             the user scrolls past ~150vh of whitespace before any
-             of the product copy appears. */
-          .trust-section {
-            margin-top: 40vh !important;
-            padding-top: 0 !important;
+          /* App Store-style: just the hero on mobile. Trust section
+             ("OUR PROMISE"), ProductMoment, and Footer all hidden.
+             Brand + photo + headline + one input + sign-in. Done. */
+          .trust-section,
+          .product-moment,
+          .landing-footer {
+            display: none !important;
           }
         }
       `}</style>
@@ -968,6 +966,7 @@ function Trust() {
 function ProductMoment() {
   return (
     <section
+      className="product-moment"
       style={{
         background: IVORY,
         padding: "clamp(96px, 16vh, 180px) clamp(28px, 5vw, 80px)",
@@ -1364,6 +1363,7 @@ function DecisionCard() {
 function Footer() {
   return (
     <footer
+      className="landing-footer"
       style={{
         background: PAPER,
         borderTop: `1px solid ${HAIRLINE}`,
