@@ -692,8 +692,9 @@ function extractBriefFields(msg: string, brief: Brief | null): Record<string, un
     const n = msg.match(/\b(\d{2,4})\s*(?:-\s*\d{2,4})?\s*(?:guests?|people|heads|attendees|pax)\b/i);
     if (n) out.guestCount = parseInt(n[1], 10);
     else {
-      // "roughly 80" / "around 120" without "guests" word
-      const n2 = msg.match(/\b(?:roughly|around|about|~|circa)\s+(\d{2,4})\b/i);
+      // "roughly 80" / "around 120" / "~120" / "~ 120" — qualifier with or
+      // without whitespace before the digits.
+      const n2 = msg.match(/(?:\b(?:roughly|around|about|circa)\s+|~\s*)(\d{2,4})\b/i);
       if (n2) out.guestCount = parseInt(n2[1], 10);
     }
   }
@@ -762,29 +763,56 @@ function extractBriefFields(msg: string, brief: Brief | null): Record<string, un
     }
   }
 
-  // Region. runs LAST so we don't grab a name. Several heuristics:
-  //   "in Hudson Valley", "Hudson Valley, NY", "Charleston SC", capitalized noun phrases
+  // Region. runs LAST so we don't grab a name. Several heuristics, tried
+  // in order; if a more-specific match is rejected (e.g. "in October" hits
+  // the in-prefix pattern but is name-shaped), we fall through to the next.
   if (fieldStillMissing(brief, "region")) {
-    // "in <Place>" / "at <Place>"
-    const inAt = msg.match(/\b(?:in|at|near|around)\s+([A-Z][\w' .-]{2,40}(?:,\s*[A-Z]{2,})?)/);
-    if (inAt) {
-      const candidate = inAt[1].replace(/\.$/, "").trim();
-      if (!isLikelyName(candidate, brief, out)) out.region = candidate;
-    } else {
-      // "Hudson Valley, NY"
+    // 1. "in <Place>" / "at <Place>" — try ALL matches, take the first
+    //    that isn't a month or name-shape.
+    const months = /^(?:january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)$/i;
+    const inAtAll = Array.from(msg.matchAll(/\b(?:in|at|near|around)\s+([A-Z][\w' .-]{2,40}(?:,\s*[A-Z]{2,})?)/g));
+    for (const m of inAtAll) {
+      const candidate = m[1].replace(/\.$/, "").trim();
+      if (months.test(candidate)) continue;
+      if (isLikelyName(candidate, brief, out)) continue;
+      out.region = candidate;
+      break;
+    }
+    // 2. "Hudson Valley, NY" — city + state code, even if (1) already
+    //    matched something we rejected.
+    if (!out.region) {
       const cityState = msg.match(/\b([A-Z][\w' .-]{2,40}),\s*([A-Z]{2})\b/);
       if (cityState) {
         out.region = `${cityState[1]}, ${cityState[2]}`;
-      } else {
-        // Bare capitalized place hint when this looks like a region answer:
-        // short message, no other extractions yet.
-        const wordCount = msg.trim().split(/\s+/).length;
-        if (wordCount <= 5 && !out.organizerName && !out.partnerName &&
-            !out.guestCount && !out.budgetUsd && !out.dateWindow) {
-          const cap = msg.match(/\b([A-Z][a-z][\w' -]{2,40})\b/);
-          if (cap && !isLikelyName(cap[1], brief, out)) {
-            out.region = cap[1].replace(/\.$/, "").trim();
-          }
+      }
+    }
+    // 3. Multi-word Capitalized phrase anywhere in the message — covers
+    //    "Hudson Valley", "Big Sur", "Cape Cod" when they appear without
+    //    an "in"/"at" prefix or a state code.
+    if (!out.region) {
+      const multi = Array.from(msg.matchAll(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})\b/g));
+      for (const m of multi) {
+        const candidate = m[1].trim();
+        if (months.test(candidate)) continue;
+        if (isLikelyName(candidate, brief, out)) continue;
+        // Skip the leading-word case that's already part of a sentence
+        // start (e.g. "Saturday") — heuristic: the first token of the
+        // message is unlikely to be a region.
+        const firstWord = msg.trim().split(/\s+/)[0];
+        if (candidate.startsWith(firstWord + " ") || candidate === firstWord) continue;
+        out.region = candidate;
+        break;
+      }
+    }
+    // 4. Bare capitalized place hint — only on short replies with no
+    //    other structured extractions this turn.
+    if (!out.region) {
+      const wordCount = msg.trim().split(/\s+/).length;
+      if (wordCount <= 5 && !out.organizerName && !out.partnerName &&
+          !out.guestCount && !out.budgetUsd && !out.dateWindow) {
+        const cap = msg.match(/\b([A-Z][a-z][\w' -]{2,40})\b/);
+        if (cap && !isLikelyName(cap[1], brief, out)) {
+          out.region = cap[1].replace(/\.$/, "").trim();
         }
       }
     }

@@ -632,25 +632,13 @@ function BriefStrip({
   const { pollForUpdates } = useProject();
   const retriedRef = useRef<string | null>(null);
   const [rendering, setRendering] = useState(false);
-  const [renderError, setRenderError] = useState<string | null>(
-    brief.heroError ?? null,
-  );
 
   const triggerRender = useCallback(async () => {
     if (rendering) return;
     setRendering(true);
-    setRenderError(null);
     try {
-      const r = await fetch("/api/brief/render-hero?force=1", { method: "POST" });
-      const j = (await r.json().catch(() => null)) as
-        | { image?: string; mode?: string; model?: string; error?: string }
-        | null;
-      if (j?.mode === "placeholder" && j.error) {
-        setRenderError(j.error);
-      }
+      await fetch("/api/brief/render-hero?force=1", { method: "POST" });
       pollForUpdates(120_000);
-    } catch (e) {
-      setRenderError(e instanceof Error ? e.message : String(e));
     } finally {
       setTimeout(() => setRendering(false), 5_000);
     }
@@ -924,27 +912,6 @@ function BriefStrip({
           </div>
         )}
       </div>
-
-      {/* OpenAI error surfacing. Only shown when the image render failed
-          AND we have an actual error message. used to debug why the
-          hero is still a placeholder. */}
-      {renderError && isPlaceholder && (
-        <div
-          className="mt-4 rounded-lg px-3 py-2 text-[11px] font-mono leading-relaxed"
-          style={{
-            background: "rgba(168,52,26,0.06)",
-            border: "1px solid rgba(168,52,26,0.25)",
-            color: "#8A2A14",
-            maxWidth: "100%",
-            wordBreak: "break-word",
-          }}
-        >
-          <span className="font-semibold uppercase tracking-[0.18em] mr-2">
-            Image gen:
-          </span>
-          {renderError}
-        </div>
-      )}
 
       </div>
     </header>
