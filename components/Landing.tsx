@@ -664,29 +664,21 @@ function HeroAction() {
     setBusy(true);
     setError(null);
 
-    // Open the chat dock immediately so the destination is primed.
-    // setChatOpen lives in React context and persists across the
-    // client-side navigation below.
+    // OPTION A flow: open the chat dock right here. NO navigation.
+    // Maestro will reply in the dock and the dossier is built
+    // conversationally through chat. We never push the user to
+    // /dossier from this entry point — the dark form pop-up over
+    // the chat was a flow collision.
+    //
+    // AppShell flips out of marketing-landing mode when chatOpen
+    // becomes true, so the dock + dashboard surround render right
+    // here without a route change.
     setChatOpen(true);
-
-    // Race the chat fetch against a 6s timeout. The button shows
-    // "Going…" with a spinner during this window, which IS the
-    // immediate feedback. If Maestro responds in <6s we propagate
-    // the new state. If it stalls (slow region, key missing, etc.)
-    // we navigate anyway so the user is never stuck.
-    const navigateNext = () => {
-      // /dossier is OFF the marketing-landing path so AppShell stops
-      // gating the chat dock there. The brief form is the natural
-      // next step. router.refresh() makes the destination re-fetch
-      // the latest state so a partial brief (if Maestro created one)
-      // shows up immediately.
-      router.push("/dossier");
-      router.refresh();
-    };
+    setDraft("");
 
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 6000);
+      const timeout = setTimeout(() => controller.abort(), 8000);
       const r = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -698,25 +690,23 @@ function HeroAction() {
       if (!r.ok) {
         const j = (await r.json().catch(() => ({}))) as { error?: string };
         setError(j.error || `Server returned ${r.status}`);
-        // Even on error: navigate so the user isn't stranded on the
-        // landing page. The chat record was attempted; the dock at
-        // the destination will surface Maestro's state.
-        navigateNext();
         return;
       }
       const j = (await r.json()) as { state?: ProjectState };
       if (j.state) setState(j.state);
-      navigateNext();
+      // router.refresh() so the server-rendered Today picks up the
+      // new state (partial brief → ContinuingDraft surface).
+      router.refresh();
     } catch (e) {
-      // Network error, abort, or fetch-thrown. Don't strand the user.
+      // Network error, abort, or fetch-thrown. The chat is already
+      // open. Maestro's reply will land when it arrives.
       // eslint-disable-next-line no-console
       console.error("[HeroAction] /api/chat failed:", e);
       setError(
         e instanceof Error && e.name === "AbortError"
-          ? "Maestro is taking a moment. continuing without waiting."
-          : "Network hiccup. continuing without waiting.",
+          ? "Maestro is taking a moment. carry on, I'll catch up."
+          : "Network hiccup. try again?",
       );
-      navigateNext();
     } finally {
       setBusy(false);
     }

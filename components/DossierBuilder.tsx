@@ -24,15 +24,19 @@ const STAGES: Stage[] = [
 ];
 
 // ---------- Palette ----------
-const INK = "#0F0E0B";
-const PAPER = "#FAF7EE";
-const CREAM = "#F0E9D8";
-const SAGE = "#A8B5A0";
-const SAGE_DEEP = "#6E8068";
+// Wedding-stationery light. Cream paper, ink type, sage + gold accents.
+// Same names as the dark version so the JSX downstream is unchanged.
+// PAPER = the page background. INK = the type. CREAM = the selected-card
+// fill. MUTED / FAINT / HAIRLINE are subtle ink tints for hierarchy.
+const INK = "#1A1A18";
+const PAPER = "#FCFBF6";   // page background, warm off-white
+const CREAM = "#F0E9D8";   // selected-state card fill
+const SAGE = "#6E8068";
+const SAGE_DEEP = "#4F5D44";
 const GOLD = "#B89968";
-const MUTED = "rgba(248,246,241,0.55)";
-const FAINT = "rgba(248,246,241,0.40)";
-const HAIRLINE = "rgba(248,246,241,0.14)";
+const MUTED = "rgba(26,26,24,0.55)";
+const FAINT = "rgba(26,26,24,0.40)";
+const HAIRLINE = "rgba(26,26,24,0.12)";
 
 const DISPLAY = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 const SANS = '"Helvetica Neue", Helvetica, Arial, sans-serif';
@@ -185,7 +189,7 @@ export function DossierBuilder() {
   if (loading || !state) {
     return (
       <div
-        style={{ background: INK, minHeight: "100vh" }}
+        style={{ background: PAPER, minHeight: "100vh" }}
         className="flex items-center justify-center"
       >
         <p style={{ color: MUTED, fontFamily: SANS, fontSize: 12, letterSpacing: "0.2em" }}>
@@ -257,9 +261,9 @@ export function DossierBuilder() {
   return (
     <div
       style={{
-        background: `radial-gradient(ellipse 90% 80% at 50% 0%, #1a1814 0%, ${INK} 60%)`,
+        background: `radial-gradient(ellipse 110% 70% at 50% 0%, #FFFFFF 0%, ${PAPER} 55%, #F4F0E4 100%)`,
         minHeight: "100vh",
-        color: PAPER,
+        color: INK,
         fontFamily: SANS,
         position: "relative",
         overflow: "hidden",
@@ -446,7 +450,7 @@ export function DossierBuilder() {
             bottom: 0,
             left: 0,
             right: 0,
-            background: `linear-gradient(180deg, transparent 0%, rgba(15,14,11,0.85) 30%, ${INK} 100%)`,
+            background: `linear-gradient(180deg, rgba(252,251,246,0) 0%, rgba(252,251,246,0.85) 35%, ${PAPER} 100%)`,
             padding: "32px 28px 32px",
             zIndex: 10,
           }}
@@ -468,7 +472,7 @@ export function DossierBuilder() {
               style={{
                 fontFamily: SANS,
                 fontSize: 13,
-                color: stageIdx === 0 ? "rgba(248,246,241,0.20)" : MUTED,
+                color: stageIdx === 0 ? "rgba(26,26,24,0.20)" : MUTED,
                 background: "transparent",
                 border: "none",
                 padding: "12px 4px",
@@ -488,7 +492,7 @@ export function DossierBuilder() {
                   fontSize: 13,
                   fontWeight: 500,
                   padding: "14px 32px",
-                  background: canAdvance[stage] ? CREAM : "rgba(248,246,241,0.15)",
+                  background: canAdvance[stage] ? CREAM : "rgba(26,26,24,0.08)",
                   color: canAdvance[stage] ? INK : FAINT,
                   border: "none",
                   borderRadius: 999,
@@ -510,7 +514,7 @@ export function DossierBuilder() {
                   fontWeight: 500,
                   padding: "14px 36px",
                   background: SAGE_DEEP,
-                  color: PAPER,
+                  color: "#FCFBF6",
                   border: "none",
                   borderRadius: 999,
                   cursor: busy ? "wait" : "pointer",
@@ -565,7 +569,7 @@ function StageHeader({ eyebrow, title }: { eyebrow: string; title: string | Reac
           fontSize: "clamp(36px, 5vw, 56px)",
           lineHeight: 1.05,
           letterSpacing: "-0.015em",
-          color: PAPER,
+          color: INK,
           margin: 0,
         }}
       >
@@ -700,7 +704,7 @@ function WhenStage(props: {
               type="button"
               onClick={() => props.setMonthIdx(m.idx)}
               style={{
-                background: sel ? CREAM : "rgba(248,246,241,0.04)",
+                background: sel ? CREAM : "rgba(26,26,24,0.025)",
                 color: sel ? INK : PAPER,
                 border: `1px solid ${sel ? CREAM : HAIRLINE}`,
                 borderRadius: 14,
@@ -788,7 +792,7 @@ function SizeStage(props: {
               type="button"
               onClick={() => props.setGuestCount(g.count)}
               style={{
-                background: sel ? CREAM : "rgba(248,246,241,0.04)",
+                background: sel ? CREAM : "rgba(26,26,24,0.025)",
                 color: sel ? INK : PAPER,
                 border: `1px solid ${sel ? CREAM : HAIRLINE}`,
                 borderRadius: 16,
@@ -873,7 +877,7 @@ function VibeStage(props: {
                 props.setVibeFree("");
               }}
               style={{
-                background: sel ? CREAM : "rgba(248,246,241,0.04)",
+                background: sel ? CREAM : "rgba(26,26,24,0.025)",
                 color: sel ? INK : PAPER,
                 border: `1px solid ${sel ? CREAM : HAIRLINE}`,
                 borderRadius: 14,
@@ -954,7 +958,7 @@ function ScaleStage(props: {
               type="button"
               onClick={() => props.setBudgetUsd(s.budget)}
               style={{
-                background: sel ? CREAM : "rgba(248,246,241,0.04)",
+                background: sel ? CREAM : "rgba(26,26,24,0.025)",
                 color: sel ? INK : PAPER,
                 border: `1px solid ${sel ? CREAM : HAIRLINE}`,
                 borderRadius: 16,
@@ -1047,7 +1051,7 @@ function TraditionStage(props: {
               type="button"
               onClick={() => props.setFormality(f.key)}
               style={{
-                background: sel ? CREAM : "rgba(248,246,241,0.04)",
+                background: sel ? CREAM : "rgba(26,26,24,0.025)",
                 color: sel ? INK : PAPER,
                 border: `1px solid ${sel ? CREAM : HAIRLINE}`,
                 borderRadius: 14,
@@ -1101,7 +1105,7 @@ function ReviewStage(props: {
         style={{
           border: `1px solid ${HAIRLINE}`,
           borderRadius: 18,
-          background: "rgba(248,246,241,0.03)",
+          background: "rgba(26,26,24,0.02)",
           padding: 32,
         }}
       >
@@ -1191,8 +1195,8 @@ const inputStyle: React.CSSProperties = {
   fontWeight: 300,
   fontSize: 22,
   letterSpacing: "-0.005em",
-  color: PAPER,
-  background: "rgba(248,246,241,0.04)",
+  color: INK,
+  background: "rgba(26,26,24,0.025)",
   border: `1px solid ${HAIRLINE}`,
   borderRadius: 14,
   padding: "16px 20px",
@@ -1260,7 +1264,7 @@ function Row({ label, value, multiline }: { label: string; value: string; multil
           fontStyle: "italic",
           fontSize: 18,
           fontWeight: 300,
-          color: PAPER,
+          color: INK,
           letterSpacing: "-0.005em",
           lineHeight: 1.45,
         }}

@@ -267,7 +267,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // user who needs the chat dock and topbar back. Without this, the
   // "Continue with Maestro" CTA on the partial-brief surface has nothing
   // to open.
-  const isMarketingLanding = pathname === "/" && !state?.brief;
+  // Marketing landing renders without dashboard chrome — BUT once the
+  // user has engaged (hit Go and opened the chat with Maestro), we
+  // flip out of marketing mode so the chat dock and full app surround
+  // are available. Otherwise the welcome input would open a chat that
+  // nothing on Landing can host.
+  const isMarketingLanding = pathname === "/" && !state?.brief && !chatOpen;
   const dockOff = isPublic || isMarketingLanding || isDossier || pathname.startsWith("/login") || pathname.startsWith("/portal");
   // When the chat panel is open on lg+, push the entire app frame right by
   // the panel width so page content sits beside the chat instead of under
