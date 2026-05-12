@@ -164,19 +164,8 @@ export function DossierBuilder() {
     }
   }, [state?.brief]);
 
-  if (loading || !state) {
-    return (
-      <div
-        style={{ background: INK, minHeight: "100vh" }}
-        className="flex items-center justify-center"
-      >
-        <p style={{ color: MUTED, fontFamily: SANS, fontSize: 12, letterSpacing: "0.2em" }}>
-          loading…
-        </p>
-      </div>
-    );
-  }
-
+  // Derived values — must run UNCONDITIONALLY (hooks first, early
+  // returns after) so React's hook count is stable across renders.
   const dateWindow = useMemo(() => {
     if (!monthIdx) return "";
     const mm = String(monthIdx).padStart(2, "0");
@@ -190,8 +179,21 @@ export function DossierBuilder() {
   const vibe = vibeFree
     ? vibeFree
     : vibeKey
-    ? VIBES.find((v) => v.key === vibeKey)?.label + " — " + VIBES.find((v) => v.key === vibeKey)?.hint
+    ? VIBES.find((v) => v.key === vibeKey)?.label + ". " + VIBES.find((v) => v.key === vibeKey)?.hint
     : "";
+
+  if (loading || !state) {
+    return (
+      <div
+        style={{ background: INK, minHeight: "100vh" }}
+        className="flex items-center justify-center"
+      >
+        <p style={{ color: MUTED, fontFamily: SANS, fontSize: 12, letterSpacing: "0.2em" }}>
+          loading…
+        </p>
+      </div>
+    );
+  }
 
   const canAdvance: Record<Stage, boolean> = {
     names:    organizerName.trim().length > 0 && partnerName.trim().length > 0,
