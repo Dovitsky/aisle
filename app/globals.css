@@ -513,13 +513,40 @@ main { padding-bottom: 8rem; }
   main { padding-bottom: 13rem !important; }
 }
 
+/* Sticky CTA row — pinned to the bottom of the viewport on mobile so
+   "Save draft" / "Seal the dossier" are always one tap away. The form
+   content scrolls behind it; a cream backdrop + hairline top border
+   make it read as an intentional toolbar, not floating buttons. */
 .sticky-cta {
   position: sticky;
-  bottom: 5.5rem;
+  bottom: 5.5rem; /* clears the mobile bottom tab bar */
   z-index: 10;
+  padding: 0.75rem 1rem;
+  /* Negative margins make this row span the full container width even
+     when the form is padded; then the inner padding above re-creates
+     the visual gutter the buttons live in. */
+  margin-left: -1rem;
+  margin-right: -1rem;
+  background: rgba(248, 246, 241, 0.92); /* IVORY @ 92% */
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-top: 1px solid rgba(14, 15, 13, 0.08);
+  box-shadow: 0 -6px 18px -10px rgba(14, 15, 13, 0.10);
 }
 @media (min-width: 1024px) {
-  .sticky-cta { bottom: 1.5rem; }
+  .sticky-cta {
+    bottom: 1.5rem;
+    /* On desktop the form is centered with its own padding; let the row
+       breathe as a normal centered control instead of a full-bleed bar. */
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-top: none;
+    box-shadow: none;
+  }
 }
 
 /* Toast slide-in (used by <ToastProvider>) */
