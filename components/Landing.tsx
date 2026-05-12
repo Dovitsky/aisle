@@ -12,6 +12,7 @@
 // background; no obsidian poster. Photography carries the mood.
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useProject } from "./StateProvider";
 import type { ProjectState } from "@/lib/types";
@@ -641,25 +642,72 @@ function HeroEditorial() {
 }
 
 function HeroAction() {
+  const router = useRouter();
   const { setChatOpen, setState, state } = useProject();
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const send = async () => {
     const m = draft.trim();
     if (!m) return;
     setBusy(true);
+    setError(null);
+
+    // Open the chat dock immediately so the destination is primed —
+    // setChatOpen lives in React context and persists across the
+    // client-side navigation below.
+    setChatOpen(true);
+
+    // Race the chat fetch against a 6s timeout. The button shows
+    // "Going…" with a spinner during this window, which IS the
+    // immediate feedback. If Maestro responds in <6s we propagate
+    // the new state. If it stalls (slow region, key missing, etc.)
+    // we navigate anyway so the user is never stuck.
+    const navigateNext = () => {
+      // /dossier is OFF the marketing-landing path so AppShell stops
+      // gating the chat dock there. The brief form is the natural
+      // next step. router.refresh() makes the destination re-fetch
+      // the latest state so a partial brief (if Maestro created one)
+      // shows up immediately.
+      router.push("/dossier");
+      router.refresh();
+    };
+
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 6000);
       const r = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ message: m }),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
+
+      if (!r.ok) {
+        const j = (await r.json().catch(() => ({}))) as { error?: string };
+        setError(j.error || `Server returned ${r.status}`);
+        // Even on error: navigate so the user isn't stranded on the
+        // landing page. The chat record was attempted; the dock at
+        // the destination will surface Maestro's state.
+        navigateNext();
+        return;
+      }
       const j = (await r.json()) as { state?: ProjectState };
       if (j.state) setState(j.state);
-      setChatOpen(true);
-      setDraft("");
+      navigateNext();
+    } catch (e) {
+      // Network error, abort, or fetch-thrown. Don't strand the user.
+      // eslint-disable-next-line no-console
+      console.error("[HeroAction] /api/chat failed:", e);
+      setError(
+        e instanceof Error && e.name === "AbortError"
+          ? "Maestro is taking a moment — continuing without waiting."
+          : "Network hiccup — continuing without waiting.",
+      );
+      navigateNext();
     } finally {
       setBusy(false);
     }
@@ -788,6 +836,21 @@ function HeroAction() {
           )}
         </button>
       </div>
+
+      {/* Error surface — the user must always know something went wrong. */}
+      {error && (
+        <p
+          style={{
+            fontFamily: MONO,
+            fontSize: 11,
+            color: "#A8312C",
+            margin: "12px 0 0",
+            letterSpacing: "0.02em",
+          }}
+        >
+          {error}
+        </p>
+      )}
 
       {/* Tertiary fallback */}
       <div style={{ marginTop: 14 }}>
