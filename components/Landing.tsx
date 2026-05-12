@@ -850,130 +850,59 @@ function Trust() {
       <div
         className="trust-grid"
         style={{
-          maxWidth: 1240,
+          maxWidth: 880,
           margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)",
-          gap: "clamp(48px, 8vw, 112px)",
-          alignItems: "start",
+          display: "flex",
+          flexDirection: "column",
+          gap: 22,
+          alignItems: "flex-start",
         }}
       >
-        <div>
-          <p
-            style={{
-              fontFamily: MONO,
-              fontSize: 11,
-              letterSpacing: "0.32em",
-              textTransform: "uppercase",
-              color: SAGE_DEEP,
-              margin: 0,
-              marginBottom: 22,
-              opacity: visible ? 1 : 0,
-              transform: visible ? "translateY(0)" : "translateY(8px)",
-              transition: "opacity 600ms, transform 600ms",
-            }}
-          >
-            <span
-              aria-hidden
-              style={{
-                display: "inline-block",
-                width: 32,
-                height: 1,
-                background: SAGE,
-                marginRight: 14,
-                verticalAlign: "middle",
-              }}
-            />
-            Our promise
-          </p>
-          <h2
-            style={{
-              fontFamily: DISPLAY,
-              fontWeight: 300,
-              fontSize: "clamp(36px, 5vw, 68px)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.02em",
-              color: INK,
-              margin: 0,
-              opacity: visible ? 1 : 0,
-              transform: visible ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 800ms 120ms, transform 800ms 120ms",
-            }}
-          >
-            <span style={{ display: "block" }}>We never send, sign,</span>
-            <span
-              style={{
-                display: "block",
-                fontStyle: "italic",
-                color: SAGE_DEEP,
-              }}
-            >
-              or spend without you.
-            </span>
-          </h2>
-        </div>
-
-        <div
-          className="trust-rows"
+        <h2
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 36,
-            paddingTop: 12,
+            fontFamily: DISPLAY,
+            fontWeight: 300,
+            fontSize: "clamp(36px, 5vw, 64px)",
+            lineHeight: 1.05,
+            letterSpacing: "-0.02em",
+            color: INK,
+            margin: 0,
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(20px)",
+            transition: "opacity 800ms, transform 800ms",
           }}
         >
-          {[
-            { label: "Emails", body: "Drafted, queued, awaiting your tap.", d: 220 },
-            { label: "Contracts", body: "Reviewed, scored, never signed without you.", d: 340 },
-            { label: "Payments", body: "Scheduled, never sent without your nod.", d: 460 },
-          ].map((c) => (
-            <div
-              key={c.label}
-              style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(14px)",
-                transition: `opacity 700ms ${c.d}ms, transform 700ms ${c.d}ms`,
-              }}
-            >
-              <span
-                aria-hidden
-                style={{
-                  display: "block",
-                  width: 32,
-                  height: 1,
-                  background: SAGE,
-                  marginBottom: 14,
-                }}
-              />
-              <p
-                style={{
-                  fontFamily: MONO,
-                  fontSize: 10.5,
-                  letterSpacing: "0.26em",
-                  textTransform: "uppercase",
-                  color: INK_FAINT,
-                  margin: 0,
-                  marginBottom: 8,
-                }}
-              >
-                {c.label}
-              </p>
-              <p
-                style={{
-                  fontFamily: DISPLAY,
-                  fontWeight: 300,
-                  fontSize: 22,
-                  lineHeight: 1.3,
-                  color: INK,
-                  margin: 0,
-                  letterSpacing: "-0.005em",
-                }}
-              >
-                {c.body}
-              </p>
-            </div>
-          ))}
-        </div>
+          <span style={{ display: "block" }}>AI that plans.</span>
+          <span
+            style={{
+              display: "block",
+              fontStyle: "italic",
+              color: SAGE_DEEP,
+            }}
+          >
+            You that decides.
+          </span>
+        </h2>
+
+        <p
+          style={{
+            fontFamily: DISPLAY,
+            fontWeight: 300,
+            fontStyle: "italic",
+            fontSize: "clamp(17px, 1.6vw, 21px)",
+            lineHeight: 1.55,
+            color: INK_MUTED,
+            margin: "8px 0 0",
+            maxWidth: 720,
+            letterSpacing: "-0.005em",
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(14px)",
+            transition: "opacity 800ms 200ms, transform 800ms 200ms",
+          }}
+        >
+          From venues to vendors to vows — your AI wedding planner handles
+          every detail. Nothing happens without your say.
+        </p>
       </div>
 
       <style jsx>{`
@@ -1021,32 +950,8 @@ function ProductMoment() {
           alignItems: "center",
         }}
       >
-        {/* Left. copy */}
+        {/* Left. three simple steps. */}
         <div>
-          <p
-            style={{
-              fontFamily: MONO,
-              fontSize: 11,
-              letterSpacing: "0.32em",
-              textTransform: "uppercase",
-              color: SAGE_DEEP,
-              margin: 0,
-              marginBottom: 22,
-            }}
-          >
-            <span
-              aria-hidden
-              style={{
-                display: "inline-block",
-                width: 32,
-                height: 1,
-                background: SAGE,
-                marginRight: 14,
-                verticalAlign: "middle",
-              }}
-            />
-            How it works
-          </p>
           <h2
             style={{
               fontFamily: DISPLAY,
@@ -1058,35 +963,58 @@ function ProductMoment() {
               margin: 0,
             }}
           >
-            <span style={{ display: "block" }}>We draft.</span>
-            <span
-              style={{
-                display: "block",
-                fontStyle: "italic",
-                color: SAGE_DEEP,
-              }}
-            >
-              You decide.
-            </span>
+            How it works.
           </h2>
-          <p
+
+          <ol
             style={{
-              fontFamily: DISPLAY,
-              fontWeight: 300,
-              fontStyle: "italic",
-              fontSize: 19,
-              lineHeight: 1.55,
-              color: INK_MUTED,
-              maxWidth: 480,
-              margin: "28px 0 0",
-              letterSpacing: "-0.005em",
+              listStyle: "none",
+              padding: 0,
+              margin: "36px 0 0",
+              display: "flex",
+              flexDirection: "column",
+              gap: 24,
+              counterReset: "step",
             }}
           >
-            Every email, contract, and payment lands here as a card. Approve, edit, or pass. One tap.
-          </p>
+            {[
+              "Tell us your vision.",
+              "AI finds, drafts, and negotiates.",
+              "You approve with one tap.",
+            ].map((step, i) => (
+              <li
+                key={step}
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  gap: 18,
+                  fontFamily: DISPLAY,
+                  fontWeight: 300,
+                  fontSize: "clamp(20px, 2vw, 26px)",
+                  lineHeight: 1.3,
+                  color: INK,
+                  letterSpacing: "-0.005em",
+                }}
+              >
+                <span
+                  style={{
+                    flexShrink: 0,
+                    fontFamily: MONO,
+                    fontSize: 11,
+                    letterSpacing: "0.26em",
+                    color: SAGE_DEEP,
+                    minWidth: 22,
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
         </div>
 
-        {/* Right. the actual decision card */}
+        {/* Right. the simplified decision card. */}
         <DecisionCard />
       </div>
 
@@ -1120,7 +1048,7 @@ function DecisionCard() {
         }}
       />
 
-      {/* Live card */}
+      {/* Live card. stripped to the bone — headline + three buttons. */}
       <article
         style={{
           position: "relative",
@@ -1133,54 +1061,6 @@ function DecisionCard() {
           zIndex: 1,
         }}
       >
-        {/* Top row */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-            gap: 12,
-            marginBottom: 18,
-          }}
-        >
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              fontFamily: MONO,
-              fontSize: 10.5,
-              letterSpacing: "0.26em",
-              textTransform: "uppercase",
-              color: INK_FAINT,
-            }}
-          >
-            <span
-              aria-hidden
-              style={{
-                display: "inline-block",
-                width: 6,
-                height: 6,
-                borderRadius: 999,
-                background: SAGE,
-                animation: "cat-pulse 2s ease-in-out infinite",
-              }}
-            />
-            Today · 8:42 AM
-          </span>
-          <span
-            style={{
-              fontFamily: MONO,
-              fontSize: 10.5,
-              letterSpacing: "0.26em",
-              textTransform: "uppercase",
-              color: SAGE_DEEP,
-            }}
-          >
-            Worth a look
-          </span>
-        </div>
-
         {/* Headline */}
         <h3
           style={{
@@ -1195,86 +1075,12 @@ function DecisionCard() {
         >
           Tre Posti revised the contract.
         </h3>
-        <p
-          style={{
-            fontFamily: DISPLAY,
-            fontStyle: "italic",
-            fontWeight: 300,
-            fontSize: 16,
-            lineHeight: 1.5,
-            color: INK_MUTED,
-            margin: "10px 0 0",
-            maxWidth: 420,
-          }}
-        >
-          Counsel raised the deal score from 62 to 78. Cancellation window
-          tightened, deposit non-refundable, force-majeure now mutual.
-        </p>
-
-        {/* Score visual */}
-        <div
-          style={{
-            marginTop: 22,
-            display: "flex",
-            alignItems: "center",
-            gap: 14,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: MONO,
-              fontSize: 10.5,
-              letterSpacing: "0.26em",
-              textTransform: "uppercase",
-              color: INK_FAINT,
-            }}
-          >
-            Deal score
-          </span>
-          <span
-            style={{
-              fontFamily: DISPLAY,
-              fontStyle: "italic",
-              fontSize: 22,
-              color: INK_FAINT,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            62
-          </span>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={INK_FAINT}
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-          <span
-            style={{
-              fontFamily: DISPLAY,
-              fontStyle: "italic",
-              fontSize: 32,
-              fontWeight: 400,
-              color: SAGE_DEEP,
-              letterSpacing: "-0.02em",
-              lineHeight: 1,
-            }}
-          >
-            78
-          </span>
-        </div>
 
         {/* Hairline */}
         <div
           aria-hidden
           style={{
-            margin: "22px 0",
+            margin: "24px 0",
             height: 1,
             background: HAIRLINE,
           }}
@@ -1371,23 +1177,6 @@ function DecisionCard() {
             Pass
           </button>
         </div>
-
-        {/* Caption. what's happening behind the scenes */}
-        <p
-          style={{
-            marginTop: 22,
-            fontFamily: DISPLAY,
-            fontStyle: "italic",
-            fontWeight: 300,
-            fontSize: 14,
-            lineHeight: 1.55,
-            color: SAGE_DEEP,
-            margin: "22px 0 0",
-          }}
-        >
-          drafting Emiliano&apos;s tasting follow-up · scheduling the florist
-          consult · reconciling the hotel block deposit
-        </p>
       </article>
     </div>
   );
