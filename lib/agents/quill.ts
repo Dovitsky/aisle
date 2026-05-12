@@ -24,7 +24,7 @@ export interface ParsedEstimate {
   confidence: "high" | "medium" | "low";
 }
 
-const SYSTEM = `You are Quill, AISLE's text parser.
+const SYSTEM = `You are Quill, Corsia's text parser.
 
 You receive arbitrary text from the couple — a forwarded vendor email, a
 screenshot transcription, a PDF excerpt, an SMS thread — and extract the

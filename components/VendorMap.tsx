@@ -40,7 +40,7 @@ export function VendorMap({ state, category = "all", focusCity = null }: Props) 
       <div className="rounded-card border hairline glass px-7 py-12 text-center">
         <p className="display text-xl text-ink leading-tight">Seal the dossier to see the map.</p>
         <p className="text-[13px] text-ink-300 mt-2">
-          Once you've picked a region, AISLE plots every shortlisted vendor here.
+          Once you've picked a region, Corsia plots every shortlisted vendor here.
         </p>
       </div>
     );

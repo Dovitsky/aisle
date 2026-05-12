@@ -151,7 +151,7 @@ function composeApprovalDetail(card: ApprovalCard): string {
     case "lock_setlist":          return `Setlist locked with ${a.cueCount} cues.`;
     case "lock_ceremony":         return `Ceremony script locked with ${a.sectionCount} moments.`;
     case "lock_cake":             return `Cake locked — ${a.tiers}-tier, ${a.servings} servings.`;
-    case "publish_website":       return `aisle.wedding/${a.slug} is live.`;
+    case "publish_website":       return `corsia.wedding/${a.slug} is live.`;
     case "file_marriage_license": return `Filing in ${a.county}, ${a.state}.`;
     case "send_caterer_brief":    return `Brief sent to ${a.vendor}; ${a.allergenCount} allergens flagged.`;
     case "block_hotel_rooms":     return `${a.rooms} rooms blocked at ${a.hotel} ($${a.nightlyRate}/night).`;

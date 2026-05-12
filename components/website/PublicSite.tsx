@@ -1,7 +1,7 @@
 "use client";
 
 // The public wedding website — the artifact guests visit at
-// aisle.wedding/{slug}. This file is the *only* renderer; the builder's
+// corsia.wedding/{slug}. This file is the *only* renderer; the builder's
 // right pane embeds it inline, and a future /w/[slug] route can wrap it
 // with no behavior change.
 //

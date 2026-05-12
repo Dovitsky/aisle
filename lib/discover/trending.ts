@@ -1,6 +1,6 @@
 // "Trending now" — a mixed-content feed combining photo, vibe, trend, and
 // real-wedding cards. v1 is hardcoded; v2 moves to a CMS surface refreshed
-// weekly by AISLE's editorial team.
+// weekly by Corsia's editorial team.
 
 export type TrendingItem =
   | { kind: "photo";   id: string; image: string; place: string; credit: string; pinnedThisWeek: number }
@@ -17,7 +17,7 @@ export const TRENDING: TrendingItem[] = [
     eyebrow: "Trending up",
     headline: "Smaller dance floors, longer dinners",
     excerpt: "Couples are reallocating dance-floor budget to two-hour dinners. The four-hour reception is becoming the five-hour one.",
-    stat: "Up 32% YoY in AISLE-planned weddings" },
+    stat: "Up 32% YoY in Corsia-planned weddings" },
   { kind: "wedding", id: "wc1", weddingId: "w1", couple: "Maya & Daniel", region: "Sonoma", season: "October",
     image: "https://images.unsplash.com/photo-1505839673365-e3971f8d9184?w=900&q=80" },
   { kind: "photo", id: "p2",

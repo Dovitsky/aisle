@@ -7,7 +7,7 @@ import { Brief, RentalCategory, RentalItem } from "../types";
 
 const CATEGORIES: RentalCategory[] = ["seating", "tables", "linens", "china", "glassware", "flatware", "dance_floor", "lighting", "tent", "heaters", "other"];
 
-const SYSTEM = `You are Steward, AISLE's rentals agent.
+const SYSTEM = `You are Steward, Corsia's rentals agent.
 Build the rental inventory required for the wedding.
 
 Output JSON only:

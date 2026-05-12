@@ -396,7 +396,7 @@ mode") in a luxury-planner voice. Targets:
   replies looks like." Scan button reads "Check for replies" / "See it
   in action".
 - `components/LoginView.tsx` — the no-Supabase fallback was a wall of
-  env-var names. Now reads: "Just you, for now / AISLE is running locally
+  env-var names. Now reads: "Just you, for now / Corsia is running locally
   on this device. Everything works — every flow, every agent, every
   decision. There's only one wedding here, and it's yours."
 - `components/Settings.tsx` IntegrationsPanel — renamed "Integrations" →
@@ -406,7 +406,7 @@ mode") in a luxury-planner voice. Targets:
   buttons read "Make this mine" or "Start the example over".
 - `app/api/gmail/connect/route.ts` — error response no longer mentions
   env vars. Reads: "Gmail isn't set up on this account yet. Reach out to
-  your AISLE team and they'll have it ready in a few minutes."
+  your Corsia team and they'll have it ready in a few minutes."
 - `components/AppShell.tsx` topbar pill — "demo" → "example" (clearer
   what it means; aligns with the Settings copy).
 - `app/api/chat/route.ts` Maestro error fallback — "Maestro hit an error
@@ -520,7 +520,7 @@ spend a dollar." Italic supporting paragraph. Three columns underneath
 eyebrow, Cormorant 18px description.
 
 **Section 6 — Footer.** White background, hairline border-top, single
-centered Inter 12px line: *"AISLE · the autonomous wedding platform · hello@aisle.com"*. No nav, no social.
+centered Inter 12px line: *"Corsia · the autonomous wedding platform · hello@corsia.com"*. No nav, no social.
 
 **Other touches:**
 - Loaded Caveat from Google Fonts via `<style jsx global>`.
@@ -914,7 +914,7 @@ as if the user typed it, and clears the slot.
 
 **Vendor detail page** — new route `/vendors/[id]/page.tsx` mounting
 `components/VendorDetailView.tsx`. Full-page profile: hero with name,
-category, fit, bracket, AISLE-verified chip; primary action rail (Draft
+category, fit, bracket, Corsia-verified chip; primary action rail (Draft
 outreach goes through chat dock, Simulate reply, Counter via Negotiator,
 Review contract); two-column body with photo gallery (sage-pale gradient
 fallback), Google Maps embed, what-people-are-saying review block (4 stars
@@ -1131,7 +1131,7 @@ explaining when each pillar matters ("Boutique hotels usually want 90+
 days notice — start any time the venue is locked").
 
 **LoginView polish** (128 → ~190 lines) — magic-link + Google OAuth
-landing now uses the AISLE editorial header pattern (mono-caps brand
+landing now uses the Corsia editorial header pattern (mono-caps brand
 eyebrow + display-italic headline), Google glyph (real 4-color SVG, not
 text-only), confirmation-state card with sage-50 chrome and a "Use a
 different email" link to back out, "or" divider with hairline rules,
@@ -1334,7 +1334,7 @@ substance, every word earned:
    IntersectionObserver-driven reveal on scroll.
 
 4. **Footer** — single hairline rule, three-up: brand mark, mono-caps
-   trust-line repeat, hello@aisle.com mailto.
+   trust-line repeat, hello@corsia.com mailto.
 
 **Removed entirely**:
 - "A fleet of AI agents plans your entire wedding from venue to thank-yous

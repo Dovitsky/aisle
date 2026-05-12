@@ -224,7 +224,7 @@ export function TimelineView() {
                 color: "rgba(26,26,24,0.36)",
               }}
             >
-              AISLE benchmark
+              Corsia benchmark
             </p>
           </aside>
         </header>

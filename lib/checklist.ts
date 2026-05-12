@@ -119,7 +119,7 @@ export const CHECKLIST: ChecklistItem[] = [
     id: "wedding-website",
     monthsOut: 8,
     title: "Publish the wedding website",
-    detail: "Travel info, schedule, RSVP. Lives on aisle.wedding/<your-slug>.",
+    detail: "Travel info, schedule, RSVP. Lives on corsia.wedding/<your-slug>.",
     area: "Build",
     href: "/website",
     isDone: (s) => approvalApproved(s, "publish_website") || !!s.site?.schedulePublished,

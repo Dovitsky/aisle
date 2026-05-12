@@ -85,7 +85,7 @@ function detectMaterialPivot(prev: Brief, next: Brief): string[] {
 //      to be locked. Patissier waits for caterer (often in-house desserts).
 //
 // The couple can still jump to any module manually — /music, /cake, etc.
-// remain navigable. This pacing only governs what AISLE pushes UP into
+// remain navigable. This pacing only governs what Corsia pushes UP into
 // the decisions queue automatically.
 // ---------------------------------------------------------------------
 
@@ -675,9 +675,9 @@ async function backgroundFireScout(
           risk: "low",
           action: {
             kind: "send_email",
-            to: `${top.name} (via AISLE alias)`,
+            to: `${top.name} (via Corsia alias)`,
             subject: `Inquiry for ${cat} — ${b.dateWindow}`,
-            body: `Hello ${top.name},\n\nWe're reaching out from ${b.organizerName} & ${b.partnerName}'s wedding planning team. They're looking at ${b.dateWindow} in ${b.region} for roughly ${b.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nAISLE on behalf of ${b.organizerName} & ${b.partnerName}`,
+            body: `Hello ${top.name},\n\nWe're reaching out from ${b.organizerName} & ${b.partnerName}'s wedding planning team. They're looking at ${b.dateWindow} in ${b.region} for roughly ${b.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nCorsia on behalf of ${b.organizerName} & ${b.partnerName}`,
           },
         });
       } catch (e) {
@@ -1179,7 +1179,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
               vibe: brief.vibe,
               portfolioNote: top.signaturePortfolioNote,
             })
-          : `Hello ${top.name},\n\nWe're reaching out from ${brief.organizerName} & ${brief.partnerName}'s wedding planning team. They're looking at ${brief.dateWindow} in ${brief.region} for roughly ${brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nAISLE on behalf of ${brief.organizerName} & ${brief.partnerName}`;
+          : `Hello ${top.name},\n\nWe're reaching out from ${brief.organizerName} & ${brief.partnerName}'s wedding planning team. They're looking at ${brief.dateWindow} in ${brief.region} for roughly ${brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nCorsia on behalf of ${brief.organizerName} & ${brief.partnerName}`;
         const rationaleHead = targeted
           ? `${top.name} — found via open-web search at the couple's request.${top.sourceUrl ? `\nSource: ${top.sourceUrl}` : ""}${top.contactPath ? `\nContact path: ${top.contactPath}` : ""}${top.unverified && top.unverified.length > 0 ? `\nUnverified: ${top.unverified.join("; ")}` : ""}`
           : `Maestro dispatched Scout from chat. Shortlist of ${items.length} produced.`;
@@ -1194,7 +1194,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
             kind: "send_email",
             to: top.contactPath
               ? `${top.name} (${top.contactPath})`
-              : `${top.name} (via AISLE alias)`,
+              : `${top.name} (via Corsia alias)`,
             subject,
             body,
           },
@@ -1233,7 +1233,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
         risk: "low",
         action: {
           kind: "send_email",
-          to: `${v.name} (via AISLE alias)`,
+          to: `${v.name} (via Corsia alias)`,
           subject,
           body,
         },
@@ -1267,7 +1267,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
         risk: "medium",
         action: {
           kind: "send_email",
-          to: `${v.name} (via AISLE alias)`,
+          to: `${v.name} (via Corsia alias)`,
           subject: `Re: Quote — ${v.category}`,
           body,
         },
@@ -1291,7 +1291,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
         title: `Email ${v.name}: ${topic}?`,
         rationale: `You asked Maestro to email ${v.name} about ${topic}. Outreach drafted the body. Approve to send via your connected Gmail; the reply will land in your inbox and update ${v.name}'s thread automatically.`,
         risk: "low",
-        action: { kind: "send_email", to: `${v.name} (via AISLE alias)`, subject, body },
+        action: { kind: "send_email", to: `${v.name} (via Corsia alias)`, subject, body },
       });
       return `Drafted: emailing ${v.name} about ${topic}.`;
     }

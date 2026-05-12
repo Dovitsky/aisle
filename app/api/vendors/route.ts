@@ -46,11 +46,11 @@ export async function POST(req: NextRequest) {
       const after = await appendApproval({
         agent: "Outreach", phase,
         title: `Send opening email to ${v.name}?`,
-        rationale: `Personalized first contact for ${v.category}. Going via the AISLE alias so the couple's personal address is never exposed.${parsed.data.note ? `\n\nCouple's note included: "${parsed.data.note}"` : ""}`,
+        rationale: `Personalized first contact for ${v.category}. Going via the Corsia alias so the couple's personal address is never exposed.${parsed.data.note ? `\n\nCouple's note included: "${parsed.data.note}"` : ""}`,
         risk: "low",
         action: {
           kind: "send_email",
-          to: `${v.name} (via AISLE alias)`,
+          to: `${v.name} (via Corsia alias)`,
           subject: `Inquiry — ${state.brief.organizerName} & ${state.brief.partnerName}, ${state.brief.dateWindow}`,
           body,
         },
@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
         risk: "medium",
         action: {
           kind: "send_email",
-          to: `${v.name} (via AISLE alias)`,
+          to: `${v.name} (via Corsia alias)`,
           subject: `Re: Inquiry — ${state.brief.organizerName} & ${state.brief.partnerName}`,
           body,
         },

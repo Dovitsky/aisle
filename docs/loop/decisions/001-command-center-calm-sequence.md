@@ -26,7 +26,7 @@ from `CommandCenter.tsx`.
 ## Reasoning
 
 The product call from the existing inline comment was right and matches
-the AISLE voice: this page is the morning sequence, not a dashboard. The
+the Corsia voice: this page is the morning sequence, not a dashboard. The
 mistake was leaving five unrendered components in the file, which made
 the actual surface look thinner than the doc-comment promised and made
 future iterations unsure which shape was canonical. Pruning the file

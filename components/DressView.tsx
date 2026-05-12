@@ -1,7 +1,7 @@
 "use client";
 
 // DressView. the gated workflow. When the firewall is on, the partner's
-// view of AISLE shows nothing. no cards, no budget line, no vendor names,
+// view of Corsia shows nothing. no cards, no budget line, no vendor names,
 // no ledger entries. Couturier proposes silhouettes here; the trying-on
 // happens at fittings tracked under /visits.
 

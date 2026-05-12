@@ -1,4 +1,4 @@
-# AISLE
+# Corsia
 
 The autonomous wedding platform. Built against `AISLE_PRD.docx` and `AISLE_BUILD_BRIEF.docx`.
 
@@ -43,7 +43,7 @@ The schema enforces the dress firewall via Row-Level Security: a `partner`-role 
 3. Add scopes: `gmail.readonly`, `gmail.send`, `gmail.modify`, `userinfo.email`
 4. Paste client ID + secret into `.env.local`. Restart dev.
 5. Open `/inbox`, click "Connect Gmail". Approve the consent screen.
-6. Click "Scan now". AISLE pulls vendor replies, runs Triage, matches to vendors, drafts follow-ups via Negotiator as Approval Cards.
+6. Click "Scan now". Corsia pulls vendor replies, runs Triage, matches to vendors, drafts follow-ups via Negotiator as Approval Cards.
 
 Until you do that, `/inbox` runs against a 5-message simulated fixture so the entire scan → triage → match → auto-draft → Approval Card flow is testable.
 

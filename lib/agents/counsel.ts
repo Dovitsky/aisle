@@ -9,7 +9,7 @@ export interface CounselSummary {
   overallRisk: "low" | "medium" | "high";
 }
 
-const SYSTEM = `You are Counsel, AISLE's contract review agent.
+const SYSTEM = `You are Counsel, Corsia's contract review agent.
 You produce plain-English redline proposals against a vendor contract.
 
 Output JSON only:

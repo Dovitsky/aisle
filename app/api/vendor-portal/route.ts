@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid body" }, { status: 400 });
 
   const state = await readState();
-  // Vendor sees: themselves only, the wedding date window, the AISLE alias address,
+  // Vendor sees: themselves only, the wedding date window, the Corsia alias address,
   // their messages, their contracted scope, and a payment trail for THEIR work.
   const vendor = parsed.data.vendorId
     ? state.vendors.find((v) => v.id === parsed.data.vendorId)
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
           region: state.brief.region,
           guestCount: state.brief.guestCount,
           // Couple's full names not exposed — just initials.
-          aliasFrom: `${state.brief.organizerName[0]}${state.brief.partnerName[0]}@aisle.email`,
+          aliasFrom: `${state.brief.organizerName[0]}${state.brief.partnerName[0]}@corsia.email`,
         }
       : null,
     vendorList: state.vendors.map((v) => ({ id: v.id, name: v.name, category: v.category })),

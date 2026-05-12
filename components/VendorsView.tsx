@@ -410,7 +410,7 @@ export function VendorsView() {
                       }`}
                     >
                       <div className="text-[10px] uppercase tracking-[0.16em] mb-1 opacity-75">
-                        {m.direction === "outbound" ? "AISLE → vendor" : "Vendor → AISLE"}
+                        {m.direction === "outbound" ? "Corsia → vendor" : "Vendor → Corsia"}
                         {m.parsedIntent && ` · ${m.parsedIntent}`}
                         {m.quotedUsd && ` · $${m.quotedUsd.toLocaleString()}`}
                       </div>

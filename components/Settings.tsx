@@ -133,7 +133,7 @@ export function Settings() {
             </span>
           </div>
           <p className="text-[13.5px] text-ink-300 mt-2 leading-relaxed">
-            See AISLE the way it looks once it&apos;s really humming. We&apos;ll drop you into a finished example. Maya & Sam, a barn wedding in the Hudson Valley, a hundred and twenty guests, a fully booked vendor team, mood directions picked, the budget allocated, the ceremony script written, the menu set, the seating ready to chart, vows and speeches drafted, the day-of timeline laid out. Wander any room, click any button, see how it all moves together.
+            See Corsia the way it looks once it&apos;s really humming. We&apos;ll drop you into a finished example. Maya & Sam, a barn wedding in the Hudson Valley, a hundred and twenty guests, a fully booked vendor team, mood directions picked, the budget allocated, the ceremony script written, the menu set, the seating ready to chart, vows and speeches drafted, the day-of timeline laid out. Wander any room, click any button, see how it all moves together.
           </p>
           <p className="text-[12.5px] text-ink-400 mt-3 italic">
             This replaces what&apos;s currently here. You can reset to an empty start any time.
@@ -296,7 +296,7 @@ export function Settings() {
       </section>
 
       <p className="lg:col-span-2 text-[11px] text-ink-300 text-center">
-        AISLE v0 · {process.env.NEXT_PUBLIC_BUILD ?? "local build"}
+        Corsia v0 · {process.env.NEXT_PUBLIC_BUILD ?? "local build"}
       </p>
       </div>
     </div>
@@ -404,7 +404,7 @@ function IntegrationsPanel() {
     <section className="surface rounded-card border hairline shadow-card p-5 sm:p-6">
       <h2 className="display text-xl">Connections</h2>
       <p className="text-[13px] text-ink-300 mt-1 leading-relaxed">
-        Tools we connect to on your behalf. None of these are required. AISLE works perfectly without any of them, with everything you do staying private to your device.
+        Tools we connect to on your behalf. None of these are required. Corsia works perfectly without any of them, with everything you do staying private to your device.
       </p>
       <div className="grid sm:grid-cols-2 gap-3 mt-4">
         <div className="rounded-card border hairline bg-white/60 p-4 flex flex-col">
@@ -458,7 +458,7 @@ function IntegrationsPanel() {
           <p className="text-[12.5px] text-ink-300 mt-2 leading-relaxed">
             {status.supabaseConfigured
               ? "Your wedding syncs to your partner's phone in real time. Privacy gates (the dress, surprise gifts) stay enforced from the database itself. your partner can't see what you've gated even if they look."
-              : "Your wedding lives on this device for now. When you're ready to bring your partner in or use it from your phone, your AISLE team can flip syncing on."}
+              : "Your wedding lives on this device for now. When you're ready to bring your partner in or use it from your phone, your Corsia team can flip syncing on."}
           </p>
         </div>
         <div className="rounded-card border hairline bg-white/60 p-4">

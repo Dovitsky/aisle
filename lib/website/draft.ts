@@ -97,7 +97,7 @@ export function buildWebsiteDraft(state: ProjectState): WebsiteDraft {
 
   return {
     slug,
-    publicUrl: `aisle.wedding/${slug}`,
+    publicUrl: `corsia.wedding/${slug}`,
     vibe,
     hero: buildHero(brief, region),
     story: buildStory(brief),
@@ -337,7 +337,7 @@ function buildTravel(brief: Brief | null, state: ProjectState): WebsiteDraft["tr
     shuttle: {
       title: "Shuttle plan",
       body: shuttle
-        ? `Shuttles run ${shuttle.route} beginning ${shuttle.pickupTime}. Look for the AISLE-branded coach.`
+        ? `Shuttles run ${shuttle.route} beginning ${shuttle.pickupTime}. Look for the Corsia-branded coach.`
         : `Shuttles are scheduled between the room block and the venue both directions. Times will be on the back of your place card.`,
     },
   };

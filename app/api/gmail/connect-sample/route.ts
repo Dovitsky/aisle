@@ -17,7 +17,7 @@ export async function POST() {
     const now = new Date();
     const expires = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
     await saveConnection({
-      emailAddress: "you@aisle.example",
+      emailAddress: "you@corsia.example",
       accessToken: "sample-access-token",
       refreshToken: "sample-refresh-token",
       expiresAt: expires.toISOString(),

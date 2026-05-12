@@ -4,7 +4,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { MODELS, hasApiKey, createWithWebSearch } from "../anthropic";
 import { Brief, RegistryItem } from "../types";
 
-const SYSTEM = `You are Curator, AISLE's registry agent.
+const SYSTEM = `You are Curator, Corsia's registry agent.
 Propose a registry of 12-18 items spanning kitchen, bedroom, bath, dining,
 experience funds, cash funds, and at least one charity option.
 
@@ -66,9 +66,9 @@ function offline(): Omit<RegistryItem, "id">[] {
     { item: "Coyuchi organic cotton bath towels (set of 4)",  vendor: "Coyuchi",      priceUsd: 156, category: "bath",      status: "wanted" },
     { item: "Frette towel-set bundle",                        vendor: "Frette",       priceUsd: 220, category: "bath",      status: "wanted" },
     { item: "Soho Home Fitzgerald velvet armchair",           vendor: "Soho Home",    priceUsd: 720, category: "other",     status: "wanted" },
-    { item: "Honeymoon — first-night flight upgrade",         vendor: "AISLE Cash Fund", priceUsd: 600, category: "cash_fund", status: "wanted" },
-    { item: "Honeymoon — restaurant tasting menu (one night)", vendor: "AISLE Cash Fund", priceUsd: 350, category: "experience", status: "wanted" },
-    { item: "Cash fund — first home down payment",             vendor: "AISLE Cash Fund", priceUsd: 100, category: "cash_fund", status: "wanted" },
+    { item: "Honeymoon — first-night flight upgrade",         vendor: "Corsia Cash Fund", priceUsd: 600, category: "cash_fund", status: "wanted" },
+    { item: "Honeymoon — restaurant tasting menu (one night)", vendor: "Corsia Cash Fund", priceUsd: 350, category: "experience", status: "wanted" },
+    { item: "Cash fund — first home down payment",             vendor: "Corsia Cash Fund", priceUsd: 100, category: "cash_fund", status: "wanted" },
     { item: "Charity gift — World Central Kitchen",           vendor: "WCK",          priceUsd: 75,  category: "charity",   status: "wanted" },
     { item: "Charity gift — Local food bank",                  vendor: "Local FB",    priceUsd: 50,  category: "charity",   status: "wanted" },
     { item: "Stub Hub gift card — first concert as marrieds", vendor: "StubHub",     priceUsd: 200, category: "experience", status: "wanted" },

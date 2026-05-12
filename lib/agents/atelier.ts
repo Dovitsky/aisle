@@ -4,7 +4,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { Brief, BeautyAppt, WeddingPartyMember } from "../types";
 
-const SYSTEM = `You are Atelier, AISLE's hair-and-makeup agent.
+const SYSTEM = `You are Atelier, Corsia's hair-and-makeup agent.
 Build a day-of beauty schedule starting from a "ready by" time.
 
 Output JSON only:

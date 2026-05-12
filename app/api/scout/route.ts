@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
           portfolioNote: top.signaturePortfolioNote,
           contactPath: top.contactPath,
         })
-      : `Hello ${top.name},\n\nWe're reaching out from ${state.brief.organizerName} & ${state.brief.partnerName}'s wedding planning team. They're looking at ${state.brief.dateWindow} in ${state.brief.region} for roughly ${state.brief.guestCount} guests.\n\nWould you have availability in that window, and could you share rough pricing for an event our size?\n\nThank you,\nAISLE on behalf of ${state.brief.organizerName} & ${state.brief.partnerName}`;
+      : `Hello ${top.name},\n\nWe're reaching out from ${state.brief.organizerName} & ${state.brief.partnerName}'s wedding planning team. They're looking at ${state.brief.dateWindow} in ${state.brief.region} for roughly ${state.brief.guestCount} guests.\n\nWould you have availability in that window, and could you share rough pricing for an event our size?\n\nThank you,\nCorsia on behalf of ${state.brief.organizerName} & ${state.brief.partnerName}`;
 
     const rationaleHead = targeted
       ? `${top.name} — found via open-web search at the couple's request.${top.sourceUrl ? `\nSource: ${top.sourceUrl}` : ""}${top.contactPath ? `\nContact path: ${top.contactPath}` : ""}${top.unverified && top.unverified.length > 0 ? `\nUnverified: ${top.unverified.join("; ")}` : ""}`
@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
         kind: "send_email",
         to: top.contactPath
           ? `${top.name} (${top.contactPath})`
-          : `${top.name} (via AISLE alias)`,
+          : `${top.name} (via Corsia alias)`,
         subject,
         body,
       },

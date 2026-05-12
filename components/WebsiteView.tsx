@@ -73,7 +73,7 @@ export function WebsiteView() {
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           The public site at{" "}
-          <span className="font-mono text-ink">aisle.wedding/{site?.slug ?? "your-names"}</span>.
+          <span className="font-mono text-ink">corsia.wedding/{site?.slug ?? "your-names"}</span>.
           Schedule, smart RSVP, travel guide, registry links, FAQs.
         </p>
       </header>

@@ -1,0 +1,247 @@
+{
+  "brief": {
+    "organizerName": "Maya",
+    "partnerName": "Sam",
+    "dateWindow": "Late September 2026",
+    "region": "Hudson Valley, NY",
+    "guestCount": 120,
+    "budgetUsd": 80000,
+    "vibe": "candlelit barn, editorial film photography, no DJ banter",
+    "plannerStatus": "want_one",
+    "cultural": "secular",
+    "formalityTone": "modern",
+    "destination": false,
+    "locked": true,
+    "lockedAt": "2026-05-11T20:18:07.112Z"
+  },
+  "chat": [
+    {
+      "id": "mp17g44ss2hpq",
+      "createdAt": "2026-05-11T12:55:43.852Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Email approved but no transport configured. The draft is saved on the vendor record. Connect Gmail at /inbox to actually send."
+    },
+    {
+      "id": "mp1n94fetxwsl",
+      "createdAt": "2026-05-11T20:18:11.498Z",
+      "role": "agent",
+      "agent": "Maestro",
+      "content": "Email approved but no transport configured. The draft is saved on the vendor record. Connect Gmail at /inbox to actually send."
+    }
+  ],
+  "approvals": [
+    {
+      "id": "mp17g0m40udct",
+      "createdAt": "2026-05-11T12:55:39.292Z",
+      "status": "approved",
+      "agent": "Scout",
+      "phase": "foundation",
+      "title": "Open outreach to Hudson Valley Barn for Venue?",
+      "rationale": "test",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn",
+        "subject": "test",
+        "body": "Hello Hudson Valley Barn,\n\nWe're reaching out from Maya & Sam's wedding planning team. They're considering Late September 2026 in Hudson Valley, NY, with roughly 120 guests, and venue is a top priority on our list.\n\nTwo quick questions before we go further:\n1. Do you have availability anywhere in that date window?\n2. For 120 guests, can you share rough pricing or your typical package range?\n\nIf the timing aligns, we'd love to learn more about how you work. Thank you for your time.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      },
+      "resolvedAt": "2026-05-11T12:55:39.293Z",
+      "approvalToken": "tok_us7sn1nm1jl"
+    },
+    {
+      "id": "mp1n911w1bn6u",
+      "createdAt": "2026-05-11T20:18:07.124Z",
+      "status": "approved",
+      "agent": "Scout",
+      "phase": "foundation",
+      "title": "Open outreach to Hudson Valley Barn for Venue?",
+      "rationale": "test",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn",
+        "subject": "test",
+        "body": "Hello Hudson Valley Barn,\n\nWe're reaching out from Maya & Sam's wedding planning team. They're considering Late September 2026 in Hudson Valley, NY, with roughly 120 guests, and venue is a top priority on our list.\n\nTwo quick questions before we go further:\n1. Do you have availability anywhere in that date window?\n2. For 120 guests, can you share rough pricing or your typical package range?\n\nIf the timing aligns, we'd love to learn more about how you work. Thank you for your time.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      },
+      "resolvedAt": "2026-05-11T20:18:07.125Z",
+      "approvalToken": "tok_72nd5ypgeyq"
+    }
+  ],
+  "ledger": [
+    {
+      "id": "mp17g0lr7r03m",
+      "at": "2026-05-11T12:55:39.279Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mp17g0ltnzb1e",
+      "at": "2026-05-11T12:55:39.281Z",
+      "actor": "user",
+      "kind": "brief.locked",
+      "summary": "Brief locked"
+    },
+    {
+      "id": "mp17g0m4y0hsh",
+      "at": "2026-05-11T12:55:39.292Z",
+      "actor": "agent",
+      "agent": "Scout",
+      "kind": "approval.created",
+      "summary": "Open outreach to Hudson Valley Barn for Venue?",
+      "meta": {
+        "approvalId": "mp17g0m40udct",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp17g0m5k70z7",
+      "at": "2026-05-11T12:55:39.293Z",
+      "actor": "user",
+      "kind": "approval.approved",
+      "summary": "approved — Open outreach to Hudson Valley Barn for Venue?",
+      "meta": {
+        "approvalId": "mp17g0m40udct",
+        "agent": "Scout"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp1n911ifnl32",
+      "at": "2026-05-11T20:18:07.110Z",
+      "actor": "user",
+      "kind": "brief.updated",
+      "summary": "Brief updated"
+    },
+    {
+      "id": "mp1n911kiq9uy",
+      "at": "2026-05-11T20:18:07.112Z",
+      "actor": "user",
+      "kind": "brief.locked",
+      "summary": "Brief locked"
+    },
+    {
+      "id": "mp1n911w5576u",
+      "at": "2026-05-11T20:18:07.124Z",
+      "actor": "agent",
+      "agent": "Scout",
+      "kind": "approval.created",
+      "summary": "Open outreach to Hudson Valley Barn for Venue?",
+      "meta": {
+        "approvalId": "mp1n911w1bn6u",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp1n911xne0mw",
+      "at": "2026-05-11T20:18:07.125Z",
+      "actor": "user",
+      "kind": "approval.approved",
+      "summary": "approved — Open outreach to Hudson Valley Barn for Venue?",
+      "meta": {
+        "approvalId": "mp1n911w1bn6u",
+        "agent": "Scout"
+      },
+      "gateScope": null
+    }
+  ],
+  "paused": false,
+  "vendors": [
+    {
+      "id": "mp17g0m3zar19",
+      "status": "contacted",
+      "lastTouchAt": "2026-05-11T20:18:11.497Z",
+      "name": "Hudson Valley Barn",
+      "category": "Venue",
+      "city": "Hudson",
+      "fitScore": 96,
+      "priceBracket": "$$",
+      "notes": "Working farm in Hudson with reclaimed-wood interior; right scale for 120 guests, fits the barn-and-meadow vibe.",
+      "thread": [
+        {
+          "id": "mp17g0m5azcai",
+          "at": "2026-05-11T12:55:39.293Z",
+          "direction": "outbound",
+          "body": "Hello Hudson Valley Barn,\n\nWe're reaching out from Maya & Sam's wedding planning team. They're considering Late September 2026 in Hudson Valley, NY, with roughly 120 guests, and venue is a top priority on our list.\n\nTwo quick questions before we go further:\n1. Do you have availability anywhere in that date window?\n2. For 120 guests, can you share rough pricing or your typical package range?\n\nIf the timing aligns, we'd love to learn more about how you work. Thank you for your time.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+        },
+        {
+          "id": "mp17g44q95f13",
+          "at": "2026-05-11T12:55:43.850Z",
+          "direction": "outbound",
+          "body": "Hello Hudson Valley Barn,\n\nWe're reaching out from Maya & Sam's wedding planning team. They're considering Late September 2026 in Hudson Valley, NY, with roughly 120 guests, and venue is a top priority on our list.\n\nTwo quick questions before we go further:\n1. Do you have availability anywhere in that date window?\n2. For 120 guests, can you share rough pricing or your typical package range?\n\nIf the timing aligns, we'd love to learn more about how you work. Thank you for your time.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+        },
+        {
+          "id": "mp1n911xdvtls",
+          "at": "2026-05-11T20:18:07.125Z",
+          "direction": "outbound",
+          "body": "Hello Hudson Valley Barn,\n\nWe're reaching out from Maya & Sam's wedding planning team. They're considering Late September 2026 in Hudson Valley, NY, with roughly 120 guests, and venue is a top priority on our list.\n\nTwo quick questions before we go further:\n1. Do you have availability anywhere in that date window?\n2. For 120 guests, can you share rough pricing or your typical package range?\n\nIf the timing aligns, we'd love to learn more about how you work. Thank you for your time.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+        },
+        {
+          "id": "mp1n94fcf988a",
+          "at": "2026-05-11T20:18:11.496Z",
+          "direction": "outbound",
+          "body": "Hello Hudson Valley Barn,\n\nWe're reaching out from Maya & Sam's wedding planning team. They're considering Late September 2026 in Hudson Valley, NY, with roughly 120 guests, and venue is a top priority on our list.\n\nTwo quick questions before we go further:\n1. Do you have availability anywhere in that date window?\n2. For 120 guests, can you share rough pricing or your typical package range?\n\nIf the timing aligns, we'd love to learn more about how you work. Thank you for your time.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+        }
+      ]
+    }
+  ],
+  "budget": [],
+  "households": [],
+  "guests": [],
+  "designs": [],
+  "seating": {
+    "tables": [],
+    "assignments": {},
+    "constraints": [],
+    "cost": 0
+  },
+  "dayOf": [],
+  "thanks": [],
+  "gates": {
+    "dress": false,
+    "partner_gift": false,
+    "honeymoon": false,
+    "speech": false,
+    "vows_organizer": false,
+    "vows_partner": false
+  },
+  "viewer": "organizer",
+  "stationery": [],
+  "hotelBlocks": [],
+  "shuttles": [],
+  "welcomeBag": [],
+  "contingencies": [],
+  "engagement": [],
+  "vows": [],
+  "speeches": [],
+  "registry": [],
+  "honeymoon": [],
+  "dayOfMode": false,
+  "plan": "couple_plus",
+  "approvedTokens": [
+    "tok_us7sn1nm1jl",
+    "tok_72nd5ypgeyq"
+  ],
+  "music": [],
+  "ceremony": [],
+  "ceremonyTradition": "humanist",
+  "cake": null,
+  "bar": null,
+  "florals": [],
+  "rentals": [],
+  "beauty": [],
+  "visits": [],
+  "license": null,
+  "site": null,
+  "weddingParty": [],
+  "preEvents": [],
+  "tips": [],
+  "memorials": [],
+  "menu": [],
+  "dietaryResolutions": {}
+}

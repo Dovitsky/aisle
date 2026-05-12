@@ -4,7 +4,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { MODELS, hasApiKey, createWithWebSearch } from "../anthropic";
 import { Brief, HoneymoonSegment } from "../types";
 
-const SYSTEM = `You are Itinerist, AISLE's honeymoon agent.
+const SYSTEM = `You are Itinerist, Corsia's honeymoon agent.
 Propose a 2-4 segment honeymoon itinerary for a couple.
 
 How you work:

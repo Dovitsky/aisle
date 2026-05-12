@@ -1,4 +1,4 @@
-// Core domain types for AISLE.
+// Core domain types for Corsia.
 // Mirrors PRD §6 (Data Model) — full v1 surface.
 
 export type Phase =
@@ -228,7 +228,7 @@ export interface Vendor {
   lastTouchAt?: string;
   gateScope?: GateScope;
   thread?: VendorMessage[];
-  verified?: boolean;     // AISLE Verified (PRD §9.2)
+  verified?: boolean;     // Corsia Verified (PRD §9.2)
   /** Where this vendor came from — the curated marketplace, an open-web
    *  search at the couple's request, or a manual add. Default treated as
    *  "marketplace" when undefined. */
@@ -1180,7 +1180,7 @@ export const EMPTY_SEATING: SeatingChart = {
 // Pun-y wedding-planner names couples can pick for Maestro.
 export const MAESTRO_NAMES = [
   "Maestro",
-  "Aisle Capone",
+  "Corsia Capone",
   "Veil Hartz",
   "Vowdini",
   "Bouquet Fontaine",
@@ -1193,9 +1193,9 @@ export const MAESTRO_NAMES = [
   "Sir Vows-A-Lot",
   "Marquee Brûlée",
   "Ferris Wedder",
-  "Aisle B. There",
+  "Corsia B. There",
   "The Vow-fessor",
-  "Captain Aisle",
+  "Captain Corsia",
   "The Wed-itor",
   "Walt Whitveil",
   "Lady Wedweth",
@@ -1238,6 +1238,6 @@ export const PRICING_PLANS: PricingPlan[] = [
     label: "Studio",
     monthly: 999,
     blurb: "API + integrations + white-label. For agencies.",
-    features: ["Everything in Planner", "API access", "White-label print partner", "AISLE Verified vendor program", "Volume billing"],
+    features: ["Everything in Planner", "API access", "White-label print partner", "Corsia Verified vendor program", "Volume billing"],
   },
 ];

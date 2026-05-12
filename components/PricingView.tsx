@@ -27,7 +27,7 @@ export function PricingView() {
       const j = (await r.json()) as { state?: ProjectState };
       if (j.state) {
         setState(j.state);
-        notify({ kind: "approval", title: `${label} plan selected`, detail: "Your AISLE team has updated your tier." });
+        notify({ kind: "approval", title: `${label} plan selected`, detail: "Your Corsia team has updated your tier." });
       }
     } finally { setBusy(null); }
   };

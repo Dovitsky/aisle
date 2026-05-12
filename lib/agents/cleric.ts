@@ -15,7 +15,7 @@ interface ClericArgs {
   notes?: string;
 }
 
-const SYSTEM = `You are Cleric, AISLE's ceremony-script agent.
+const SYSTEM = `You are Cleric, Corsia's ceremony-script agent.
 
 You write the spoken script for a wedding ceremony in the requested tradition. You have working
 knowledge of: humanist / civil / catholic (with or without nuptial mass) / protestant / orthodox christian

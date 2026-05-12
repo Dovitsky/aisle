@@ -4,7 +4,7 @@
 // specialist recommendations. Lives on Florals / Cake / Bar / Music /
 // any module where the AI picked something based on accumulated state.
 //
-// The point is to make AISLE's intelligence VISIBLE: not "here's a
+// The point is to make Corsia's intelligence VISIBLE: not "here's a
 // generic cake suggestion" but "we picked this for October in the
 // Hudson Valley · candlelit editorial palette · 120 guests, because
 // we already know all of that about you." It earns the user's trust

@@ -12,7 +12,7 @@ import { ALLERGEN_CODES, AllergenCode, Brief, CakeSpec } from "../types";
 import type { WeddingContext } from "./context";
 import { contextSummaryForPrompt } from "./context";
 
-const SYSTEM = `You are Patissier, AISLE's cake & dessert agent.
+const SYSTEM = `You are Patissier, Corsia's cake & dessert agent.
 Design a wedding cake spec.
 
 CRITICAL: Use what the app already knows about THIS wedding — the season, the region's climate, the contracted venue's style, the locked palette and design direction. Pick flavors and frostings that resonate with the season (stone fruit + elderflower in summer, spiced pear + brown butter in autumn, citrus + olive oil in Mediterranean spring). Match decoration to the moodboard palette.

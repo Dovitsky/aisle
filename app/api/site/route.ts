@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
       if (!state.site) return NextResponse.json({ error: "No site to publish" }, { status: 412 });
       const after = await appendApproval({
         agent: "Stationer", phase: "guest_management",
-        title: `Publish wedding site at aisle.wedding/${state.site.slug}?`,
+        title: `Publish wedding site at corsia.wedding/${state.site.slug}?`,
         rationale: `Goes live for guests. RSVP form, schedule, travel guide, registry links, and FAQs all become public. Password-protect from Settings if needed.`,
         risk: "medium",
         action: { kind: "publish_website", slug: state.site.slug },

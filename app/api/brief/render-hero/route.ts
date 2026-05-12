@@ -13,7 +13,7 @@ export const maxDuration = 60;
 //
 // The hero photo is not a stock asset — it's an AI-generated scene that
 // matches the EXACT details in the dossier. The longer the couple uses
-// AISLE, the more theirs the app becomes. As decisions lock in, this
+// Corsia, the more theirs the app becomes. As decisions lock in, this
 // prompt picks them up and we re-render:
 //
 //   At lock              → region + season + vibe + guest scale

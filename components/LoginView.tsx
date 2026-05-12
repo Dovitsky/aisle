@@ -61,13 +61,13 @@ export function LoginView() {
     return (
       <div className="max-w-md mx-auto pt-24 text-center px-6 animate-fade-in-soft">
         <p className="text-[10px] uppercase tracking-[0.32em] text-sage-500 font-mono mb-5">
-          AISLE
+          Corsia
         </p>
         <h1 className="display text-[34px] sm:text-[40px] leading-[1.05] tracking-[-0.01em]">
           Just you, for now.
         </h1>
         <p className="text-[14.5px] text-ink-300 mt-5 leading-relaxed">
-          AISLE is running locally on this device. Every flow, every specialist,
+          Corsia is running locally on this device. Every flow, every specialist,
           every decision works. There's one wedding here. and it's yours.
         </p>
         <p className="text-[13px] text-ink-300 mt-3 leading-relaxed italic">
@@ -88,7 +88,7 @@ export function LoginView() {
   return (
     <div className="max-w-md mx-auto pt-20 px-6 animate-fade-in-soft">
       <p className="text-[10px] uppercase tracking-[0.32em] text-sage-500 font-mono text-center mb-4">
-        AISLE
+        Corsia
       </p>
       <h1 className="display text-[34px] sm:text-[40px] text-center leading-[1.05] tracking-[-0.01em]">
         Sign in.

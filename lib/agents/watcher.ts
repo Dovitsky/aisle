@@ -188,7 +188,7 @@ export async function watcherAct(state?: ProjectState): Promise<WatcherActResult
     try {
       body = await negotiatorDraft({ brief: s.brief, vendor: v, goal });
     } catch {
-      body = `Hi ${v.name},\n\nJust circling back on our note from ${Math.round(days)} days ago — we're still looking at ${s.brief.dateWindow} in ${s.brief.region} for roughly ${s.brief.guestCount} guests.\n\nIf this isn't a fit, no problem — just let us know so we can close the loop.\n\nThanks,\nAISLE on behalf of ${s.brief.organizerName} & ${s.brief.partnerName}`;
+      body = `Hi ${v.name},\n\nJust circling back on our note from ${Math.round(days)} days ago — we're still looking at ${s.brief.dateWindow} in ${s.brief.region} for roughly ${s.brief.guestCount} guests.\n\nIf this isn't a fit, no problem — just let us know so we can close the loop.\n\nThanks,\nCorsia on behalf of ${s.brief.organizerName} & ${s.brief.partnerName}`;
     }
 
     await appendApproval({
@@ -198,7 +198,7 @@ export async function watcherAct(state?: ProjectState): Promise<WatcherActResult
       risk: "low",
       action: {
         kind: "send_email",
-        to: `${v.name} (via AISLE alias)`,
+        to: `${v.name} (via Corsia alias)`,
         subject: `Re: Inquiry — ${s.brief.dateWindow}`,
         body,
       },

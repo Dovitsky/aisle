@@ -3,9 +3,9 @@ import "./globals.css";
 import { RootClient } from "@/components/RootClient";
 
 export const metadata: Metadata = {
-  title: "AISLE — The autonomous wedding platform",
+  title: "Corsia — The autonomous wedding platform",
   description:
-    "From the proposal to the thank-you cards. AISLE is the autonomous agent that plans the wedding, with the couple and planner approving every move.",
+    "From the proposal to the thank-you cards. Corsia is the autonomous agent that plans the wedding, with the couple and planner approving every move.",
 };
 
 // Every page reads from the JSON store / Anthropic / OpenAI at request

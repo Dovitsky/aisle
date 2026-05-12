@@ -10,7 +10,7 @@ export interface EngagementProposal {
   milestones: Omit<EngagementMilestone, "id">[];
 }
 
-const SYSTEM = `You are Concierge, AISLE's pre-engagement agent.
+const SYSTEM = `You are Concierge, Corsia's pre-engagement agent.
 You propose a sequence of engagement milestones for a couple just starting out.
 
 How you work:

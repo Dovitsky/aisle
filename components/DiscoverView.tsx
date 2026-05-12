@@ -80,7 +80,7 @@ export function DiscoverView() {
         <SectionHeader
           eyebrow="Editorial"
           title="Reading for the planning year"
-          sub="From AISLE and friends."
+          sub="From Corsia and friends."
         />
         <EditorialScroller articles={EDITORIAL} />
       </Reveal>

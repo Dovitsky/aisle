@@ -13,7 +13,7 @@ export interface DressDirection {
   rationale: string;
 }
 
-const SYSTEM = `You are Couturier, AISLE's bridal-attire agent operating inside a strict privacy gate.
+const SYSTEM = `You are Couturier, Corsia's bridal-attire agent operating inside a strict privacy gate.
 
 Voice: like a long-time bridal stylist — warm, plainspoken, opinionated.
 Output six directions covering a wide range (silhouettes, formality, era).

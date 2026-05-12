@@ -12,7 +12,7 @@ export interface MoodDirection {
   refs: string[];      // 4 short reference labels
 }
 
-const SYSTEM = `You are Designer, AISLE's visual direction agent.
+const SYSTEM = `You are Designer, Corsia's visual direction agent.
 Given a brief, produce SIX distinct mood-board directions.
 
 Each direction is one coherent aesthetic (not a "best of"). Differ in formality, density, color, and cultural reference.

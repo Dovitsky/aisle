@@ -2,7 +2,7 @@
 
 // PlannerView. the override CRM for the human planner. Quick glance at
 // the couple's state, current Watcher flags, and one-tap jumps into any
-// module to override what AISLE proposed.
+// module to override what Corsia proposed.
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";

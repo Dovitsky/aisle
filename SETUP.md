@@ -76,7 +76,7 @@ Without these, `/inbox` runs against a 5-message simulated fixture.
 
 1. <https://console.cloud.google.com>. Create a project (or pick an existing one).
 2. **APIs & Services → Library** → enable: Gmail API, People API.
-3. **OAuth consent screen** → External → fill in the basics. App name "AISLE", user support email = yours.
+3. **OAuth consent screen** → External → fill in the basics. App name "Corsia", user support email = yours.
 4. **Credentials → Create Credentials → OAuth client ID → Web application**.
 5. Authorized redirect URIs:
    ```
@@ -93,7 +93,7 @@ Without these, `/inbox` runs against a 5-message simulated fixture.
    ```
 8. Restart. Open `/inbox` → "Connect Gmail" goes through real Google OAuth.
 
-Same OAuth credentials can be used for Supabase Google sign-in — set the redirect URI to your Supabase callback (`https://YOUR_PROJECT.supabase.co/auth/v1/callback`) in addition to the AISLE one.
+Same OAuth credentials can be used for Supabase Google sign-in — set the redirect URI to your Supabase callback (`https://YOUR_PROJECT.supabase.co/auth/v1/callback`) in addition to the Corsia one.
 
 ---
 

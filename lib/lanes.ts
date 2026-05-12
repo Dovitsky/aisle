@@ -1,4 +1,4 @@
-// Planning lanes — the 8 sequential phases AISLE walks couples through.
+// Planning lanes — the 8 sequential phases Corsia walks couples through.
 //
 // A great planner never dumps the whole project on a couple at once. They
 // guide one room at a time: foundation, then food, then photography, then

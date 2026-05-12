@@ -13,7 +13,7 @@ const SLOTS: MusicSlot[] = [
   "parent_dance", "dinner", "open_dancing", "last_dance",
 ];
 
-const SYSTEM = `You are Cantor, AISLE's music director.
+const SYSTEM = `You are Cantor, Corsia's music director.
 Build a wedding setlist anchored to the couple's vibe and cultural tradition.
 
 How you work:

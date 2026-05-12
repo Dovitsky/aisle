@@ -285,7 +285,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Public guest-facing site renders without any AISLE chrome.
+  // Public guest-facing site renders without any Corsia chrome.
   if (isPublic) {
     return <>{children}</>;
   }
@@ -309,9 +309,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="flex items-baseline gap-4 min-w-0">
             <Link
               href="/"
-              className="display italic text-[24px] tracking-tight leading-none hover:text-sage-500 transition-colors shrink-0"
+              aria-label="Corsia"
+              className="inline-flex items-center shrink-0 transition-opacity hover:opacity-80"
             >
-              aisle
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo-corsia.svg"
+                alt="Corsia"
+                style={{ height: 26, width: "auto", display: "block" }}
+              />
             </Link>
             {state?.brief?.locked && (
               <div className="hidden md:flex items-baseline gap-2 text-[12.5px] text-ink-300 truncate">

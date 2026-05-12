@@ -6,7 +6,7 @@
 // full-bleed wedding photograph on the left, ivory editorial column on
 // the right with restrained type and one unmistakable CTA. Below the
 // fold, a single trust monument and a product moment showing the
-// decision card on cream so the user actually sees what AISLE does.
+// decision card on cream so the user actually sees what Corsia does.
 //
 // Aesthetic: refined editorial. Cream / ink / sage. No tan-warm SaaS
 // background; no obsidian poster. Photography carries the mood.
@@ -224,18 +224,19 @@ function Header() {
       >
         <Link
           href="/"
+          aria-label="Corsia"
           style={{
-            fontFamily: DISPLAY,
-            fontStyle: "italic",
-            fontWeight: 400,
-            fontSize: 24,
-            lineHeight: 1,
-            letterSpacing: "-0.01em",
-            color: INK,
+            display: "inline-flex",
+            alignItems: "center",
             textDecoration: "none",
           }}
         >
-          aisle
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-corsia.svg"
+            alt="Corsia"
+            style={{ height: 28, width: "auto", display: "block" }}
+          />
         </Link>
 
         <nav
@@ -417,7 +418,7 @@ function HeroPhoto() {
           color: "rgba(248,246,241,0.55)",
         }}
       >
-        AISLE · est. 2026
+        Corsia · est. 2026
       </span>
 
       {/* MOBILE-ONLY headline overlay at the bottom of the photo. Hidden on
@@ -989,7 +990,7 @@ function Trust() {
 
 // =====================================================================
 // PRODUCT MOMENT. show the actual decision card on cream so the user
-// sees what AISLE actually does.
+// sees what Corsia actually does.
 // =====================================================================
 
 function ProductMoment() {
@@ -1270,17 +1271,12 @@ function Footer() {
           gap: 16,
         }}
       >
-        <span
-          style={{
-            fontFamily: DISPLAY,
-            fontStyle: "italic",
-            fontSize: 18,
-            color: INK,
-            letterSpacing: "-0.005em",
-          }}
-        >
-          aisle
-        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo-corsia.svg"
+          alt="Corsia"
+          style={{ height: 22, width: "auto", display: "block" }}
+        />
         <span
           style={{
             fontFamily: MONO,
@@ -1293,7 +1289,7 @@ function Footer() {
           Plan less · Decide better
         </span>
         <a
-          href="mailto:hello@aisle.com"
+          href="mailto:hello@corsia.com"
           style={{
             fontFamily: MONO,
             fontSize: 10.5,
@@ -1306,7 +1302,7 @@ function Footer() {
           onMouseEnter={(e) => (e.currentTarget.style.color = INK)}
           onMouseLeave={(e) => (e.currentTarget.style.color = INK_FAINT)}
         >
-          hello@aisle.com
+          hello@corsia.com
         </a>
       </div>
     </footer>

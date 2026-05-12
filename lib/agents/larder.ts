@@ -26,7 +26,7 @@ export interface ParsedDietary {
   notes?: string;
 }
 
-const SYSTEM_PARSE = `You are Larder, AISLE's dietary parser.
+const SYSTEM_PARSE = `You are Larder, Corsia's dietary parser.
 Extract structured allergen + dietary-preference data from a guest's free-text RSVP entry.
 
 Allergen codes (use ONLY these):
@@ -362,7 +362,7 @@ export function catererBrief(state: ProjectState): CatererBrief {
   lines.push("Please confirm: (1) you can accommodate all of the above, (2) ingredient cross-contamination protocol for the critical entries, (3) which menu items will be flagged on place cards / menu cards.");
   lines.push("");
   lines.push(`Thanks,`);
-  lines.push(`AISLE on behalf of ${couple}`);
+  lines.push(`Corsia on behalf of ${couple}`);
 
   return {
     guestCount: yes.length,

@@ -1,5 +1,5 @@
 // Demo Mode — generate a complete, realistic ProjectState that exercises
-// every module of AISLE. Used by /api/settings op:"load-demo" so a single
+// every module of Corsia. Used by /api/settings op:"load-demo" so a single
 // button in Settings populates the entire app for an investor demo.
 //
 // The generated state is internally consistent: vendor statuses match
@@ -303,9 +303,9 @@ export async function buildDemoState(): Promise<ProjectState> {
       status: "pending",
       action: {
         kind: "send_email",
-        to: `${vendors.find((v) => v.category === "Florist" && v.status === "quoting")?.name ?? "Florist"} (via AISLE alias)`,
+        to: `${vendors.find((v) => v.category === "Florist" && v.status === "quoting")?.name ?? "Florist"} (via Corsia alias)`,
         subject: `Re: Quote — Florals`,
-        body: `Hi,\n\nThank you for the proposal — Maya & Sam loved your portfolio. They wanted to come back with one small ask: would you be open to honoring the $9,000 line if we agree on foam-free centerpieces and a single cascading arch instead of two?\n\nLooking forward.\n\nWarmly,\nAISLE on behalf of Maya & Sam`,
+        body: `Hi,\n\nThank you for the proposal — Maya & Sam loved your portfolio. They wanted to come back with one small ask: would you be open to honoring the $9,000 line if we agree on foam-free centerpieces and a single cascading arch instead of two?\n\nLooking forward.\n\nWarmly,\nCorsia on behalf of Maya & Sam`,
       },
     },
     {

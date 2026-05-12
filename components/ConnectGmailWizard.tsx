@@ -406,7 +406,7 @@ function ReadyStep({
         </span>
         <div className="min-w-0">
           <p className="text-[15px] leading-relaxed text-ink">
-            Credentials saved. Last step — sign in to the Gmail account AISLE
+            Credentials saved. Last step — sign in to the Gmail account Corsia
             should watch and send from.
           </p>
           {source === "env" && (
@@ -420,7 +420,7 @@ function ReadyStep({
       <div className="bg-paper-200/70 border border-ink/8 rounded-lg p-4 text-[12.5px] leading-relaxed text-ink-400">
         <p className="font-medium text-ink mb-1">What happens when you sign in</p>
         <ul className="space-y-1 list-none pl-0">
-          <li className="flex gap-2"><span className="text-sage-500">·</span> Google asks you to approve read + send access for AISLE.</li>
+          <li className="flex gap-2"><span className="text-sage-500">·</span> Google asks you to approve read + send access for Corsia.</li>
           <li className="flex gap-2"><span className="text-sage-500">·</span> We watch only vendor reply threads. Personal mail stays untouched.</li>
           <li className="flex gap-2"><span className="text-sage-500">·</span> Outgoing emails always pause for your approval first.</li>
         </ul>

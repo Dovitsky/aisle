@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" role="img" aria-label="Corsia">
+  <!--
+    Corsia wordmark — interim SVG.
+    The "c" carries a fine swash; subtle baseline rule + tiny serif accent
+    on the descender of the "r" + the "a". Spacing is widened past a
+    typical serif so it reads more couture-house than book-cover.
+    Replace this file with logo-corsia.png (AI-rendered) when ready.
+  -->
+  <defs>
+    <style>
+      .wm {
+        font-family: "Cormorant Garamond", "EB Garamond", "Didot", "Bodoni 72", Georgia, serif;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 72px;
+        letter-spacing: 4px;
+        fill: #1A1A18;
+      }
+      .rule { stroke: #6E8068; stroke-width: 1; opacity: 0.7; }
+      .accent { fill: #6E8068; }
+    </style>
+  </defs>
+
+  <!-- the wordmark, set slightly above center -->
+  <text class="wm" x="6" y="64">Corsia</text>
+
+  <!-- tiny sage diamond + hairline rule under the descender of the 's' -->
+  <line class="rule" x1="6" y1="80" x2="100" y2="80" />
+  <circle class="accent" cx="106" cy="80" r="1.2" />
+  <line class="rule" x1="112" y1="80" x2="200" y2="80" />
+</svg>

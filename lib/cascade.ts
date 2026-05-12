@@ -57,7 +57,7 @@ export async function cascade(card: ApprovalCard): Promise<string[]> {
       break;
     }
     case "send_save_the_date": {
-      summaries.push(`Save-the-dates dispatched to ${card.action.recipients} households via ${card.action.format}. AISLE will queue invitations 8-10 weeks before the wedding.`);
+      summaries.push(`Save-the-dates dispatched to ${card.action.recipients} households via ${card.action.format}. Corsia will queue invitations 8-10 weeks before the wedding.`);
       break;
     }
     case "send_invitations": {
@@ -181,9 +181,9 @@ async function handleLockBrief(_card: ApprovalCard, state: ProjectState): Promis
           risk: "low",
           action: {
             kind: "send_email",
-            to: `${top.name} (via AISLE alias)`,
+            to: `${top.name} (via Corsia alias)`,
             subject: `Inquiry for ${cat} — ${brief.dateWindow}`,
-            body: `Hello ${top.name},\n\nWe're reaching out from ${brief.organizerName} & ${brief.partnerName}'s wedding planning team. They're looking at ${brief.dateWindow} in ${brief.region} for roughly ${brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nAISLE on behalf of ${brief.organizerName} & ${brief.partnerName}`,
+            body: `Hello ${top.name},\n\nWe're reaching out from ${brief.organizerName} & ${brief.partnerName}'s wedding planning team. They're looking at ${brief.dateWindow} in ${brief.region} for roughly ${brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nCorsia on behalf of ${brief.organizerName} & ${brief.partnerName}`,
           },
         });
         return cat;

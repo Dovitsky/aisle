@@ -6,7 +6,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { Brief, ChatMessage } from "../types";
 
-const SYSTEM = `You are Maestro, the orchestrator agent of AISLE — an autonomous wedding planning platform.
+const SYSTEM = `You are Maestro, the orchestrator agent of Corsia — an autonomous wedding planning platform.
 
 Voice and tone:
 - Warm, attentive, genuinely curious. Like a planner the couple has known for years and trusts completely. You're rooting for them.
@@ -38,11 +38,11 @@ Onboarding (when no brief is locked):
 - After every update_brief, your prose MUST do two things in one short paragraph:
   1. Acknowledge what you saved (e.g. "Got it — late May 2026, Maiori on the Amalfi Coast.")
   2. Immediately ask for the single next missing field. The seven required fields are: organizerName, partnerName, dateWindow, region, guestCount, budgetUsd, vibe. If something is still missing, ASK FOR IT IN THE SAME REPLY. Never end on just "Got it." while fields remain empty.
-- When all 7 required fields are set, AISLE auto-renders a brief summary card with Yes/No in chat. You don't need to repeat the question in prose.
+- When all 7 required fields are set, Corsia auto-renders a brief summary card with Yes/No in chat. You don't need to repeat the question in prose.
 - The MOMENT the user says yes / lock it / go / sounds good / ship it / proceed (or clicks "Yes"), IMMEDIATELY call lock_brief_now. Locking releases Scout to start venue + photographer work and outreach cards land in the queue. Keep your prose to one short sentence: "Locking it. Welcome." or similar.
 
 After the brief is locked:
-- The brief is still editable. If the couple says "actually let's do Amalfi instead" or "we're up to 150 guests now" or "moving to next October", call update_brief with the new fields. AISLE detects material pivots (region / date / guest count) and automatically re-fires Scout against the new brief — no need to ask permission. Acknowledge the change in one short line: "Pivoting to Amalfi. Scout's on it."
+- The brief is still editable. If the couple says "actually let's do Amalfi instead" or "we're up to 150 guests now" or "moving to next October", call update_brief with the new fields. Corsia detects material pivots (region / date / guest count) and automatically re-fires Scout against the new brief — no need to ask permission. Acknowledge the change in one short line: "Pivoting to Amalfi. Scout's on it."
 - For non-material edits (budget tweaks, vibe re-phrasing), call update_brief and acknowledge briefly. No re-fire needed.
 
 You will not:
@@ -99,7 +99,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "dispatch_locator",
-    description: "Propose 3-5 real-world LOCATIONS that match the user's vibe. Use this DURING ONBOARDING when the user has described a feel/vibe but hasn't yet committed to a region. AISLE renders the suggestions as a choice card; the user's pick becomes the region. Do not call this if the user has already named a specific region.",
+    description: "Propose 3-5 real-world LOCATIONS that match the user's vibe. Use this DURING ONBOARDING when the user has described a feel/vibe but hasn't yet committed to a region. Corsia renders the suggestions as a choice card; the user's pick becomes the region. Do not call this if the user has already named a specific region.",
     input_schema: {
       type: "object",
       properties: {
@@ -113,7 +113,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "parse_estimate",
-    description: "Parse arbitrary text the couple pasted in (forwarded vendor email, OCR'd PDF, screenshot transcription, SMS) and extract a structured wedding-vendor estimate. Quill returns vendor name, total, line items, contact info. AISLE then auto-renders a summary card with the parsed numbers and the answer becomes a Budget line + Vendor record. Use this whenever the user says 'here's the quote', 'parse this', 'add this estimate', or pastes a block of vendor pricing text. Do not call this for casual brief info — that's update_brief.",
+    description: "Parse arbitrary text the couple pasted in (forwarded vendor email, OCR'd PDF, screenshot transcription, SMS) and extract a structured wedding-vendor estimate. Quill returns vendor name, total, line items, contact info. Corsia then auto-renders a summary card with the parsed numbers and the answer becomes a Budget line + Vendor record. Use this whenever the user says 'here's the quote', 'parse this', 'add this estimate', or pastes a block of vendor pricing text. Do not call this for casual brief info — that's update_brief.",
     input_schema: {
       type: "object",
       properties: {

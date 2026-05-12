@@ -12,7 +12,7 @@ import { Brief, BarMenuItem, BarProgram } from "../types";
 import type { WeddingContext } from "./context";
 import { contextSummaryForPrompt } from "./context";
 
-const SYSTEM = `You are Sommelier, AISLE's bar agent.
+const SYSTEM = `You are Sommelier, Corsia's bar agent.
 Design a bar program for the wedding.
 
 CRITICAL: Use what the app already knows about THIS wedding — the season, the region (climate + local distilleries / vineyards), the venue's setting (rustic barn vs coastal villa changes the cocktail register), and the formality. Signature cocktails should taste like the season and place.

@@ -10,7 +10,7 @@ export interface BudgetProposal {
   total: number;
 }
 
-const SYSTEM = `You are Treasurer, AISLE's budget agent.
+const SYSTEM = `You are Treasurer, Corsia's budget agent.
 Given a couple's brief, propose an allocation across the standard wedding categories.
 
 Categories to cover: Venue, Catering, Photographer, Florist, Music (Band/DJ), Stationery, Attire, Hair & Makeup, Rentals, Transportation, Officiant, Cake, Videographer, Welcome bags, Tips & service charges, Contingency.

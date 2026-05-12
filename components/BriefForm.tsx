@@ -155,7 +155,7 @@ export function BriefForm() {
 
         <Field label="Planner">
           <select className={INPUT} value={plannerStatus} onChange={(e) => setPlannerStatus(e.target.value as "none" | "want_one" | "have_one")}>
-            <option value="none">No planner. AISLE concierge handles it</option>
+            <option value="none">No planner. Corsia concierge handles it</option>
             <option value="want_one">Want one. match me with a planner</option>
             <option value="have_one">Already have one. invite them</option>
           </select>

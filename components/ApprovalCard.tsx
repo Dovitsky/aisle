@@ -163,7 +163,7 @@ function ActionPreview({ a }: { a: ApprovalCardT["action"] }) {
       return (
         <Box>
           <Mini>Address</Mini>
-          <div className="mt-1 font-mono text-[13.5px]">aisle.wedding/{a.slug}</div>
+          <div className="mt-1 font-mono text-[13.5px]">corsia.wedding/{a.slug}</div>
         </Box>
       );
     case "file_marriage_license":
@@ -364,7 +364,7 @@ export function ApprovalCardView({ card }: { card: ApprovalCardT }) {
 }
 
 // Composes a one-line confirmation for an approval that just got approved.
-// Tells the user what AISLE is now actually doing as a result.
+// Tells the user what Corsia is now actually doing as a result.
 function toastDetailForAction(card: ApprovalCardT): string {
   const a = card.action;
   switch (a.kind) {
@@ -378,7 +378,7 @@ function toastDetailForAction(card: ApprovalCardT): string {
     case "lock_setlist":          return `Setlist locked with ${a.cueCount} cues.`;
     case "lock_ceremony":         return `Ceremony script locked with ${a.sectionCount} moments.`;
     case "lock_cake":             return `Cake locked. ${a.tiers}-tier, ${a.servings} servings.`;
-    case "publish_website":       return `aisle.wedding/${a.slug} is live.`;
+    case "publish_website":       return `corsia.wedding/${a.slug} is live.`;
     case "file_marriage_license": return `Filing in ${a.county}, ${a.state}.`;
     case "send_caterer_brief":    return `Dossier sent to ${a.vendor}; ${a.allergenCount} allergens flagged.`;
     case "block_hotel_rooms":     return `${a.rooms} rooms blocked at ${a.hotel} ($${a.nightlyRate}/night).`;

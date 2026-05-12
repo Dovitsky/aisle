@@ -10,7 +10,7 @@ export type TriageVendorReply = {
   notes?: string;
 };
 
-const SYSTEM = `You are Triage, AISLE's parser. Classify a vendor reply email.
+const SYSTEM = `You are Triage, Corsia's parser. Classify a vendor reply email.
 Return ONLY JSON of shape { "intent": ..., "quotedUsd"?: number, "notes"?: string }.
 - "available"   — the vendor confirms availability in the date window
 - "unavailable" — booked or no longer accepting work

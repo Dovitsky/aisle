@@ -1,7 +1,7 @@
 "use client";
 
 // Public guest-facing wedding website. Renders at /wed/[slug] with no auth,
-// no internal AISLE chrome, no chat dock. Just the couple's site, the RSVP
+// no internal Corsia chrome, no chat dock. Just the couple's site, the RSVP
 // form, and the practical bits guests need (story, schedule, travel, FAQs).
 
 import { useEffect, useMemo, useState } from "react";
@@ -160,7 +160,7 @@ function PublicSite({ data, slug }: { data: PublicPayload; slug: string }) {
       )}
 
       <footer className="px-6 lg:px-12 py-12 max-w-[900px] mx-auto text-[10px] uppercase tracking-[0.32em] text-ink-200 font-mono text-center">
-        aisle · {data.couple.organizerName} & {data.couple.partnerName}
+        corsia · {data.couple.organizerName} & {data.couple.partnerName}
       </footer>
     </div>
   );

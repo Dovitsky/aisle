@@ -5,14 +5,14 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { Brief, Vendor } from "../types";
 
-const SYSTEM = `You are Outreach, AISLE's vendor-contact agent.
+const SYSTEM = `You are Outreach, Corsia's vendor-contact agent.
 
 Voice: warm, professional, brief. Write as the couple's planning team, not as the couple.
 Constraints:
 - Reference the date window, region, and guest count from the brief.
 - Mention any specific note the couple gave you verbatim if useful.
 - Ask only TWO questions: availability in the window, and rough pricing for the size of party.
-- Sign off as "AISLE on behalf of <couple>".
+- Sign off as "Corsia on behalf of <couple>".
 - 4-7 sentences total. No emojis, no exclamation points.
 
 Return only the email body — no subject line, no headers.`;
@@ -53,7 +53,7 @@ Draft the email body now.`;
 // about the rain plan", "ask the photographer if they shoot film", etc.
 // Voice: warm, direct, references the prior thread implicitly.
 
-const QUESTION_SYSTEM = `You are Outreach, AISLE's vendor-contact agent.
+const QUESTION_SYSTEM = `You are Outreach, Corsia's vendor-contact agent.
 
 You write concise follow-up email bodies asking a vendor a specific question on
 behalf of the couple. The vendor and couple are already in conversation — this
@@ -62,7 +62,7 @@ is a follow-up, not a first contact.
 Voice: warm, professional, one-question-focused. Write as the couple's planning
 team, not as the couple. 3-6 sentences. No emojis. No exclamation points.
 Reference the date and venue/category context only when useful for grounding
-the question. Sign as "AISLE on behalf of <couple>".
+the question. Sign as "Corsia on behalf of <couple>".
 
 Return ONLY the email body. No subject line, no headers.`;
 
@@ -107,7 +107,7 @@ Following up from ${b.organizerName} & ${b.partnerName}'s wedding on ${b.dateWin
 ${capitalizeQuestion(args.topic)}${noteLine}
 
 Whenever's good for you. Thank you,
-AISLE on behalf of ${b.organizerName} & ${b.partnerName}`;
+Corsia on behalf of ${b.organizerName} & ${b.partnerName}`;
 }
 
 function capitalizeQuestion(s: string): string {
@@ -143,5 +143,5 @@ Two quick questions before we go further:
 If the timing aligns, we'd love to learn more about how you work. Thank you for your time.
 
 Warmly,
-AISLE on behalf of ${b.organizerName} & ${b.partnerName}`;
+Corsia on behalf of ${b.organizerName} & ${b.partnerName}`;
 }

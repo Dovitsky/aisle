@@ -4,7 +4,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { Brief, Vendor, VendorMessage } from "../types";
 
-const SYSTEM = `You are Negotiator, AISLE's vendor-negotiation agent.
+const SYSTEM = `You are Negotiator, Corsia's vendor-negotiation agent.
 
 You write follow-up email bodies that propose specific deal terms politely.
 Voice: respectful, plain, never adversarial. Reference what the vendor said and propose
@@ -14,7 +14,7 @@ Constraints:
 - Couple-safe: never commit to anything beyond what the brief permits.
 - 4-7 sentences.
 - No emojis, no exclamation points.
-- Sign as "AISLE on behalf of <couple>".
+- Sign as "Corsia on behalf of <couple>".
 
 Return ONLY the body text. No subject line.`;
 
@@ -60,7 +60,7 @@ If that's not workable, we're flexible on a few details — happy to discuss alt
 Looking forward to your reply.
 
 Warmly,
-AISLE on behalf of ${b.organizerName} & ${b.partnerName}`;
+Corsia on behalf of ${b.organizerName} & ${b.partnerName}`;
 }
 
 export function synthesizeInbound(vendor: Vendor): VendorMessage {

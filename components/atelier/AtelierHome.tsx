@@ -125,7 +125,7 @@ export function AtelierHome() {
             </p>
             <p className="text-[12.5px] leading-relaxed text-ink-400">
               Everything in /atelier — concepts, ateliers, fittings, even
-              the budget line — is invisible to your partner&apos;s view of AISLE.
+              the budget line — is invisible to your partner&apos;s view of Corsia.
               Maestro refuses to reveal anything here, gently.
             </p>
           </div>

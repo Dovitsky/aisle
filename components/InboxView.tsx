@@ -1,7 +1,7 @@
 "use client";
 
 // Inbox. connect Gmail, scan vendor replies, see what Triage parsed and what
-// AISLE did with each message.
+// Corsia did with each message.
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -159,7 +159,7 @@ export function InboxView() {
         subtitle={
           status.connected
             ? <>Connected to <span className="font-mono text-ink">{status.emailAddress}</span>. Scans pull vendor replies, run them through Triage, match to your vendor records, and draft responses you can approve.</>
-            : <>Connect your Gmail and AISLE will scan vendor replies for you, parse intent and pricing, draft responses, and surface Approval Cards.</>
+            : <>Connect your Gmail and Corsia will scan vendor replies for you, parse intent and pricing, draft responses, and surface Approval Cards.</>
         }
       />
 
@@ -219,7 +219,7 @@ export function InboxView() {
             </summary>
             <div className="mt-3 text-[13px] text-ink-300 leading-relaxed border-l-2 border-sage-300/40 pl-4">
               <p>
-                Real Gmail integration takes about five minutes to set up. your AISLE team will pair you through it.
+                Real Gmail integration takes about five minutes to set up. your Corsia team will pair you through it.
                 You&apos;ll create a Google Cloud OAuth client, paste three values into your project&apos;s settings, and the
                 button above flips to a real connect-with-Google flow.
               </p>

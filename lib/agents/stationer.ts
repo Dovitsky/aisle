@@ -16,7 +16,7 @@ const PIECES: { piece: StationeryPiece; label: string }[] = [
   { piece: "thank_you", label: "Thank-you card" },
 ];
 
-const SYSTEM = `You are Stationer, AISLE's invitation-suite agent.
+const SYSTEM = `You are Stationer, Corsia's invitation-suite agent.
 You write the actual paper-card copy for a couple's full stationery suite.
 
 Voice depends on cultural/formality fields; default is "modern formal" — host line
@@ -99,7 +99,7 @@ function offline(args: { brief: Brief; direction: string; menu?: MenuItem[] }): 
     { piece: "response_card",
       copy: `M ___________________________________\n\n☐ Joyfully accepts\n☐ Regretfully declines\n\nKindly reply by ${replyBy}\n\nMeal selection:\n☐ ${args.menu?.[0]?.name ?? "Chicken"}\n☐ ${args.menu?.[1]?.name ?? "Fish"}\n☐ ${args.menu?.[2]?.name ?? "Vegetarian"}\n\nDietary restrictions: __________________` },
     { piece: "details_card",
-      copy: `THE WEEKEND\n\nAttire: ${b.formalityTone === "modern" ? "Cocktail attire" : "Black tie optional"}\n\nHotel block: details and code on our website\naisle.wedding/${slugify(b.organizerName)}-${slugify(b.partnerName)}\n\nTransportation: shuttles will run\nfrom the hotel block to the venue\nstarting at 3:30pm\n\nKindly arrive 30 minutes before the\nceremony so we can begin on time.` },
+      copy: `THE WEEKEND\n\nAttire: ${b.formalityTone === "modern" ? "Cocktail attire" : "Black tie optional"}\n\nHotel block: details and code on our website\ncorsia.wedding/${slugify(b.organizerName)}-${slugify(b.partnerName)}\n\nTransportation: shuttles will run\nfrom the hotel block to the venue\nstarting at 3:30pm\n\nKindly arrive 30 minutes before the\nceremony so we can begin on time.` },
     { piece: "menu_card",
       copy: menuLines
         ? `THE MENU\n\nFirst\n  ${args.menu?.[0]?.name ?? "Seasonal salad"}\n\nSecond\n  ${args.menu?.[1]?.name ?? "Main course"}\n\nThird\n  ${args.menu?.[2]?.name ?? "Dessert"}\n\nWines paired throughout\n\nThank you for joining us.`

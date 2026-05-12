@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
         risk: brief.criticalGuests.length > 0 ? "high" : "medium",
         action: {
           kind: "send_email",
-          to: `${caterer.name} (via AISLE alias)`,
+          to: `${caterer.name} (via Corsia alias)`,
           subject: `Dietary brief — ${state.brief?.organizerName ?? ""} & ${state.brief?.partnerName ?? ""} (${brief.guestCount} guests)`,
           body: brief.body,
         },
