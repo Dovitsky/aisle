@@ -91,7 +91,7 @@ export function InboxView() {
         agent: "Triage",
         title: matchedLine,
         detail: cardsLine.trim() ? cardsLine.trim() : `Scanned ${j.scanned}.`,
-        hrefOnClick: j.approvalsQueued > 0 ? "/approvals" : undefined,
+        hrefOnClick: j.approvalsQueued > 0 ? "/" : undefined,
       });
       await load();
     } finally { setBusy(null); }
@@ -310,7 +310,7 @@ export function InboxView() {
                     </span>
                   </div>
                   {m.approvalId && (
-                    <Link href="/approvals" className="text-accent hover:text-accent-soft transition-colors">
+                    <Link href="/" className="text-accent hover:text-accent-soft transition-colors">
                       Card queued →
                     </Link>
                   )}

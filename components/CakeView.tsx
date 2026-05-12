@@ -52,8 +52,8 @@ export function CakeView() {
             kind: "approval",
             agent: "Patissier",
             title: "Lock the cake?",
-            detail: "Open Decisions to confirm.",
-            hrefOnClick: "/approvals",
+            detail: "Open the home queue to confirm.",
+            hrefOnClick: "/",
           });
         }
       }

@@ -48,7 +48,9 @@ const ROUTE_MAP: Record<string, PageContext> = {
   "/logistics":    { route: "/logistics",    label: "Logistics",      vendorCategory: "Transportation", topic: "logistics — hotel block, shuttles, welcome bags" },
   "/day-of":       { route: "/day-of",       label: "Day-of",         topic: "the day-of timeline and contingency bands" },
   "/inbox":        { route: "/inbox",        label: "Inbox",          topic: "the vendor email inbox and replies" },
-  "/approvals":    { route: "/approvals",    label: "Decisions",      topic: "your approvals queue" },
+  // /approvals merged into / (home command center). Stays mapped so old
+  // references resolve to the home-page context cleanly.
+  "/approvals":    { route: "/",             label: "Home",           topic: "your approvals queue (on the home command center)" },
   "/timeline":     { route: "/timeline",     label: "Timeline",       topic: "the 12-month checklist" },
   "/pre-events":   { route: "/pre-events",   label: "Pre-events",     topic: "rehearsal dinner, welcome drinks, next-day brunch" },
   "/memorials":    { route: "/memorials",    label: "Memorials",      topic: "memorials and tributes during the ceremony" },

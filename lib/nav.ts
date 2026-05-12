@@ -14,7 +14,6 @@ export const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   { label: "The wedding", items: [
     { href: "/", label: "Home" },
     { href: "/timeline", label: "Phases" },
-    { href: "/approvals", label: "Decisions" },
     { href: "/inbox", label: "Inbox" },
   ]},
   { label: "Inspiration", items: [

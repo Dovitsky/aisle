@@ -380,30 +380,26 @@ export function CommandCenter({
 }) {
   const phase = inferPhase(state);
   const pending = state.approvals.filter((a) => a.status === "pending");
-  const topDecision = pending[0] ?? null;
   const recs = recommendForPhase(phase, state);
 
-  // Guided dashboard. Three quiet sections, top to bottom:
+  // Mission-control home. Four sections, top to bottom:
   //   1. BriefStrip — names + countdown + phase, the editorial hero.
-  //   2. RightNow — the ONE thing waiting on the couple, or a soft
-  //      "all quiet" line + Watcher heads-up when nothing is pending.
-  //   3. RecommendedForPhase — the 3-6 concrete steps for this phase.
-  //
-  // Pending approvals beyond the top one live on /approvals (badge in
-  // the top nav routes there). Vendor replies live on /vendors. Stats
-  // live on each module. This page is the calm sequence, not the
-  // dashboard buffet.
+  //   2. Decisions — all pending approval cards inline (was a separate
+  //      /approvals page; now lives here). When zero pending, the
+  //      "Your team is getting started…" agent activity shows instead.
+  //   3. FlagsBlock — Watcher critical/warn heads-up if any.
+  //   4. RecommendedForPhase — concrete steps for the current phase.
   const criticalOrWarn = flags.filter(
     (f) => f.level === "critical" || f.level === "warn",
   );
 
-  // Guided dashboard. Hero + phase recommendations only.
-  // No RIGHT NOW card — pending approvals live on /approvals.
-  // Critical flags still surface as a quiet strip above the recs so the
-  // user notices broken-foundation issues without an interrupting CTA.
   return (
     <div className="flex flex-col gap-12 lg:gap-16 pb-24">
       <BriefStrip state={state} phase={phase} />
+
+      <Reveal>
+        <Decisions pending={pending} phase={phase} />
+      </Reveal>
 
       {criticalOrWarn.length > 0 && (
         <Reveal>
@@ -415,6 +411,167 @@ export function CommandCenter({
         <RecommendedForPhase phase={phase} recs={recs} />
       </Reveal>
     </div>
+  );
+}
+
+// =====================================================================
+// DECISIONS. Inline approvals queue + team-getting-started empty state.
+// Replaces the old separate /approvals page. Risk-grouped, compact.
+// =====================================================================
+
+const DECISIONS_RISK_LABEL: Record<ApprovalCard["risk"], string> = {
+  high: "Big call",
+  medium: "Worth a look",
+  low: "Easy",
+};
+
+function Decisions({
+  pending,
+  phase,
+}: {
+  pending: ApprovalCard[];
+  phase: PhaseKey;
+}) {
+  if (pending.length === 0) {
+    return <TeamGettingStarted phase={phase} />;
+  }
+
+  const byRisk: Record<ApprovalCard["risk"], ApprovalCard[]> = {
+    high: [],
+    medium: [],
+    low: [],
+  };
+  for (const c of pending) byRisk[c.risk].push(c);
+
+  return (
+    <section>
+      <div className="flex items-baseline justify-between gap-3 mb-7 lg:mb-8 flex-wrap">
+        <div>
+          <p className="text-[10.5px] uppercase tracking-[0.32em] font-mono text-sage-deep mb-2 font-semibold flex items-center gap-2">
+            <span
+              className="inline-block w-1.5 h-1.5 rounded-full bg-sage-500 animate-pulse-soft"
+              aria-hidden
+            />
+            Waiting on you
+          </p>
+          <h2
+            className="display text-[26px] sm:text-[32px] leading-[1.1] text-ink"
+            style={{ fontWeight: 400 }}
+          >
+            {pending.length === 1 ? (
+              <>One decision.</>
+            ) : (
+              <>
+                <CountUp value={pending.length} /> decisions.
+              </>
+            )}
+          </h2>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-10">
+        {(["high", "medium", "low"] as const).map((r) => {
+          const items = byRisk[r];
+          if (!items.length) return null;
+          return (
+            <div key={r}>
+              <div className="flex items-baseline gap-3 mb-3">
+                <span
+                  className={`inline-block w-1.5 h-1.5 rounded-full ${
+                    r === "high"
+                      ? "bg-risk-high"
+                      : r === "medium"
+                      ? "bg-risk-medium"
+                      : "bg-sage-400"
+                  }`}
+                  aria-hidden
+                />
+                <h3 className="display italic text-[18px] text-ink leading-tight">
+                  {DECISIONS_RISK_LABEL[r]}
+                  <span className="not-italic text-ink-300 ml-2 text-[13px]">
+                    {items.length}
+                  </span>
+                </h3>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-3 stagger">
+                {items.map((c) => (
+                  <ApprovalCardView key={c.id} card={c} />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+// "Your team is getting started…" — shown right after lock, before any
+// approvals exist. A roster of named specialists with breathing dots so
+// the user understands the silence isn't emptiness, it's preparation.
+const STARTING_TEAM = [
+  { agent: "Scout", activity: "sourcing your venue and photographer" },
+  { agent: "Botanist", activity: "sketching the floral program" },
+  { agent: "Sommelier", activity: "drafting the bar" },
+  { agent: "Cleric", activity: "composing the ceremony" },
+  { agent: "Stationer", activity: "drafting the save-the-dates" },
+  { agent: "Treasurer", activity: "laying out the budget envelope" },
+] as const;
+
+function TeamGettingStarted({ phase: _phase }: { phase: PhaseKey }) {
+  return (
+    <section
+      className="rounded-card p-6 sm:p-8 relative overflow-hidden"
+      style={{
+        background: "#FFFFFF",
+        border: "1px solid rgba(184,153,104,0.18)",
+        boxShadow:
+          "0 18px 40px -22px rgba(79,93,68,0.22), inset 0 1px 0 rgba(255,255,255,1)",
+      }}
+    >
+      <span
+        aria-hidden
+        className="absolute left-0 top-0 bottom-0 w-0.5"
+        style={{
+          background: "linear-gradient(180deg, #C7D1BD 0%, #A8B5A0 100%)",
+        }}
+      />
+      <p className="text-[10.5px] uppercase tracking-[0.32em] font-mono text-sage-deep mb-1.5 font-semibold flex items-center gap-2">
+        <BreathingDot />
+        Your team is getting started
+      </p>
+      <p className="text-[14px] text-ink-300 leading-relaxed mb-5 max-w-[560px]">
+        The first decisions will land here as the specialists return with
+        proposals. Nothing happens without your say.
+      </p>
+      <ul className="flex flex-col">
+        {STARTING_TEAM.map((m, i) => (
+          <li
+            key={m.agent}
+            className={`py-3 flex items-baseline justify-between gap-4 ${
+              i < STARTING_TEAM.length - 1 ? "border-b hairline" : ""
+            }`}
+          >
+            <div className="flex items-baseline gap-3 min-w-0">
+              <span
+                className="inline-block w-1.5 h-1.5 rounded-full bg-sage-400 animate-pulse-soft shrink-0"
+                style={{ animationDelay: `${i * 0.18}s` }}
+                aria-hidden
+              />
+              <span className="display italic text-[16px] text-ink leading-none shrink-0">
+                {m.agent}
+              </span>
+              <span className="text-[13px] text-ink-300 leading-tight truncate">
+                {m.activity}
+              </span>
+            </div>
+            <span className="text-[10px] uppercase tracking-[0.22em] font-mono text-sage-500 shrink-0">
+              working
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -793,7 +950,7 @@ function RightNow({
           </div>
           {pending > 1 && (
             <Link
-              href="/approvals"
+              href="/"
               className="text-[10.5px] uppercase tracking-[0.22em] font-mono text-ink-300 hover:text-sage-deep transition-colors"
             >
               {pending - 1} more after this →

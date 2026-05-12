@@ -60,12 +60,11 @@ const PRIMARY_NAV: {
   {
     label: "The Wedding",
     href: "/mood-board",
-    match: ["/mood-board", "/", "/timeline", "/approvals", "/inbox"],
+    match: ["/mood-board", "/", "/timeline", "/inbox"],
     items: [
       { href: "/mood-board", label: "Mood" },
       { href: "/", label: "Home" },
       { href: "/timeline", label: "Phases" },
-      { href: "/approvals", label: "Decisions" },
       { href: "/inbox", label: "Inbox" },
     ],
   },
@@ -362,7 +361,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
             {pendingCount > 0 && (
               <Link
-                href="/approvals"
+                href="/"
                 title={`${pendingCount} pending decision${pendingCount === 1 ? "" : "s"}`}
                 className="hidden sm:inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-medium text-ink bg-sage-300 hover:bg-sage-400 transition-colors"
               >

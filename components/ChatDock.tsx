@@ -103,7 +103,7 @@ export function ChatDock() {
             agent: "Maestro",
             title: "Foundation in flight",
             detail: "Scout, Designer, and Treasurer are working. decisions will land as they finish.",
-            hrefOnClick: "/approvals",
+            hrefOnClick: "/",
           });
         } else if (
           isLocked
@@ -113,8 +113,8 @@ export function ChatDock() {
             kind: "agent",
             agent: "Outreach",
             title: "Email drafted for your approval",
-            detail: "Open Decisions to review before it sends.",
-            hrefOnClick: "/approvals",
+            detail: "Open the home queue to review before it sends.",
+            hrefOnClick: "/",
           });
         } else if (refireSignal && !justLocked) {
           notify({
@@ -180,32 +180,49 @@ export function ChatDock() {
 
   return (
     <>
-      {/* Closed-state launcher tab. slim vertical strip on the right edge.
-          Renders when the panel is closed; one click opens the panel.
-          The /timeline page embeds Maestro inline (per its revision spec)
-          so the floating pill is suppressed there. */}
+      {/* Closed-state launcher. A whisper, not a shout — a small soft
+          ivory circle in the bottom-right corner, semi-transparent until
+          hover/tap. No visible name label (the `title` attribute supplies
+          the tooltip on desktop hover). The /timeline page embeds Maestro
+          inline so the floating button is suppressed there. */}
       {!open && pathname !== "/timeline" && (
         <button
           type="button"
           onClick={() => setOpen(true)}
-          aria-label="Open Maestro"
-          className="fixed top-1/2 -translate-y-1/2 z-40 right-0 group flex items-center"
-          style={{ touchAction: "manipulation" }}
+          aria-label={`Open ${me}`}
+          title={`Open ${me}`}
+          className="fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105"
+          style={{
+            background: "rgba(255,255,255,0.78)",
+            backdropFilter: "saturate(160%) blur(10px)",
+            WebkitBackdropFilter: "saturate(160%) blur(10px)",
+            border: "1px solid rgba(14,15,13,0.10)",
+            boxShadow:
+              "0 6px 18px -8px rgba(14,15,13,0.22), 0 2px 4px -1px rgba(14,15,13,0.06)",
+            opacity: 0.7,
+            touchAction: "manipulation",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = "1";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = "0.7";
+          }}
         >
-          <span
-            className="rounded-l-full bg-ink text-paper-50 pl-3 pr-3 py-4 flex flex-col items-center gap-1 shadow-cardHover"
-            style={{
-              boxShadow:
-                "0 14px 36px -18px rgba(14,14,12,0.30), 0 4px 14px -8px rgba(79,93,68,0.30)",
-            }}
+          {/* Minimal chat-bubble glyph in ink. */}
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#1A1A18"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
           >
-            <span className="text-[9.5px] uppercase tracking-[0.22em] font-mono">
-              {me}
-            </span>
-            <span aria-hidden className="text-[14px] leading-none -translate-x-0.5 transition-transform group-hover:-translate-x-1">
-              ←
-            </span>
-          </span>
+            <path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z" />
+          </svg>
         </button>
       )}
 

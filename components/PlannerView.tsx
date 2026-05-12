@@ -20,7 +20,6 @@ interface WatcherFlag {
 const ROOMS: { href: string; label: string; group: "core" | "build" | "day" | "personal" | "after" }[] = [
   { href: "/", label: "Today", group: "core" },
   { href: "/timeline", label: "Plan", group: "core" },
-  { href: "/approvals", label: "Queue", group: "core" },
   { href: "/inbox", label: "Inbox", group: "core" },
 
   { href: "/vendors", label: "Vendors", group: "build" },

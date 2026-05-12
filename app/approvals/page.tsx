@@ -1,5 +1,8 @@
-import { ApprovalsList } from "@/components/ApprovalsList";
+import { redirect } from "next/navigation";
 
-export default function ApprovalsPage() {
-  return <ApprovalsList />;
+// /approvals merged into the home command center. Kept as a 308
+// redirect so old bookmarks, ChatDock hrefs, and email notifications
+// still resolve cleanly.
+export default function ApprovalsRedirect() {
+  redirect("/");
 }

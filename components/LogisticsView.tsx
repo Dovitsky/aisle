@@ -81,7 +81,7 @@ export function LogisticsView() {
       agent: "Concierge",
       title: `${rooms} rooms requested at ${data.hotel}`,
       detail: "Approval card queued. contract follows once they reply.",
-      hrefOnClick: "/approvals",
+      hrefOnClick: "/",
     });
   };
 
