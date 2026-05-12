@@ -99,3 +99,45 @@ Investigated: the route uses Zod with `z.string().min(1).max(50_000)` so `huge`/
 ## Fix plan for Phase 3
 
 P0: none. P1: BUG-1. P2 < 20 LOC each: BUG-3, BUG-4. BUG-5 needs > 20 LOC to surface per-field errors well — log as deferred. P3: deferred (BUG-6, BUG-7, BUG-8).
+
+---
+
+## Round 2 — re-tested against actual production code (after rebase onto origin/main)
+
+The first pass was run against the worktree HEAD ("ship" commit), which turned out to be **52 commits behind** `origin/main`. After fetching and rebasing, the production code includes the real `/dossier` 8-stage flow, the Corsia rebrand, the dry-witted Maestro personality, the new "Go" CTA, and more. Reran the critical paths against the rebased branch.
+
+### Status of round-1 bugs against production code
+
+| Bug | Still present? | Notes |
+|---|---|---|
+| BUG-1 (Image gen dev leak) | YES — fix carried forward through rebase conflict resolution | Verified gone in post-lock screenshot. |
+| BUG-3 (region extractor) | YES — fix carried forward | Maestro now extracts `region:"Hudson Valley"` from "Saturday in October, Hudson Valley, ~120". |
+| BUG-4 (`~120` guest count) | YES — fix carried forward | Maestro now extracts `guestCount:120` from same input. |
+| BUG-5 (form-level "Invalid brief") | Form is no longer the primary entry — Dossier 8-step flow disables Continue on empty fields. Reduced to a minor UX issue on `/brief`. P3. |
+| BUG-6 (CountUp 0 flash) | Still present on `/approvals` and on the merged home decisions. P3. |
+| BUG-7 (Corsia vs AISLE branding) | Resolved — repo + prod are both Corsia now. |
+| BUG-8 (test harness quirk) | n/a. |
+
+### New finding from round 2
+
+### BUG-9 · P3 · Refresh mid-flow on `/dossier` discards all progress
+
+**Path / step:** Start `/dossier`, fill step 1 (names), Continue → step 2. Press Cmd-R or browser refresh.
+**Expected:** Resume from step 2 with names preserved, OR a confirm-discard prompt.
+**Actual:** Returns to step 1 with empty inputs; brief is null.
+**Where:** `components/DossierBuilder.tsx` keeps all step answers in component state only; no `localStorage` or partial save between steps. The seal-button at step 8 is the first time anything hits the server.
+**Severity rationale:** Real users will fat-finger Cmd-R, switch tabs and accidentally close, or hit forward-then-back. 8 steps of input lost. P3 (design choice, but worth a one-liner of `localStorage` persistence).
+
+### Pass results (round 2)
+
+- 45 routes (including `/dossier`) all return 200.
+- Dossier 8-step happy path: walked through all 8, sealed → redirect `/` with `{ organizer, partner, region: "Hudson Valley, NY", dateWindow: "2026-10-15", guestCount: 100, budgetUsd: 75_000, locked: true }`.
+- Continue is disabled on Step 1 with empty fields — input validation present.
+- Demo mode (`/settings` "Show me the example wedding" → `op:"load_demo"`): loads Maya & Sam with 28 vendors, 7 pending approvals.
+- Approve action on the home merged decisions: 7 → 6 pending.
+- Chat API: empty 400, 50k 400, XSS escaped on render, emoji round-trips.
+- Hero on `/` no longer shows the dev leak banner (BUG-1 fixed).
+- Maestro extractor: all 5 sample sentences extract the right fields (BUG-3 + BUG-4 fixes verified).
+- `npm test` passes (round-trip + firewall + ambient + onboarding + integration + inbox + email + page-context + dashboard renders + offline-Maestro + lanes-flow + demo-state + budget invariants — all green).
+- `tsc --noEmit` clean.
+
