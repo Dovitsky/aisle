@@ -22,6 +22,7 @@ import type { ApprovalCard, ProjectState } from "@/lib/types";
 import { ApprovalCardView } from "./ApprovalCard";
 import { Reveal, BreathingDot, CountUp } from "./Atmosphere";
 import { useProject } from "./StateProvider";
+import { regionHeroFallback } from "@/lib/regionHero";
 
 interface WatcherFlag {
   level: "info" | "warn" | "critical";
@@ -610,12 +611,24 @@ function BriefStrip({
   // Custom hero image rendered after brief lock, fades in as a moody
   // backdrop so each wedding has a one-of-a-kind home page.
   const heroImage = brief.heroImage;
+  // Region-matched stock photo fallback. Used whenever the AI-generated
+  // hero hasn't arrived (or is still the SVG placeholder, or rendering
+  // failed). The dashboard should NEVER show blank space above the
+  // couple's names. Hudson Valley → autumn foliage; Amalfi → Tuscan
+  // villa; Charleston → Spanish moss; etc. Universal warm-bouquet
+  // fallback if no keyword matches.
+  const fallbackHero = useMemo(() => regionHeroFallback(brief), [brief]);
   // Detect both "no hero yet" AND "placeholder SVG (gen failed earlier)"
   // so the dashboard always auto-renders the brief's scene on mount.
   const isPlaceholder =
     !!heroImage && heroImage.startsWith("data:image/svg+xml");
   const isMissing = !heroImage;
   const needsRender = brief.locked && (isMissing || isPlaceholder);
+  // What we actually paint behind the type. AI-generated brief.heroImage
+  // takes priority once it lands; until then we show the region-matched
+  // stock photo so the hero is never empty.
+  const displayedHero =
+    !isMissing && !isPlaceholder ? heroImage! : fallbackHero.url;
   const { pollForUpdates } = useProject();
   const retriedRef = useRef<string | null>(null);
   const [rendering, setRendering] = useState(false);
@@ -660,89 +673,78 @@ function BriefStrip({
       className="relative animate-fade-in-soft overflow-hidden -mx-5 lg:-mx-12 px-5 lg:px-12 min-h-[440px] lg:min-h-[560px] flex flex-col justify-end"
       style={{ borderRadius: 0 }}
     >
-      {heroImage && (
-        <>
-          {/* The hero image. Bold, photographic — it sets the room's mood. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={heroImage}
-            alt=""
-            aria-hidden
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-            style={{
-              animation: "hero-fade-in 1800ms ease-out both",
-              filter: "saturate(118%) contrast(104%)",
-              opacity: 0.95,
-            }}
-          />
-          {/* Subtle dark gradient at the bottom edge only — keeps the
-              photo dominant while giving white type something to land on. */}
-          <div
-            aria-hidden
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(14,15,13,0.18) 0%, transparent 22%, transparent 60%, rgba(14,15,13,0.45) 100%)",
-            }}
-          />
-          {/* Very subtle film grain over the whole hero */}
-          <div
-            aria-hidden
-            className="absolute inset-0 pointer-events-none opacity-[0.04] mix-blend-multiply"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-              backgroundSize: "220px 220px",
-            }}
-          />
-          <style jsx>{`
-            @keyframes hero-fade-in {
-              from { opacity: 0; transform: scale(1.06); filter: blur(8px) saturate(118%); }
-              to   { opacity: 0.95; transform: scale(1); filter: blur(0) saturate(118%) contrast(104%); }
-            }
-            @media (prefers-reduced-motion: reduce) {
-              img { animation: none !important; opacity: 0.90 !important; }
-            }
-          `}</style>
-        </>
-      )}
-
-      {/* If no hero yet, soft warm-grey placeholder so the strip still
-          carries presence while the render is in flight. */}
-      {!heroImage && (
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(168,181,160,0.18), transparent 60%), linear-gradient(180deg, #F7F2E8 0%, #FCFAF5 100%)",
-          }}
-        />
-      )}
+      {/* The hero image. Always present — AI-rendered when ready,
+          region-matched stock photo as the fallback. Never blank. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        key={displayedHero}
+        src={displayedHero}
+        alt={
+          !isMissing && !isPlaceholder
+            ? ""
+            : fallbackHero.alt
+        }
+        aria-hidden={!isMissing && !isPlaceholder}
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        style={{
+          animation: "hero-fade-in 1800ms ease-out both",
+          filter: "saturate(118%) contrast(104%)",
+          opacity: 0.95,
+        }}
+      />
+      {/* Subtle dark gradient at the bottom edge only — keeps the
+          photo dominant while giving white type something to land on. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(14,15,13,0.18) 0%, transparent 22%, transparent 60%, rgba(14,15,13,0.45) 100%)",
+        }}
+      />
+      {/* Very subtle film grain over the whole hero */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-[0.04] mix-blend-multiply"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+          backgroundSize: "220px 220px",
+        }}
+      />
+      <style jsx>{`
+        @keyframes hero-fade-in {
+          from { opacity: 0; transform: scale(1.06); filter: blur(8px) saturate(118%); }
+          to   { opacity: 0.95; transform: scale(1); filter: blur(0) saturate(118%) contrast(104%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          img { animation: none !important; opacity: 0.90 !important; }
+        }
+      `}</style>
 
       {/* Top row. phase + greeting. anchored to the top of the hero */}
       <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between gap-4 flex-wrap pt-6 lg:pt-8 px-5 lg:px-12">
         <div className="flex items-center gap-3">
           <BreathingDot />
           <p className="text-[10.5px] uppercase tracking-[0.28em] font-mono"
-             style={{ color: heroImage ? "#FFFFFF" : "#4F5D44",
-                      textShadow: heroImage ? "0 1px 8px rgba(14,15,13,0.45)" : "none" }}>
+             style={{ color: displayedHero ? "#FFFFFF" : "#4F5D44",
+                      textShadow: displayedHero ? "0 1px 8px rgba(14,15,13,0.45)" : "none" }}>
             {greeting()}
           </p>
-          <span style={{ color: heroImage ? "rgba(255,255,255,0.55)" : "rgba(14,15,13,0.30)" }}>·</span>
+          <span style={{ color: displayedHero ? "rgba(255,255,255,0.55)" : "rgba(14,15,13,0.30)" }}>·</span>
           <p className="text-[10.5px] uppercase tracking-[0.22em] font-mono"
-             style={{ color: heroImage ? "rgba(255,255,255,0.85)" : "rgba(14,15,13,0.50)",
-                      textShadow: heroImage ? "0 1px 8px rgba(14,15,13,0.45)" : "none" }}>
+             style={{ color: displayedHero ? "rgba(255,255,255,0.85)" : "rgba(14,15,13,0.50)",
+                      textShadow: displayedHero ? "0 1px 8px rgba(14,15,13,0.45)" : "none" }}>
             {PHASE_LABEL[phase]}
           </p>
           {(rendering || (isPlaceholder && brief.locked)) && (
             <>
-              <span style={{ color: heroImage ? "rgba(255,255,255,0.55)" : "rgba(14,15,13,0.30)" }}>·</span>
+              <span style={{ color: displayedHero ? "rgba(255,255,255,0.55)" : "rgba(14,15,13,0.30)" }}>·</span>
               <span
                 className="text-[10px] uppercase tracking-[0.22em] font-mono italic"
                 style={{
-                  color: heroImage ? "rgba(255,255,255,0.85)" : "rgba(14,15,13,0.50)",
-                  textShadow: heroImage ? "0 1px 8px rgba(14,15,13,0.45)" : "none",
+                  color: displayedHero ? "rgba(255,255,255,0.85)" : "rgba(14,15,13,0.50)",
+                  textShadow: displayedHero ? "0 1px 8px rgba(14,15,13,0.45)" : "none",
                 }}
               >
                 rendering your scene…
@@ -757,12 +759,12 @@ function BriefStrip({
               onClick={triggerRender}
               className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] font-medium transition-all"
               style={{
-                background: heroImage ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.80)",
+                background: displayedHero ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.80)",
                 backdropFilter: "blur(10px)",
                 WebkitBackdropFilter: "blur(10px)",
-                border: heroImage ? "1px solid rgba(255,255,255,0.30)" : "1px solid rgba(14,15,13,0.10)",
-                color: heroImage ? "#FFFFFF" : "#0E0F0D",
-                textShadow: heroImage ? "0 1px 6px rgba(14,15,13,0.35)" : "none",
+                border: displayedHero ? "1px solid rgba(255,255,255,0.30)" : "1px solid rgba(14,15,13,0.10)",
+                color: displayedHero ? "#FFFFFF" : "#0E0F0D",
+                textShadow: displayedHero ? "0 1px 6px rgba(14,15,13,0.35)" : "none",
               }}
               aria-label="Generate scene image"
               title="Generate scene image"
@@ -775,12 +777,12 @@ function BriefStrip({
             href="/timeline"
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10.5px] uppercase tracking-[0.22em] font-medium transition-all"
             style={{
-              background: heroImage ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.80)",
+              background: displayedHero ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.80)",
               backdropFilter: "blur(10px)",
               WebkitBackdropFilter: "blur(10px)",
-              border: heroImage ? "1px solid rgba(255,255,255,0.30)" : "1px solid rgba(14,15,13,0.10)",
-              color: heroImage ? "#FFFFFF" : "#0E0F0D",
-              textShadow: heroImage ? "0 1px 6px rgba(14,15,13,0.35)" : "none",
+              border: displayedHero ? "1px solid rgba(255,255,255,0.30)" : "1px solid rgba(14,15,13,0.10)",
+              color: displayedHero ? "#FFFFFF" : "#0E0F0D",
+              textShadow: displayedHero ? "0 1px 6px rgba(14,15,13,0.35)" : "none",
             }}
           >
             See the plan
@@ -797,7 +799,7 @@ function BriefStrip({
           <h1
             className="display text-[42px] sm:text-[54px] lg:text-[68px] leading-[0.96] tracking-[-0.018em] text-balance"
             style={{
-              color: heroImage ? "#FFFFFF" : "#1A1A18",
+              color: displayedHero ? "#FFFFFF" : "#1A1A18",
               fontWeight: 400,
               textShadow: heroImage
                 ? "0 2px 24px rgba(14,15,13,0.45), 0 1px 4px rgba(14,15,13,0.35)"
@@ -808,7 +810,7 @@ function BriefStrip({
             <span
               className="italic mx-3"
               style={{
-                color: heroImage ? "rgba(255,255,255,0.78)" : "var(--sage-deep)",
+                color: displayedHero ? "rgba(255,255,255,0.78)" : "var(--sage-deep)",
               }}
             >
               &
@@ -818,16 +820,16 @@ function BriefStrip({
           <p
             className="text-[10.5px] uppercase tracking-[0.26em] font-mono mt-4 leading-relaxed flex items-center gap-3 flex-wrap"
             style={{
-              color: heroImage ? "rgba(255,255,255,0.88)" : "rgba(14,15,13,0.55)",
-              textShadow: heroImage ? "0 1px 8px rgba(14,15,13,0.50)" : "none",
+              color: displayedHero ? "rgba(255,255,255,0.88)" : "rgba(14,15,13,0.55)",
+              textShadow: displayedHero ? "0 1px 8px rgba(14,15,13,0.50)" : "none",
             }}
           >
             <span>{formattedDate}</span>
-            <span style={{ color: heroImage ? "rgba(255,255,255,0.45)" : "rgba(14,15,13,0.25)" }}>·</span>
+            <span style={{ color: displayedHero ? "rgba(255,255,255,0.45)" : "rgba(14,15,13,0.25)" }}>·</span>
             {venue ? (
               <>
                 <span>{venue.name}</span>
-                <span style={{ color: heroImage ? "rgba(255,255,255,0.45)" : "rgba(14,15,13,0.25)" }}>·</span>
+                <span style={{ color: displayedHero ? "rgba(255,255,255,0.45)" : "rgba(14,15,13,0.25)" }}>·</span>
                 <span style={{ fontStyle: "italic", textTransform: "none", letterSpacing: 0 }}>
                   {venue.city}
                 </span>
@@ -835,7 +837,7 @@ function BriefStrip({
             ) : (
               <span>{brief.region}</span>
             )}
-            <span style={{ color: heroImage ? "rgba(255,255,255,0.45)" : "rgba(14,15,13,0.25)" }}>·</span>
+            <span style={{ color: displayedHero ? "rgba(255,255,255,0.45)" : "rgba(14,15,13,0.25)" }}>·</span>
             <span>{brief.guestCount} guests</span>
           </p>
         </div>
@@ -862,8 +864,8 @@ function BriefStrip({
               <span
                 className="text-[10px] uppercase tracking-[0.26em] font-mono"
                 style={{
-                  color: heroImage ? "rgba(255,255,255,0.78)" : "var(--sage-deep)",
-                  textShadow: heroImage ? "0 1px 6px rgba(14,15,13,0.40)" : "none",
+                  color: displayedHero ? "rgba(255,255,255,0.78)" : "var(--sage-deep)",
+                  textShadow: displayedHero ? "0 1px 6px rgba(14,15,13,0.40)" : "none",
                 }}
               >
                 {days < 0 ? "days ago" : days === 0 ? "today" : days === 1 ? "day" : "days"}
@@ -871,8 +873,8 @@ function BriefStrip({
               <span
                 className="text-[10.5px] italic"
                 style={{
-                  color: heroImage ? "rgba(255,255,255,0.62)" : "rgba(14,15,13,0.40)",
-                  textShadow: heroImage ? "0 1px 6px rgba(14,15,13,0.40)" : "none",
+                  color: displayedHero ? "rgba(255,255,255,0.62)" : "rgba(14,15,13,0.40)",
+                  textShadow: displayedHero ? "0 1px 6px rgba(14,15,13,0.40)" : "none",
                 }}
               >
                 {PHASE_TAGLINE[phase]}

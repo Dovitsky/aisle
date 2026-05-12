@@ -53,14 +53,14 @@ export async function POST(req: NextRequest) {
   if (lock) {
     await appendApproval({
       agent: "Maestro", phase: "discovery",
-      title: "Approve this brief and let me start working on Phase 3?",
-      rationale: `Brief locked: ${data.organizerName} & ${data.partnerName}, ~${data.guestCount} guests, ${data.region}, ${data.dateWindow}, $${data.budgetUsd.toLocaleString()} envelope. Cultural: ${data.cultural ?? "secular"}. Formality: ${data.formalityTone ?? "modern"}.${data.destination ? " Destination wedding." : ""} On approval, Scout begins venue discovery and a first shortlist will appear within 2 hours.`,
+      title: `Your dossier is sealed — shall we start finding your venue?`,
+      rationale: `${data.organizerName} & ${data.partnerName}, ~${data.guestCount} guests, ${data.region}, ${data.dateWindow}, $${data.budgetUsd.toLocaleString()} envelope. Cultural: ${data.cultural ?? "secular"}. Formality: ${data.formalityTone ?? "modern"}.${data.destination ? " Destination wedding." : ""} On your approval, Scout begins venue discovery and your first shortlist will appear within a couple of hours.`,
       risk: "low",
-      action: { kind: "lock_brief", summary: `Brief locked for ${data.organizerName} & ${data.partnerName}` },
+      action: { kind: "lock_brief", summary: `${data.organizerName} & ${data.partnerName} — ${data.region}, ${data.dateWindow}` },
     });
     await appendChat({
       role: "agent", agent: "Maestro",
-      content: `Brief locked. I've put a card in your queue to greenlight Phase 2 work. Once you approve, Scout will begin venue discovery in the background.`,
+      content: `Sealed. I've put a card in your queue so you can greenlight the venue hunt. The moment you approve, Scout starts in the background.`,
     });
   }
 
