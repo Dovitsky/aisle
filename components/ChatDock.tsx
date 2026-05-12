@@ -141,16 +141,8 @@ export function ChatDock() {
     void send(replyText);
   };
 
-  // When any other surface calls sendChatMessage(), pendingChatPrompt fills
-  // in. Auto-open the dock and fire the message, then clear so it doesn't
-  // re-fire on the next render.
-  useEffect(() => {
-    if (!pendingChatPrompt) return;
-    if (sending) return;
-    setOpen(true);
-    void send(pendingChatPrompt);
-    clearPendingChatPrompt();
-  }, [pendingChatPrompt, sending, send, setOpen, clearPendingChatPrompt]);
+  // Duplicate pendingChatPrompt effect removed. the effect at the top
+  // of this component already handles cross-surface chat triggers.
 
   if (!state) return null;
   const me = maestroName(state);
