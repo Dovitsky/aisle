@@ -606,6 +606,12 @@ export interface SpeechDraft {
 
 // ---- Registry ----------------------------------------------------------
 
+export interface RegistryContribution {
+  name: string;
+  amountUsd: number;
+  at: string;
+}
+
 export interface RegistryItem {
   id: string;
   item: string;
@@ -613,8 +619,21 @@ export interface RegistryItem {
   priceUsd: number;
   category: "kitchen" | "bedroom" | "bath" | "dining" | "experience" | "cash_fund" | "charity" | "other";
   url?: string;
+  imageUrl?: string;
   status: "wanted" | "purchased";
   purchasedBy?: string;
+  // Quantity support. lets the same physical item (8 of the dinner plates) be
+  // partially claimed by different guests.
+  quantityNeeded?: number;     // defaults to 1
+  quantityFulfilled?: number;  // defaults to 0
+  // Group gifting + cash funds. when groupGifting is true, guests can
+  // contribute partial amounts toward the fundTarget. cash_fund category
+  // items default to group gifting.
+  groupGifting?: boolean;
+  fundTargetUsd?: number;
+  fundRaisedUsd?: number;
+  fundDescription?: string;
+  groupContributions?: RegistryContribution[];
 }
 
 // ---- Honeymoon (gated) -------------------------------------------------
