@@ -143,8 +143,8 @@ export function StarterBriefs() {
               </div>
 
               <div className="mt-5 flex items-center justify-between">
-                <span className="text-[10.5px] uppercase tracking-[0.24em] text-ink group-hover:text-sage-500 transition-colors duration-500">
-                  {busy === s.id ? "Loading…" : "Begin this story"}
+                <span className="text-[13px] text-ink group-hover:text-sage-500 transition-colors duration-500">
+                  {busy === s.id ? "Loading…" : "Start this story"}
                 </span>
                 <span
                   className="text-[14px] text-ink-300 group-hover:text-sage-500 transition-all duration-500 group-hover:translate-x-1"

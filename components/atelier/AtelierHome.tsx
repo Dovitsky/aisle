@@ -60,7 +60,7 @@ export function AtelierHome() {
               className="display text-[24px] text-ink leading-tight"
               style={{ fontWeight: 400 }}
             >
-              {hasAnything ? "On the shortlist" : "Begin a concept"}
+              {hasAnything ? "On the shortlist" : "Start a concept"}
             </h2>
             <Link
               href="/atelier/dress"
@@ -262,9 +262,9 @@ function EmptyConceptRail({ hasAny }: { hasAny: boolean }) {
       </p>
       <Link
         href="/atelier/dress"
-        className="cta-sage inline-flex items-center gap-2 mt-6 rounded-full px-5 py-2 text-[11.5px] uppercase tracking-[0.22em] font-mono transition-all"
+        className="cta-sage inline-flex items-center gap-2 mt-6 rounded-full px-5 py-2 text-[13.5px] font-sans transition-all"
       >
-        Begin <span aria-hidden>→</span>
+        Go <span aria-hidden>→</span>
       </Link>
     </div>
   );

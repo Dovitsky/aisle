@@ -51,8 +51,13 @@ const config: Config = {
       },
       fontFamily: {
         display: ['"Cormorant Garamond"', "Garamond", "Georgia", "serif"],
-        sans: ['"Inter"', "system-ui", "-apple-system", "Segoe UI", "Helvetica", "Arial", "sans-serif"],
-        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
+        // Clean sans across the site. No Inter (its mono caps tracking was
+        // the "AI startup" giveaway). System sans first, then Helvetica.
+        sans: ["-apple-system", "BlinkMacSystemFont", '"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
+        // `font-mono` is kept as a Tailwind class for legacy refs, but it
+        // now resolves to the same sans stack — anywhere that used to read
+        // as monospace caps now reads as the sane Helvetica register.
+        mono: ["-apple-system", "BlinkMacSystemFont", '"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
       },
       maxWidth: {
         phone: "440px",

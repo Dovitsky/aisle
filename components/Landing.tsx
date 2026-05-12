@@ -38,7 +38,10 @@ const CTA_BG = `linear-gradient(135deg, ${SAGE} 0%, ${SAGE_DEEP} 100%)`;
 const CTA_BG_HOVER = `linear-gradient(135deg, ${SAGE_DEEP} 0%, ${SAGE_DARK} 100%)`;
 
 const DISPLAY = '"Cormorant Garamond","Cormorant",Georgia,serif';
-const MONO = '"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace';
+// Helvetica-first system stack. The mono caps "AI startup" look came
+// from JetBrains Mono — gone. This constant kept its old name so the
+// many inline `fontFamily: MONO` refs in this file keep working.
+const MONO = '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif';
 
 export function Landing() {
   return (
@@ -266,14 +269,13 @@ function Header() {
           <Link
             href="#begin"
             style={{
-              padding: "10px 20px",
+              padding: "10px 22px",
               borderRadius: 999,
               background: CTA_BG,
               color: IVORY,
               fontFamily: MONO,
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
+              fontSize: 14,
+              letterSpacing: "0.01em",
               fontWeight: 500,
               textDecoration: "none",
               transition: "background 200ms, transform 200ms",
@@ -287,7 +289,7 @@ function Header() {
               e.currentTarget.style.background = CTA_BG;
             }}
           >
-            Begin
+            Go
           </Link>
         </nav>
       </div>
@@ -774,25 +776,24 @@ function HeroAction() {
         <button
           type="submit"
           disabled={busy}
-          aria-label="Begin"
+          aria-label="Go"
           style={{
             position: "relative",
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
             gap: 10,
-            padding: "0 26px",
+            padding: "0 30px",
             background: CTA_BG,
             color: IVORY,
             fontFamily: MONO,
-            fontSize: 11,
-            letterSpacing: "0.26em",
-            textTransform: "uppercase",
-            fontWeight: 600,
+            fontSize: 16,
+            letterSpacing: "0",
+            fontWeight: 500,
             border: "none",
             borderRadius: 999,
             cursor: busy ? "wait" : "pointer",
-            // Stay sage even when the input is empty — the previous 0.5
+            // Stay sage even when the input is empty. the previous 0.5
             // opacity made the button read as a gray "disabled" blob.
             opacity: busy ? 0.6 : !draft.trim() ? 0.82 : 1,
             transition:
@@ -819,7 +820,7 @@ function HeroAction() {
             </>
           ) : (
             <>
-              <span>Begin</span>
+              <span>Go</span>
               <svg
                 width="13"
                 height="13"
