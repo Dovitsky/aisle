@@ -1,4 +1,4 @@
-// Starter brief templates — taste-level presets a couple can apply with one
+// Starter brief templates. taste-level presets a couple can apply with one
 // click to skip the cold start. All seven required brief fields are filled
 // EXCEPT the names; Maestro asks for those after the template lands.
 
@@ -109,7 +109,7 @@ export const STARTER_BRIEFS: StarterBrief[] = [
       region: "Charleston, SC",
       guestCount: 140,
       budgetUsd: 110000,
-      vibe: "Spanish moss and pastel blooms. Antique-feeling china. Southern elegance — black-tie but warm. Hand-written calligraphy on everything.",
+      vibe: "Spanish moss and pastel blooms. Antique-feeling china. Southern elegance. black-tie but warm. Hand-written calligraphy on everything.",
       plannerStatus: "have_one",
       cultural: "secular",
       formalityTone: "formal",
@@ -129,7 +129,7 @@ export const STARTER_BRIEFS: StarterBrief[] = [
       region: "New York, NY",
       guestCount: 14,
       budgetUsd: 25000,
-      vibe: "City Hall ceremony at noon, two witnesses. Best meal of the year that night — private dining room, family-style, one toast each. Pavilion at-home brunch the next morning.",
+      vibe: "City Hall ceremony at noon, two witnesses. Best meal of the year that night. private dining room, family-style, one toast each. Pavilion at-home brunch the next morning.",
       plannerStatus: "none",
       cultural: "civil",
       formalityTone: "modern",

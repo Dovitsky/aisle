@@ -53,7 +53,7 @@ export const VIBES: Vibe[] = [
     name: "Greenhouse",
     image: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=900&q=80",
     boardCount: 176,
-    description: "A converted glasshouse: hanging ivy, long taper candles, deep green and ivory palette. Ferns, asparagus fern, smilax — botanically literal.",
+    description: "A converted glasshouse: hanging ivy, long taper candles, deep green and ivory palette. Ferns, asparagus fern, smilax. botanically literal.",
     palette: ["#F8F6E9", "#C8D2BB", "#5B6748", "#1F3025", "#EFE8D2"],
     signaturePieces: ["Hanging ivy + smilax", "Wooden farmhouse tables", "Brass candelabras", "Glass ceiling at dusk"],
   },

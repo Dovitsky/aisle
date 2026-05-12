@@ -1,12 +1,12 @@
 // Render a hero image for one or all design assets.
 //
 // Body (one of):
-//   { op: "render_one", designId }     — render hero for a single design
-//   { op: "render_all", kind?: string } — render hero for every design (or just one kind)
+//   { op: "render_one", designId }    . render hero for a single design
+//   { op: "render_all", kind?: string }. render hero for every design (or just one kind)
 //
 // Uses lib/imagegen.ts which calls OpenAI gpt-image-1 when OPENAI_API_KEY is
 // set, otherwise returns sage-pale placeholder SVGs. Either way the action
-// succeeds and the design.heroImage is populated — the UI doesn't need to
+// succeeds and the design.heroImage is populated. the UI doesn't need to
 // know which mode is active.
 
 import { NextRequest, NextResponse } from "next/server";
@@ -28,18 +28,18 @@ function promptFor(d: DesignAsset): string {
   const palette = (d.swatches ?? []).slice(0, 4).join(", ");
   const refs = (d.refs ?? []).slice(0, 4).join(", ");
   if (d.kind === "moodboard") {
-    return `An editorial wedding mood — ${d.title}. ${d.description}${palette ? ` Palette: ${palette}.` : ""}${refs ? ` Includes ${refs}.` : ""} Wide reception establishing shot, no people, golden-hour natural light.`;
+    return `An editorial wedding mood. ${d.title}. ${d.description}${palette ? ` Palette: ${palette}.` : ""}${refs ? ` Includes ${refs}.` : ""} Wide reception establishing shot, no people, golden-hour natural light.`;
   }
   if (d.kind === "dress_concept") {
-    return `An editorial wedding dress — ${d.title}. ${d.description}. Photographed on a dress form against a soft cream studio backdrop, no model, medium-format film, even diffused light.`;
+    return `An editorial wedding dress. ${d.title}. ${d.description}. Photographed on a dress form against a soft cream studio backdrop, no model, medium-format film, even diffused light.`;
   }
   if (d.kind === "floral_concept") {
-    return `An editorial wedding floral arrangement — ${d.title}. ${d.description}${palette ? ` Palette: ${palette}.` : ""} Single arrangement on a linen table, no people, soft golden light.`;
+    return `An editorial wedding floral arrangement. ${d.title}. ${d.description}${palette ? ` Palette: ${palette}.` : ""} Single arrangement on a linen table, no people, soft golden light.`;
   }
   if (d.kind === "stationery_proof") {
-    return `An editorial wedding stationery flat-lay — ${d.title}. ${d.description}. Photographed flat on a linen surface, no people, soft directional light.`;
+    return `An editorial wedding stationery flat-lay. ${d.title}. ${d.description}. Photographed flat on a linen surface, no people, soft directional light.`;
   }
-  return `An editorial wedding moment — ${d.title}. ${d.description}${palette ? ` Palette: ${palette}.` : ""}`;
+  return `An editorial wedding moment. ${d.title}. ${d.description}${palette ? ` Palette: ${palette}.` : ""}`;
 }
 
 export async function POST(req: NextRequest) {
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Nothing to render." }, { status: 400 });
   }
 
-  // Daily generation cap (shared with Mood Board) — never bypassable from
+  // Daily generation cap (shared with Mood Board). never bypassable from
   // the client.
   const cap = await bumpGenerationCount(targets.length);
   if (!cap.allowed) {

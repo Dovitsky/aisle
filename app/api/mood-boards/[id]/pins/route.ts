@@ -1,4 +1,4 @@
-// Pins on a mood board — list + add.
+// Pins on a mood board. list + add.
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";

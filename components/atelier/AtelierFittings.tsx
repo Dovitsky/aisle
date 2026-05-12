@@ -1,6 +1,6 @@
 "use client";
 
-// /atelier/fittings — three states:
+// /atelier/fittings. three states:
 //   1. No "the_one" yet → placeholder
 //   2. "the_one" set, no atelier selected → ranked atelier shortlist
 //   3. Atelier selected → fitting plan + tech pack export
@@ -155,7 +155,7 @@ function EmptyFittings() {
       </p>
       <p className="text-[13px] text-ink-300 mt-3 leading-relaxed">
         Once you mark a dress concept as the one, the atelier match comes
-        alive — a shortlist of houses that can build exactly this dress,
+        alive. a shortlist of houses that can build exactly this dress,
         with a fitting plan back from the wedding date.
       </p>
       <Link
@@ -194,7 +194,7 @@ function AtelierMatchList({
   }
   if (ateliers.length === 0) {
     return (
-      <p className="text-[14px] text-ink-300">No matches yet — try again.</p>
+      <p className="text-[14px] text-ink-300">No matches yet. try again.</p>
     );
   }
   return (

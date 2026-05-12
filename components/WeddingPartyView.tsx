@@ -1,7 +1,7 @@
 "use client";
 
 // Wedding party. Maid of honor, best man, bridesmaids, groomsmen, officiant,
-// ring bearer, ushers, witnesses — the people standing closest to you on
+// ring bearer, ushers, witnesses. the people standing closest to you on
 // the day. Track attire size + color, gift ideas, and whether attire is
 // ordered. Two-column split by side so the symmetry stays clean.
 //
@@ -119,7 +119,7 @@ export function WeddingPartyView() {
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           Maid of honor, best man, bridesmaids, groomsmen, officiant, ring bearer, ushers,
-          witnesses — anyone with a role on the day. Track sizes, colors, gift ideas,
+          witnesses. anyone with a role on the day. Track sizes, colors, gift ideas,
           and what&rsquo;s been ordered.
         </p>
       </header>
@@ -185,7 +185,7 @@ export function WeddingPartyView() {
           <div className="rounded-card border hairline bg-white/55 px-7 py-12 max-w-xl">
             <p className="display text-[26px] text-ink leading-tight">No one here yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Add your maid of honor, best man, bridesmaids, groomsmen, officiant —
+              Add your maid of honor, best man, bridesmaids, groomsmen, officiant.
               anyone with a role on the day. Sizes and gift ideas can come later.
             </p>
           </div>

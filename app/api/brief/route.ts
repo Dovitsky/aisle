@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
   if (lock) {
     await appendApproval({
       agent: "Maestro", phase: "discovery",
-      title: `Your dossier is sealed — shall we start finding your venue?`,
+      title: `Your dossier is sealed. shall we start finding your venue?`,
       rationale: `${data.organizerName} & ${data.partnerName}, ~${data.guestCount} guests, ${data.region}, ${data.dateWindow}, $${data.budgetUsd.toLocaleString()} envelope. Cultural: ${data.cultural ?? "secular"}. Formality: ${data.formalityTone ?? "modern"}.${data.destination ? " Destination wedding." : ""} On your approval, Scout begins venue discovery and your first shortlist will appear within a couple of hours.`,
       risk: "low",
-      action: { kind: "lock_brief", summary: `${data.organizerName} & ${data.partnerName} — ${data.region}, ${data.dateWindow}` },
+      action: { kind: "lock_brief", summary: `${data.organizerName} & ${data.partnerName}. ${data.region}, ${data.dateWindow}` },
     });
     await appendChat({
       role: "agent", agent: "Maestro",

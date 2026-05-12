@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Cormorant Garamond is the only typeface we load over the wire — the
+/* Cormorant Garamond is the only typeface we load over the wire. the
    editorial display face. Everything else uses the system sans stack
    (-apple-system → Helvetica Neue → Helvetica) so the app reads clean
    and simple, not techy-startup. Inter and JetBrains Mono are gone. */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
 :root {
-  /* Paper shifted cooler — less tan, more neutral white. The warm cream
+  /* Paper shifted cooler. less tan, more neutral white. The warm cream
      felt SaaS-y; the cooler tone reads luxury concierge against sage. */
   --paper: #FCFCFB;
   --paper-200: #F4F4F2;
@@ -71,7 +71,7 @@ html, body {
   .chip-on { @apply bg-ink text-paper-50 border-ink; }
   .chip-off { @apply border-ink/15 text-ink-300 hover:border-ink/30 hover:text-ink-400 bg-white/40; }
 
-  /* Dark sidebar — deep blackened-sage with subtle gradient + film noise */
+  /* Dark sidebar. deep blackened-sage with subtle gradient + film noise */
   .sidebar-dark {
     background:
       radial-gradient(80% 60% at 0% 0%, rgba(79,93,68,0.30), transparent 60%),
@@ -117,7 +117,7 @@ html, body {
     pointer-events: none;
   }
 
-  /* Watermark — giant outlined character behind a hero. Decorative. */
+  /* Watermark. giant outlined character behind a hero. Decorative. */
   .watermark {
     position: absolute;
     pointer-events: none;
@@ -138,7 +138,7 @@ html, body {
     -webkit-backdrop-filter: saturate(180%) blur(20px);
   }
 
-  /* Liquid-glass for the floating dock — layered highlights, sage rim, deep shadow */
+  /* Liquid-glass for the floating dock. layered highlights, sage rim, deep shadow */
   .glass-strong {
     background:
       linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(250,250,247,0.62) 100%);
@@ -153,7 +153,7 @@ html, body {
       0 12px 32px -16px rgba(79, 93, 68, 0.22);
   }
 
-  /* Iridescent sage rim — gentle hue shift around an element */
+  /* Iridescent sage rim. gentle hue shift around an element */
   .iris-ring {
     position: relative;
   }
@@ -181,7 +181,7 @@ html, body {
     animation: iris 14s linear infinite;
   }
 
-  /* Hairline gradient — top of cards, subtle */
+  /* Hairline gradient. top of cards, subtle */
   .hairline-top {
     background-image: linear-gradient(
       90deg,
@@ -268,7 +268,7 @@ html, body {
     cursor: not-allowed;
   }
 
-  /* Cursor spotlight on cards — uses CSS variables set by JS on mousemove */
+  /* Cursor spotlight on cards. uses CSS variables set by JS on mousemove */
   .spotlight {
     position: relative;
     isolation: isolate;
@@ -517,7 +517,7 @@ main { padding-bottom: 8rem; }
   main { padding-bottom: 13rem !important; }
 }
 
-/* Sticky CTA row — pinned to the bottom of the viewport on mobile so
+/* Sticky CTA row. pinned to the bottom of the viewport on mobile so
    "Save draft" / "Seal the dossier" are always one tap away. The form
    content scrolls behind it; a cream backdrop + hairline top border
    make it read as an intentional toolbar, not floating buttons. */
@@ -565,7 +565,7 @@ main { padding-bottom: 8rem; }
   .animate-toast-rise { animation: none; }
 }
 
-/* Ambient ticker crossfade — used by <AmbientTicker> when rotating items. */
+/* Ambient ticker crossfade. used by <AmbientTicker> when rotating items. */
 @keyframes ticker-fade {
   0%   { opacity: 0; transform: translateY(2px); filter: blur(0.5px); }
   35%  { opacity: 1; transform: translateY(0);   filter: blur(0); }
@@ -580,7 +580,7 @@ main { padding-bottom: 8rem; }
 }
 
 /* =====================================================================
-   Editorial Obsidian — landing-page surface system (iter-26)
+   Editorial Obsidian. landing-page surface system (iter-26)
    Pure void + sage halo + liquid glass. Used where a luxury concierge
    should command full visual gravity (the marketing landing primarily).
    ===================================================================== */
@@ -594,7 +594,7 @@ main { padding-bottom: 8rem; }
     color: #F4F2EC;
   }
 
-  /* Fine grain layer — apply with .obsidian-grain on a pseudo-element wrapper */
+  /* Fine grain layer. apply with .obsidian-grain on a pseudo-element wrapper */
   .obsidian::after {
     content: "";
     position: absolute;
@@ -631,7 +631,7 @@ main { padding-bottom: 8rem; }
   .text-paper-faint { color: rgba(244,242,236,0.46); }
   .text-paper-hush  { color: rgba(244,242,236,0.30); }
 
-  /* Mono small caps — used on dark surfaces */
+  /* Mono small caps. used on dark surfaces */
   .mono-caps {
     font-family: -apple-system, "Helvetica Neue", Helvetica, sans-serif;
     font-weight: 500;
@@ -640,7 +640,7 @@ main { padding-bottom: 8rem; }
     font-size: 10.5px;
   }
 
-  /* Decisive primary CTA on dark — white-fill pill with sage shimmer */
+  /* Decisive primary CTA on dark. white-fill pill with sage shimmer */
   .btn-luxe {
     position: relative;
     display: inline-flex;
@@ -694,7 +694,7 @@ main { padding-bottom: 8rem; }
     to { transform: rotate(360deg); }
   }
 
-  /* Ghost button — subtle border on dark */
+  /* Ghost button. subtle border on dark */
   .btn-ghost-luxe {
     display: inline-flex;
     align-items: center;
@@ -719,7 +719,7 @@ main { padding-bottom: 8rem; }
     color: #F4F2EC;
   }
 
-  /* Glass input pill — same depth as cards */
+  /* Glass input pill. same depth as cards */
   .glass-input-pill {
     background: rgba(255,255,255,0.06);
     backdrop-filter: saturate(160%) blur(22px);
@@ -738,7 +738,7 @@ main { padding-bottom: 8rem; }
       0 16px 40px -20px rgba(0,0,0,0.45);
   }
 
-  /* Sage halo orb — single decorative atmosphere element */
+  /* Sage halo orb. single decorative atmosphere element */
   .sage-halo {
     position: absolute;
     pointer-events: none;
@@ -768,7 +768,7 @@ main { padding-bottom: 8rem; }
   }
 }
 
-/* Page-load orchestration — staggered reveal */
+/* Page-load orchestration. staggered reveal */
 @keyframes obs-rise {
   from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
   to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
@@ -786,7 +786,7 @@ main { padding-bottom: 8rem; }
 }
 
 /* =====================================================================
-   Maestro chat — futuristic obsidian command surface (iter-31)
+   Maestro chat. futuristic obsidian command surface (iter-31)
    Replaces the flat white panel with a distinct, breathing dark
    surface that signals "intelligent agent at work."
    ===================================================================== */
@@ -798,7 +798,7 @@ main { padding-bottom: 8rem; }
       radial-gradient(ellipse 60% 40% at 50% 100%, rgba(79,93,68,0.20),  transparent 60%),
       linear-gradient(180deg, #0E110F 0%, #07090A 70%, #050706 100%);
     color: #F4F2EC;
-    /* Single soft sage glow on the left edge — no hard inset, no double rim */
+    /* Single soft sage glow on the left edge. no hard inset, no double rim */
     box-shadow: -28px 0 60px -24px rgba(168,181,160,0.32);
     position: relative;
   }
@@ -817,7 +817,7 @@ main { padding-bottom: 8rem; }
     z-index: 0;
   }
 
-  /* Animated horizon line — runs across the header to signal active intelligence */
+  /* Animated horizon line. runs across the header to signal active intelligence */
   .chat-horizon {
     position: relative;
     height: 1px;
@@ -843,7 +843,7 @@ main { padding-bottom: 8rem; }
     100% { transform: translateX(100%); }
   }
 
-  /* Agent message bubble — frosted glass on dark */
+  /* Agent message bubble. frosted glass on dark */
   .chat-bubble-agent {
     background:
       linear-gradient(135deg,
@@ -859,7 +859,7 @@ main { padding-bottom: 8rem; }
     color: #F4F2EC;
   }
 
-  /* User message bubble — sage gradient pill, subtle inner highlight */
+  /* User message bubble. sage gradient pill, subtle inner highlight */
   .chat-bubble-user {
     background:
       linear-gradient(135deg, #6E8068 0%, #4F5D44 100%);
@@ -886,7 +886,7 @@ main { padding-bottom: 8rem; }
     color: #F4F2EC;
   }
 
-  /* Command-bar input footer — no hard border line; instead a soft sage
+  /* Command-bar input footer. no hard border line; instead a soft sage
      gradient hairline that fades to nothing at the edges. */
   .chat-cmd-bar {
     position: relative;
@@ -907,7 +907,7 @@ main { padding-bottom: 8rem; }
     pointer-events: none;
   }
 
-  /* Input field — floats on the dark surface with no chrome.
+  /* Input field. floats on the dark surface with no chrome.
      Bright caret, bright placeholder, real readable text. */
   .chat-input-field {
     color: #F8F6F1;
@@ -921,7 +921,7 @@ main { padding-bottom: 8rem; }
     color: rgba(244,242,236,0.28);
   }
 
-  /* Send orb — sage-glowing button */
+  /* Send orb. sage-glowing button */
   .chat-send-orb {
     position: relative;
     width: 38px;
@@ -949,7 +949,7 @@ main { padding-bottom: 8rem; }
     transform: none;
   }
 
-  /* Subtle constellation overlay — minimal scattered dots */
+  /* Subtle constellation overlay. minimal scattered dots */
   .chat-stars {
     position: absolute;
     inset: 0;
@@ -970,7 +970,7 @@ main { padding-bottom: 8rem; }
 }
 
 /* =====================================================================
-   Maestro chat — Blackened Velvet & Champagne (iter-33)
+   Maestro chat. Blackened Velvet & Champagne (iter-33)
    Warmer dark, botanical motif, ornamental flourishes. Reads as
    "wedding intelligence" rather than generic AI chat panel.
    ===================================================================== */
@@ -987,7 +987,7 @@ main { padding-bottom: 8rem; }
     position: relative;
   }
 
-  /* Botanical eucalyptus watermark — drawn via SVG data URL, 4% opacity,
+  /* Botanical eucalyptus watermark. drawn via SVG data URL, 4% opacity,
      tiled subtly across the panel so the chat feels wedding-coded
      without ever shouting. */
   .chat-velvet::before {
@@ -1019,7 +1019,7 @@ main { padding-bottom: 8rem; }
     z-index: 0;
   }
 
-  /* Animated orbital intelligence indicator — a sage core with a
+  /* Animated orbital intelligence indicator. a sage core with a
      champagne ring orbiting it. Sits next to the agent name in the
      header. */
   .chat-orbit {
@@ -1065,7 +1065,7 @@ main { padding-bottom: 8rem; }
     50%      { transform: scale(0.82); opacity: 0.78; }
   }
 
-  /* Champagne send orb — replaces the sage one for a warmer wedding cue */
+  /* Champagne send orb. replaces the sage one for a warmer wedding cue */
   .chat-send-champagne {
     position: relative;
     width: 40px;
@@ -1096,7 +1096,7 @@ main { padding-bottom: 8rem; }
     transform: none;
   }
 
-  /* Drifting petals/motes — slow vertical drift so the panel feels alive */
+  /* Drifting petals/motes. slow vertical drift so the panel feels alive */
   .chat-motes {
     position: absolute;
     inset: 0;
@@ -1111,7 +1111,7 @@ main { padding-bottom: 8rem; }
     filter: blur(0.5px);
   }
 
-  /* Ornamental flourish — sage-and-champagne hairline divider used
+  /* Ornamental flourish. sage-and-champagne hairline divider used
      between message groups */
   .chat-flourish {
     display: flex;
@@ -1180,7 +1180,7 @@ main { padding-bottom: 8rem; }
     display: none;
   }
 
-  /* Agent message. No bubble — plain text on the white panel.
+  /* Agent message. No bubble. plain text on the white panel.
      The agent label above the message identifies the speaker. */
   .chat-bubble-agent-ivory {
     background: transparent;

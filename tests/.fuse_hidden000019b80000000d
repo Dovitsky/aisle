@@ -56,7 +56,7 @@ async function main() {
     if (!state.brief?.partnerName) throw new Error("missing partnerName");
   });
 
-  // --- DecisionsBlock. groupByPhase ---
+  // --- DecisionsBlock — groupByPhase ---
   const PHASE_ORDER = ["foundation","discovery","design","logistics","guest_management","personal_prep","week_of","wedding_day","post_event"] as const;
   const PHASE_LABEL = Object.fromEntries(PHASES.map((p) => [p.id, p.label]));
   asserting("decisions: every pending phase resolves to a label", () => {
@@ -67,7 +67,7 @@ async function main() {
   });
   ok(state.approvals.filter((a) => a.status === "pending").length >= 1, "decisions: at least one pending");
 
-  // --- ActivityFeed. merge ledger + resolved approvals ---
+  // --- ActivityFeed — merge ledger + resolved approvals ---
   asserting("activity: every ledger entry has an iso `at`", () => {
     for (const e of state.ledger) {
       if (!e.at || isNaN(new Date(e.at).getTime())) throw new Error(`bad ledger.at: ${e.at}`);
@@ -93,7 +93,7 @@ async function main() {
     if (paid > committed) throw new Error("paid > committed (invariant violated)");
   });
 
-  // --- VendorGlance. for each top category ---
+  // --- VendorGlance — for each top category ---
   const cats = ["Venue","Photographer","Caterer","Florist","Band"];
   for (const c of cats) {
     asserting(`vendor glance: ${c}`, () => {
@@ -111,7 +111,7 @@ async function main() {
     });
   }
 
-  // --- UpcomingTasks. currentMonthsOut + every isDone runs without throwing ---
+  // --- UpcomingTasks — currentMonthsOut + every isDone runs without throwing ---
   asserting("upcoming: currentMonthsOut returns a number", () => {
     const m = currentMonthsOut(state);
     if (typeof m !== "number" || isNaN(m)) throw new Error(`invalid: ${m}`);
@@ -125,7 +125,7 @@ async function main() {
     if (crashed) throw new Error(crashed);
   });
 
-  // --- Toast detail composer. every action.kind branch in the demo's pending approvals ---
+  // --- Toast detail composer — every action.kind branch in the demo's pending approvals ---
   asserting("toast: every demo approval action.kind composes a detail string", () => {
     for (const c of state.approvals) {
       const detail = composeApprovalDetail(c);
@@ -136,7 +136,7 @@ async function main() {
   console.log("\nDashboard render simulation complete. Every read path against the demo state runs cleanly.");
 }
 
-// Mirror of components/ApprovalCard.tsx::toastDetailForAction. kept in
+// Mirror of components/ApprovalCard.tsx::toastDetailForAction — kept in
 // sync intentionally; if it falls behind, the test catches the drift.
 function composeApprovalDetail(card: ApprovalCard): string {
   const a = card.action;
@@ -145,13 +145,13 @@ function composeApprovalDetail(card: ApprovalCard): string {
     case "schedule_payment":      return `$${a.amountUsd.toLocaleString()} scheduled to ${a.vendor} for ${a.dueDate}.`;
     case "sign_contract":         return `Contract signed with ${a.vendor}.`;
     case "publish_design":        return `${a.title} locked.`;
-    case "lock_seating":          return `Seating chart locked. ${a.guestCount} guests across ${a.tableCount} tables.`;
+    case "lock_seating":          return `Seating chart locked — ${a.guestCount} guests across ${a.tableCount} tables.`;
     case "send_save_the_date":    return `Going out to ${a.recipients} addresses.`;
     case "send_invitations":      return `Going out to ${a.recipients} addresses.`;
     case "lock_setlist":          return `Setlist locked with ${a.cueCount} cues.`;
     case "lock_ceremony":         return `Ceremony script locked with ${a.sectionCount} moments.`;
-    case "lock_cake":             return `Cake locked. ${a.tiers}-tier, ${a.servings} servings.`;
-    case "publish_website":       return `corsia.wedding/${a.slug} is live.`;
+    case "lock_cake":             return `Cake locked — ${a.tiers}-tier, ${a.servings} servings.`;
+    case "publish_website":       return `aisle.wedding/${a.slug} is live.`;
     case "file_marriage_license": return `Filing in ${a.county}, ${a.state}.`;
     case "send_caterer_brief":    return `Brief sent to ${a.vendor}; ${a.allergenCount} allergens flagged.`;
     case "block_hotel_rooms":     return `${a.rooms} rooms blocked at ${a.hotel} ($${a.nightlyRate}/night).`;

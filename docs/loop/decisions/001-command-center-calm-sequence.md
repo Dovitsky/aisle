@@ -10,8 +10,8 @@ Status: accepted
 `VendorReplies`, `AtAGlance`, `FlagsBlock`), but the `return` rendered only
 `BriefStrip` + `RecommendedForPhase`. The session log described a richer
 four-section layout; the actual page felt sparse. Today's home was also
-silently failing to surface the most urgent thing — pending approval cards
-and Watcher warn/critical flags — even though both were ready upstream.
+silently failing to surface the most urgent thing. pending approval cards
+and Watcher warn/critical flags. even though both were ready upstream.
 
 ## Decision
 

@@ -148,7 +148,7 @@ export async function persistDelta(
   // 2. Ledger (append-only).
   await appendNewLedger(supa, before.ledger, after.ledger, projectId);
 
-  // 3. Array-of-rows entities — diff + upsert/delete in parallel.
+  // 3. Array-of-rows entities. diff + upsert/delete in parallel.
   await Promise.all([
     diffSync<ChatMessage>(supa, "chat_messages", before.chat, after.chat, chatToRow, projectId),
     diffSync<ApprovalCard>(supa, "approvals", before.approvals, after.approvals, approvalToRow, projectId),

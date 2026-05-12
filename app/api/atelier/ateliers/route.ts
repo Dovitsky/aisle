@@ -1,5 +1,5 @@
-// GET /api/atelier/ateliers — returns the ranked atelier shortlist.
-// POST /api/atelier/ateliers — select an atelier.
+// GET /api/atelier/ateliers. returns the ranked atelier shortlist.
+// POST /api/atelier/ateliers. select an atelier.
 
 import { NextResponse } from "next/server";
 import { z } from "zod";

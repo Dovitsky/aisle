@@ -1,9 +1,9 @@
-// Watcher — continuous risk monitor (PRD §4.2).
+// Watcher. continuous risk monitor (PRD §4.2).
 // Looks at the current state and flags issues: budget overruns, missing
 // foundation entities late in the schedule, contracts unsigned for too long,
 // RSVP cadence falling behind.
 //
-// Watcher also *acts* — when a vendor goes stale, Watcher queues a polite
+// Watcher also *acts*. when a vendor goes stale, Watcher queues a polite
 // nudge email Approval Card via Outreach so the couple sees it and can
 // approve a follow-up.
 
@@ -68,7 +68,7 @@ export function watcherScan(state: ProjectState): WatcherFlag[] {
     }
   }
 
-  // Stale contacts — escalating cadence
+  // Stale contacts. escalating cadence
   const now = Date.now();
   for (const v of state.vendors) {
     if (v.status === "contacted" && v.lastTouchAt) {
@@ -103,7 +103,7 @@ export function watcherScan(state: ProjectState): WatcherFlag[] {
         flags.push({
           level: "info",
           topic: "Vendor",
-          message: `${v.name} quoted ${Math.round(days)} days ago — time to counter or commit.`,
+          message: `${v.name} quoted ${Math.round(days)} days ago. time to counter or commit.`,
           module: "vendors",
         });
       }
@@ -141,7 +141,7 @@ export function watcherScan(state: ProjectState): WatcherFlag[] {
 
 // --------------------------------------------------------------------
 // Acts: side-effecting follow-ups.
-// Distinct from `watcherScan` — these mutate state by queueing Approval Cards.
+// Distinct from `watcherScan`. these mutate state by queueing Approval Cards.
 // --------------------------------------------------------------------
 
 export interface WatcherActResult {
@@ -168,7 +168,7 @@ export async function watcherAct(state?: ProjectState): Promise<WatcherActResult
     if (v.status !== "contacted" || !v.lastTouchAt) continue;
     const days = (now - new Date(v.lastTouchAt).getTime()) / (1000 * 60 * 60 * 24);
     if (days < 7) continue;          // not stale yet
-    if (days > 21) continue;          // give up — Watcher will surface as a "consider passing" flag
+    if (days > 21) continue;          // give up. Watcher will surface as a "consider passing" flag
 
     // Skip if there's already a pending nudge for this vendor.
     const existing = s.approvals.find((a) =>
@@ -188,7 +188,7 @@ export async function watcherAct(state?: ProjectState): Promise<WatcherActResult
     try {
       body = await negotiatorDraft({ brief: s.brief, vendor: v, goal });
     } catch {
-      body = `Hi ${v.name},\n\nJust circling back on our note from ${Math.round(days)} days ago — we're still looking at ${s.brief.dateWindow} in ${s.brief.region} for roughly ${s.brief.guestCount} guests.\n\nIf this isn't a fit, no problem — just let us know so we can close the loop.\n\nThanks,\nCorsia on behalf of ${s.brief.organizerName} & ${s.brief.partnerName}`;
+      body = `Hi ${v.name},\n\nJust circling back on our note from ${Math.round(days)} days ago. we're still looking at ${s.brief.dateWindow} in ${s.brief.region} for roughly ${s.brief.guestCount} guests.\n\nIf this isn't a fit, no problem. just let us know so we can close the loop.\n\nThanks,\nCorsia on behalf of ${s.brief.organizerName} & ${s.brief.partnerName}`;
     }
 
     await appendApproval({
@@ -199,7 +199,7 @@ export async function watcherAct(state?: ProjectState): Promise<WatcherActResult
       action: {
         kind: "send_email",
         to: `${v.name} (via Corsia alias)`,
-        subject: `Re: Inquiry — ${s.brief.dateWindow}`,
+        subject: `Re: Inquiry. ${s.brief.dateWindow}`,
         body,
       },
     });
@@ -214,7 +214,7 @@ export async function watcherAct(state?: ProjectState): Promise<WatcherActResult
 // Chat-surfaced notices.
 //
 // Each emits an `agent: "Watcher"` chat message tagged with a marker like
-// `[watcher:budget-over]`. The marker gives us a 7-day idempotency window —
+// `[watcher:budget-over]`. The marker gives us a 7-day idempotency window.
 // we don't re-post the same flag if it's already in recent chat.
 // --------------------------------------------------------------------
 
@@ -250,7 +250,7 @@ async function maybePostBudgetOver(s: ProjectState, result: WatcherActResult) {
   const overBy = planSum - envelope;
   const overPct = Math.round((overBy / envelope) * 100);
 
-  // Top 3 lines by plan size — the realistic trim candidates.
+  // Top 3 lines by plan size. the realistic trim candidates.
   const top = [...s.budget]
     .sort((a, b) => b.planUsd - a.planUsd)
     .slice(0, 3)
@@ -269,14 +269,14 @@ async function maybePostMissingFoundation(s: ProjectState, result: WatcherActRes
   const days = daysUntilWedding(s);
   if (days === null) return;
   if (days < 30) return;            // too late to act on this notice
-  if (days > 240) return;           // 8+ months out — not yet urgent
+  if (days > 240) return;           // 8+ months out. not yet urgent
 
   const venue = s.vendors.find(
     (v) => v.category === "Venue" && (v.status === "contracted" || v.status === "paid"),
   );
   if (venue) return;
 
-  const body = `Watcher · It's ${days} days out and no venue is contracted yet. Most other dates depend on the venue locking — want me to refresh Scout's shortlist or push outreach on the current candidates? [watcher:missing-venue]`;
+  const body = `Watcher · It's ${days} days out and no venue is contracted yet. Most other dates depend on the venue locking. want me to refresh Scout's shortlist or push outreach on the current candidates? [watcher:missing-venue]`;
 
   await appendChat({ role: "agent", agent: "Watcher", content: body });
   result.chatNotices.push("missing-venue");
@@ -299,10 +299,10 @@ async function maybePostRsvpStalled(s: ProjectState, result: WatcherActResult) {
   if (total < 10) return;            // not enough to compute a meaningful rate
   const responded = s.guests.filter((g) => g.rsvp !== "no_response").length;
   const pct = Math.round((responded / total) * 100);
-  if (pct >= 70) return;             // healthy rate — quiet
+  if (pct >= 70) return;             // healthy rate. quiet
 
   const awaiting = total - responded;
-  const body = `Watcher · ${Math.round(sentDays)} days since invitations went out and ${pct}% have responded — ${awaiting} household${awaiting === 1 ? "" : "s"} still pending. Want Outreach to send a polite reminder cadence? [watcher:rsvp-stalled]`;
+  const body = `Watcher · ${Math.round(sentDays)} days since invitations went out and ${pct}% have responded. ${awaiting} household${awaiting === 1 ? "" : "s"} still pending. Want Outreach to send a polite reminder cadence? [watcher:rsvp-stalled]`;
 
   await appendChat({ role: "agent", agent: "Watcher", content: body });
   result.chatNotices.push("rsvp-stalled");

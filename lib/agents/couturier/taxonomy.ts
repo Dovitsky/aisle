@@ -1,4 +1,4 @@
-// The atelier taxonomy — eight dimensions for the dress, six for the veil.
+// The atelier taxonomy. eight dimensions for the dress, six for the veil.
 // Each is the canonical UI list. Translation copy lives in `vocabulary.ts`.
 
 export const SILHOUETTES = [

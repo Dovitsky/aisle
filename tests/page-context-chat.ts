@@ -1,4 +1,4 @@
-// Page-aware chat — short imperatives resolve against the page's vendor
+// Page-aware chat. short imperatives resolve against the page's vendor
 // category. "find cheaper ones" on /florals → dispatch_scout(Florist).
 
 import { maestroReply, parseImperativeAgainstContext } from "../lib/agents/maestro";
@@ -63,7 +63,7 @@ async function main() {
   ok(parseImperativeAgainstContext("any others") === "scout_more", "Imperative: 'any others' → scout_more");
   ok(parseImperativeAgainstContext("what else") === "scout_more", "Imperative: 'what else' → scout_more");
 
-  // Negative cases — shouldn't false-fire
+  // Negative cases. shouldn't false-fire
   ok(parseImperativeAgainstContext("we're Maya and Sam") === null, "Imperative: name extraction doesn't trip parser");
   ok(parseImperativeAgainstContext("yes lock it") === null, "Imperative: lock confirm doesn't trip parser");
   ok(parseImperativeAgainstContext("Email the venue about rain") === null, "Imperative: vendor-email intent doesn't trip parser");

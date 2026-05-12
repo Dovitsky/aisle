@@ -1,6 +1,6 @@
 "use client";
 
-// DossierBuilder — the interactive, visual replacement for the boring
+// DossierBuilder. the interactive, visual replacement for the boring
 // BriefForm. Dark, rich background; sage + cream accents; one focused
 // stage at a time. Designed to feel like a luxury quiz, not a form.
 
@@ -164,7 +164,7 @@ export function DossierBuilder() {
     }
   }, [state?.brief]);
 
-  // Derived values — must run UNCONDITIONALLY (hooks first, early
+  // Derived values. must run UNCONDITIONALLY (hooks first, early
   // returns after) so React's hook count is stable across renders.
   const dateWindow = useMemo(() => {
     if (!monthIdx) return "";
@@ -1092,7 +1092,7 @@ function ReviewStage(props: {
   destination: boolean;
 }) {
   const fmtBudget = (n: number | null) =>
-    n ? `$${(n / 1000).toFixed(0)}k` : "—";
+    n ? `$${(n / 1000).toFixed(0)}k` : ", ";
   return (
     <div>
       <StageHeader eyebrow="Final · Your dossier" title={<>One <span style={{ fontStyle: "italic", color: SAGE }}>last look</span>.</>} />
@@ -1106,10 +1106,10 @@ function ReviewStage(props: {
         }}
       >
         <Row label="Couple"     value={`${props.organizerName} & ${props.partnerName}`} />
-        <Row label="When"       value={props.monthName ? `${props.monthName} ${props.year}` : "—"} />
-        <Row label="Where"      value={props.region || "—"} />
-        <Row label="Guests"     value={props.guestCount ? String(props.guestCount) : "—"} />
-        <Row label="Vibe"       value={props.vibe || "—"} multiline />
+        <Row label="When"       value={props.monthName ? `${props.monthName} ${props.year}` : ", "} />
+        <Row label="Where"      value={props.region || ", "} />
+        <Row label="Guests"     value={props.guestCount ? String(props.guestCount) : ", "} />
+        <Row label="Vibe"       value={props.vibe || ", "} multiline />
         <Row label="Envelope"   value={fmtBudget(props.budgetUsd)} />
         <Row label="Tradition"  value={`${props.cultural} · ${props.formality}${props.destination ? " · destination" : ""}`} />
       </div>

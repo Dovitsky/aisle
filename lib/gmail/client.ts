@@ -1,8 +1,8 @@
 // Gmail OAuth + API client.
 //
 // Two layers:
-//   1. OAuth flow — generate consent URL, exchange code for tokens, refresh tokens.
-//   2. Gmail API — list / get messages, send, modify labels.
+//   1. OAuth flow. generate consent URL, exchange code for tokens, refresh tokens.
+//   2. Gmail API. list / get messages, send, modify labels.
 //
 // When GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET aren't set, the integration runs
 // in offline mode using a fixture inbox so the demo flow still works.

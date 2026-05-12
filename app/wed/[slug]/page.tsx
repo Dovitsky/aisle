@@ -234,7 +234,7 @@ function RsvpForm({ data, slug }: { data: PublicPayload; slug: string }) {
         </p>
         <p className="text-[14.5px] text-ink-400 mt-3 leading-relaxed">
           {rsvp === "no"
-            ? "We're sorry you can't make it — we'll miss you."
+            ? "We're sorry you can't make it. we'll miss you."
             : rsvp === "maybe"
               ? "We've noted you as a maybe. Drop us a line when you know."
               : "We've got your reply. We can't wait to celebrate with you."}
@@ -350,7 +350,7 @@ function RsvpForm({ data, slug }: { data: PublicPayload; slug: string }) {
             onClick={() => setStage({ kind: "name" })}
             className="text-[11px] uppercase tracking-[0.2em] text-ink-300 hover:text-ink"
           >
-            Not me — start over
+            Not me. start over
           </button>
         )}
       </div>

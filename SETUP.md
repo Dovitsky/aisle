@@ -1,4 +1,4 @@
-# Setup — make the app actually work
+# Setup. make the app actually work
 
 Three independent integrations, in dependency order. Each one's keys go in `.env.local`. After every edit to `.env.local`, restart `npm run dev`.
 
@@ -44,7 +44,7 @@ Without this, the app uses `data/store.json` and there's no real login.
    - Site URL: `http://localhost:3000`
    - Redirect URLs: add `http://localhost:3000/auth/callback` and (later) your prod origin.
 8. **Authentication → Providers → Email**: already enabled by default. The magic-link flow works out of the box. Supabase has a built-in SMTP relay for development; for production set up your own under **Settings → Auth → SMTP**.
-9. (Optional) **Authentication → Providers → Google**: toggle on. Paste in the Google OAuth Client ID + Secret (see step 3 below — same credentials).
+9. (Optional) **Authentication → Providers → Google**: toggle on. Paste in the Google OAuth Client ID + Secret (see step 3 below. same credentials).
 
 ### Copy the keys
 
@@ -59,14 +59,14 @@ NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
 ```
 
-11. Restart `npm run dev`. Visit `/settings` — Integrations panel should now read "✓ Postgres".
+11. Restart `npm run dev`. Visit `/settings`. Integrations panel should now read "✓ Postgres".
 
 ### What you get
 
-- **Real login** at `/login` — magic link to email, plus optional Google. First sign-in auto-creates an empty project with you as the organizer.
-- **Real persistence** — every Approval Card, vendor, guest, mood-board, ceremony section, etc. writes to Postgres. The dress firewall is now enforced by Row-Level Security at the DB level (not just by code).
-- **Realtime** — when you have a partner connected to the same project, their device updates live as you mutate state. (Channels are already published in the migration.)
-- **Append-only ledger** — Postgres triggers reject UPDATE/DELETE on `ledger_events`.
+- **Real login** at `/login`. magic link to email, plus optional Google. First sign-in auto-creates an empty project with you as the organizer.
+- **Real persistence**. every Approval Card, vendor, guest, mood-board, ceremony section, etc. writes to Postgres. The dress firewall is now enforced by Row-Level Security at the DB level (not just by code).
+- **Realtime**. when you have a partner connected to the same project, their device updates live as you mutate state. (Channels are already published in the migration.)
+- **Append-only ledger**. Postgres triggers reject UPDATE/DELETE on `ledger_events`.
 
 ---
 
@@ -93,7 +93,7 @@ Without these, `/inbox` runs against a 5-message simulated fixture.
    ```
 8. Restart. Open `/inbox` → "Connect Gmail" goes through real Google OAuth.
 
-Same OAuth credentials can be used for Supabase Google sign-in — set the redirect URI to your Supabase callback (`https://YOUR_PROJECT.supabase.co/auth/v1/callback`) in addition to the Corsia one.
+Same OAuth credentials can be used for Supabase Google sign-in. set the redirect URI to your Supabase callback (`https://YOUR_PROJECT.supabase.co/auth/v1/callback`) in addition to the Corsia one.
 
 ---
 
@@ -118,7 +118,7 @@ If something breaks: check the dev server output, then look in the Supabase dash
 
 ## What's still deferred
 
-- **Real outbound email** when an approved card has `kind: send_email`. Currently the card flow ends at "approved" — the email doesn't actually send. Wire `lib/email/send.ts` to Resend (~30 min).
+- **Real outbound email** when an approved card has `kind: send_email`. Currently the card flow ends at "approved". the email doesn't actually send. Wire `lib/email/send.ts` to Resend (~30 min).
 - **Stripe Connect** for `schedule_payment` cards. Recommended: don't move money in v1, just track committed/paid manually.
 - **Inngest cron** for scheduled scans. Today, click "Scan now" on `/inbox` to pull manually.
 - **Image generation** for mood boards / dress concepts / welcome bag previews. Color swatches + text only.

@@ -1,4 +1,4 @@
-// Demo round-trip — simulates EXACTLY what /api/settings load_demo does:
+// Demo round-trip. simulates EXACTLY what /api/settings load_demo does:
 //   buildDemoState → writeState → invalidateCache → readState → filterForViewer
 //
 // If anything gets lost in JSON serialize/parse, this catches it before the
@@ -18,14 +18,14 @@ async function main() {
   const demo = await buildDemoState();
   ok(!!demo, "Build: demo state returns truthy");
 
-  // 2. writeState — JSON-serialized to file
+  // 2. writeState. JSON-serialized to file
   await writeState(demo);
   ok(true, "Write: completed");
 
-  // 3. invalidateCache — simulate a fresh request that has to reload from disk
+  // 3. invalidateCache. simulate a fresh request that has to reload from disk
   invalidateCache();
 
-  // 4. readState — now reads from JSON, merges with EMPTY defaults
+  // 4. readState. now reads from JSON, merges with EMPTY defaults
   const roundtripped = await readState();
   ok(!!roundtripped, "Read: returns truthy");
 
@@ -71,13 +71,13 @@ async function main() {
   ok(roundtripped.ledger.length >= 4, `Round-trip: ${roundtripped.ledger.length} ledger events preserved`);
   ok(roundtripped.chat.length >= 5, `Round-trip: ${roundtripped.chat.length} chat messages preserved`);
 
-  // 6. filterForViewer (organizer) — should pass everything through unchanged
+  // 6. filterForViewer (organizer). should pass everything through unchanged
   const filtered = filterForViewer(roundtripped);
   ok(filtered.vendors.length === roundtripped.vendors.length, "Filter (organizer): vendors not stripped");
   ok(filtered.approvals.length === roundtripped.approvals.length, "Filter (organizer): approvals not stripped");
   ok(filtered.designs.length === roundtripped.designs.length, "Filter (organizer): designs not stripped");
 
-  // 7. filterForViewer (partner with dress gate ON) — should hide gated rows
+  // 7. filterForViewer (partner with dress gate ON). should hide gated rows
   const partnerView: typeof roundtripped = {
     ...roundtripped,
     viewer: "partner",
@@ -95,7 +95,7 @@ async function main() {
   ok(roundtripped.guests.every((g) => roundtripped.households.some((h) => h.id === g.householdId)),
     "Round-trip: every guest's household exists");
 
-  // 9. Critical UI access patterns — these are the things the dashboard reads
+  // 9. Critical UI access patterns. these are the things the dashboard reads
   const pending = roundtripped.approvals.filter((a) => a.status === "pending");
   ok(pending.length >= 1, "Dashboard read: pending approvals");
   const recent = roundtripped.approvals.filter((a) => a.status !== "pending").slice(-5);

@@ -3,7 +3,7 @@
 // Takes the user's taxonomy selections + their natural language input +
 // the saved DressProfile, and produces a single, coherent paragraph the
 // image model can render from. The natural language always wins over
-// the taxonomy when the two contradict — couture houses listen to the
+// the taxonomy when the two contradict. couture houses listen to the
 // bride's voice first.
 
 import type {
@@ -31,7 +31,7 @@ const SKETCH_PREAMBLE =
   "Loose pencil and gouache, soft watercolor wash, hand-rendered. Full-figure " +
   "standing pose, slight three-quarter angle, head loosely indicated without " +
   "facial detail. Designer-style notations and fabric swatches in the margin. " +
-  "No background — paper only. No text overlays.";
+  "No background. paper only. No text overlays.";
 
 const EDITORIAL_PREAMBLE =
   "Editorial bridal photography, magazine-quality, calm luxury aesthetic. " +
@@ -43,7 +43,7 @@ const EDITORIAL_PREAMBLE =
   "The dress is the subject.";
 
 const AESTHETIC_GUARDRAILS =
-  "Photorealistic rendering of the dress as specified — every structural " +
+  "Photorealistic rendering of the dress as specified. every structural " +
   "element must match the specification precisely. The dress must look " +
   "constructed, not draped fabric. Seams, darts, and construction lines " +
   "should be implied. The dress must be wearable by a human body. No " +
@@ -65,7 +65,7 @@ interface BuildArgs {
 export function buildPrompt(args: BuildArgs): string {
   const parts: string[] = [];
 
-  // 1. Style preamble first — sets the rendering register.
+  // 1. Style preamble first. sets the rendering register.
   parts.push(args.mode === "sketch" ? SKETCH_PREAMBLE : EDITORIAL_PREAMBLE);
 
   // 2. The composed taxonomy description.
@@ -191,7 +191,7 @@ function composeProfileConstraints(profile: DressProfile): string {
   }
   if (profile.venueSeasonNotes && profile.venueSeasonNotes.trim()) {
     lines.push(
-      `Venue and season: ${profile.venueSeasonNotes.trim()} — let this inform fabric weight and ceremonial formality.`,
+      `Venue and season: ${profile.venueSeasonNotes.trim()}. let this inform fabric weight and ceremonial formality.`,
     );
   }
   if (profile.nonNegotiables && profile.nonNegotiables.length > 0) {

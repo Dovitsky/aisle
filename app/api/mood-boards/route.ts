@@ -1,4 +1,4 @@
-// Mood Board CRUD — list + create.
+// Mood Board CRUD. list + create.
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";

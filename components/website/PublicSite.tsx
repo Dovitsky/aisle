@@ -1,6 +1,6 @@
 "use client";
 
-// The public wedding website — the artifact guests visit at
+// The public wedding website. the artifact guests visit at
 // corsia.wedding/{slug}. This file is the *only* renderer; the builder's
 // right pane embeds it inline, and a future /w/[slug] route can wrap it
 // with no behavior change.
@@ -443,7 +443,7 @@ function Schedule({
                     color: vibe.palette.ink,
                   }}
                 >
-                  {s.time ?? "—"}
+                  {s.time ?? ", "}
                 </p>
               </div>
               <div className="min-w-0">
@@ -951,7 +951,7 @@ function Guestbook({
             rows={3}
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Leave a note for the couple — they'll receive a bound copy after the wedding."
+            placeholder="Leave a note for the couple. they'll receive a bound copy after the wedding."
             className="w-full px-5 py-4 outline-none resize-none"
             style={{
               background: vibe.palette.surface,
@@ -1013,7 +1013,7 @@ function Guestbook({
                   color: vibe.palette.accent,
                 }}
               >
-                — {g.from}
+               . {g.from}
               </p>
             </li>
           ))}

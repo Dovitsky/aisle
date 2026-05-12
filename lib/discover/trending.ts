@@ -1,4 +1,4 @@
-// "Trending now" — a mixed-content feed combining photo, vibe, trend, and
+// "Trending now". a mixed-content feed combining photo, vibe, trend, and
 // real-wedding cards. v1 is hardcoded; v2 moves to a CMS surface refreshed
 // weekly by Corsia's editorial team.
 

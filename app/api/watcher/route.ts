@@ -9,7 +9,7 @@ export async function GET() {
   return NextResponse.json({ flags: watcherScan(s) });
 }
 
-// POST /api/watcher — Watcher acts on the flags it surfaces:
+// POST /api/watcher. Watcher acts on the flags it surfaces:
 // queues nudge emails for stale vendors, etc.
 export async function POST() {
   const s = await readState();

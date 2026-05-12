@@ -1,4 +1,4 @@
-// Triage — Haiku-class email/RSVP parser (PRD §4.2, build brief §4.3).
+// Triage. Haiku-class email/RSVP parser (PRD §4.2, build brief §4.3).
 // Used for high-volume parsing where latency and cost matter more than depth.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -12,11 +12,11 @@ export type TriageVendorReply = {
 
 const SYSTEM = `You are Triage, Corsia's parser. Classify a vendor reply email.
 Return ONLY JSON of shape { "intent": ..., "quotedUsd"?: number, "notes"?: string }.
-- "available"   — the vendor confirms availability in the date window
-- "unavailable" — booked or no longer accepting work
-- "needs_info"  — they ask follow-up questions
-- "out_of_office" — auto-reply only
-- "unknown"     — ambiguous
+- "available"  . the vendor confirms availability in the date window
+- "unavailable". booked or no longer accepting work
+- "needs_info" . they ask follow-up questions
+- "out_of_office". auto-reply only
+- "unknown"    . ambiguous
 
 If a price is quoted, parse it to a USD integer (drop currency symbols, commas).
 Notes: at most one short sentence (the most useful detail).`;
@@ -55,12 +55,12 @@ function coerce(raw: unknown): TriageVendorReply {
   return out;
 }
 
-// Offline rule-based classifier — covers the common signal patterns. Used
+// Offline rule-based classifier. covers the common signal patterns. Used
 // when no API key is set so the inbox flow is fully exercisable.
 function offline(emailBody: string): TriageVendorReply {
   const t = (emailBody || "").toLowerCase();
 
-  // Out-of-office auto-replies first (highest precedence — they don't carry intent).
+  // Out-of-office auto-replies first (highest precedence. they don't carry intent).
   if (/\bout of office\b|\bout-of-office\b|\bauto[\s-]?reply\b|\bautomated reply\b|\bauto-?responder\b|i'?m away|will reply when (i'?m|we'?re) back/.test(t)) {
     return { intent: "out_of_office", notes: "Auto-reply detected; vendor is unavailable until they return." };
   }
@@ -86,7 +86,7 @@ function offline(emailBody: string): TriageVendorReply {
     }
   }
 
-  // Unavailable signals — bound to "we/I" subject so we don't catch
+  // Unavailable signals. bound to "we/I" subject so we don't catch
   // "if a particular variety is unavailable" and similar.
   if (/(?:we|i|i'?m|we'?re|we are)\s+(?:are\s+|am\s+)?(?:unavailable|fully booked|already booked|sold out)|cannot accommodate|won'?t be able to|regretfully decline|sadly decline|no longer (taking|accepting)|booked (that|the) (date|weekend|day)/.test(t)) {
     return { intent: "unavailable", quotedUsd, notes: "Vendor declined or said the date is booked." };

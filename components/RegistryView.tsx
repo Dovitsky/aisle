@@ -27,8 +27,8 @@ const CATEGORY_LABEL: Record<string, string> = {
 };
 
 const CATEGORY_BLURB: Record<string, string> = {
-  kitchen: "Le Creuset, All-Clad — the things that get used every day.",
-  dining: "Heath plates, Riedel glassware — the table you'll set for years.",
+  kitchen: "Le Creuset, All-Clad. the things that get used every day.",
+  dining: "Heath plates, Riedel glassware. the table you'll set for years.",
   bedroom: "Linen sheets, considered comforters.",
   bath: "Coyuchi towels, Frette robes.",
   experience: "Honeymoon upgrades, tasting menus, first-night flights.",
@@ -131,7 +131,7 @@ export function RegistryView() {
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           Twelve to eighteen items across kitchen, dining, bedroom, experiences, and cash
-          funds — at least one charity. Purchases flow into thank-you cards automatically.
+          funds. at least one charity. Purchases flow into thank-you cards automatically.
         </p>
       </header>
 
@@ -143,7 +143,7 @@ export function RegistryView() {
               Pull a registry together
             </p>
             <p className="text-[14px] text-ink-300 leading-relaxed max-w-[60ch]">
-              Curator drafts 12–18 items at real current prices — Le Creuset, Heath,
+              Curator drafts 12–18 items at real current prices. Le Creuset, Heath,
               Parachute, plus cash funds for the honeymoon and a charity option or two.
             </p>
             <div className="mt-4 flex items-center gap-4">
@@ -179,7 +179,7 @@ export function RegistryView() {
             <p className="display text-[26px] text-ink leading-tight">No registry yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Click <span className="text-ink not-italic">Pull a registry together</span> above and
-              Curator will draft a tasteful starter list — real brands, real current prices —
+              Curator will draft a tasteful starter list. real brands, real current prices.
               for you to edit before publishing to guests.
             </p>
           </div>
@@ -200,7 +200,7 @@ export function RegistryView() {
                     {CATEGORY_LABEL[cat] ?? cat}
                   </p>
                   <h2 className="display italic text-[22px] text-ink leading-tight">
-                    {CATEGORY_BLURB[cat] ?? "—"}
+                    {CATEGORY_BLURB[cat] ?? ", "}
                   </h2>
                 </div>
                 <span className="text-[10.5px] uppercase tracking-[0.22em] font-mono text-ink-300 tabular-nums">

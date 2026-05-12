@@ -1,4 +1,4 @@
-// End-to-end onboarding smoke test (offline mode — no real API calls).
+// End-to-end onboarding smoke test (offline mode. no real API calls).
 // Simulates the chat → setBrief → lock → Scout flow without hitting Anthropic.
 
 import { readState, setBrief, addVendors, appendApproval } from "../lib/store";

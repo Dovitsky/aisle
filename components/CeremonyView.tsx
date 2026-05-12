@@ -97,7 +97,7 @@ export function CeremonyView() {
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           Pick a tradition or build one from scratch. Cleric drafts the lines using real liturgical
-          language — swap individual rituals from the library, reorder, edit, until the script
+          language. swap individual rituals from the library, reorder, edit, until the script
           reads the way the day will feel.
         </p>
       </header>
@@ -147,7 +147,7 @@ export function CeremonyView() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
-            placeholder="Optional notes for Cleric: 'skip kanyadaan', 'add hand-fasting after the vows', 'no full Mass', 'dual officiants — one Catholic, one Reform Jewish'…"
+            placeholder="Optional notes for Cleric: 'skip kanyadaan', 'add hand-fasting after the vows', 'no full Mass', 'dual officiants. one Catholic, one Reform Jewish'…"
             className="w-full rounded-lg border hairline bg-paper-50 px-3 py-2.5 text-[14px] leading-relaxed focus:outline-none focus:border-sage-300 resize-none"
           />
           <div className="mt-4 flex flex-wrap items-center gap-3">

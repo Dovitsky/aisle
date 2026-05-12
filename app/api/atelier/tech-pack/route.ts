@@ -1,7 +1,7 @@
-// POST /api/atelier/tech-pack — generate the atelier handoff payload.
+// POST /api/atelier/tech-pack. generate the atelier handoff payload.
 //
 // For v1, returns the structured TechPackPayload JSON and a printable
-// HTML render. A full @react-pdf/renderer PDF build is post-MVP — the
+// HTML render. A full @react-pdf/renderer PDF build is post-MVP. the
 // HTML is print-stylesheet-ready so the user can hit Cmd+P and get the
 // same artifact today.
 

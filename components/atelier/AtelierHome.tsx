@@ -112,7 +112,7 @@ export function AtelierHome() {
             <ol className="space-y-3.5 text-[13.5px] leading-relaxed">
               <Step n="1" label="Tell me about the dress you've imagined" href="/atelier/dress" />
               <Step n="2" label="Pick from the taxonomy or just describe it" href="/atelier/dress" />
-              <Step n="3" label="Sketch fast — render the keepers" href="/atelier/dress" />
+              <Step n="3" label="Sketch fast. render the keepers" href="/atelier/dress" />
               <Step n="4" label="Mark one The One" />
               <Step n="5" label="Meet your atelier match" href="/atelier/fittings" />
               <Step n="6" label="Export the tech pack" href="/atelier/fittings" />
@@ -124,8 +124,8 @@ export function AtelierHome() {
               About the firewall
             </p>
             <p className="text-[12.5px] leading-relaxed text-ink-400">
-              Everything in /atelier — concepts, ateliers, fittings, even
-              the budget line — is invisible to your partner&apos;s view of Corsia.
+              Everything in /atelier. concepts, ateliers, fittings, even
+              the budget line. is invisible to your partner&apos;s view of Corsia.
               Maestro refuses to reveal anything here, gently.
             </p>
           </div>
@@ -257,7 +257,7 @@ function EmptyConceptRail({ hasAny }: { hasAny: boolean }) {
           : "Tell me about the dress you've imagined."}
       </p>
       <p className="text-[13px] text-ink-300 mt-3 leading-relaxed max-w-[420px] mx-auto">
-        Sketches are cheap — start there. Save the ones that catch you and the
+        Sketches are cheap. start there. Save the ones that catch you and the
         atelier match comes alive.
       </p>
       <Link
@@ -298,5 +298,5 @@ function Step({ n, label, href }: { n: string; label: string; href?: string }) {
   );
 }
 
-// Silence the unused import warning — Image is reserved for future use.
+// Silence the unused import warning. Image is reserved for future use.
 void Image;

@@ -1,4 +1,4 @@
-// Dress firewall — gateScope: "dress" on every record produced here.
+// Dress firewall. gateScope: "dress" on every record produced here.
 // PRD §2.3 / build brief §8.2. v0 enforces at the data layer via filterForViewer.
 
 import { NextRequest, NextResponse } from "next/server";

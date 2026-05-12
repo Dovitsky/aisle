@@ -1,4 +1,4 @@
-// Negotiator — drafts vendor counter-proposals (PRD §4.2, §5.2 step 6).
+// Negotiator. drafts vendor counter-proposals (PRD §4.2, §5.2 step 6).
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
@@ -51,11 +51,11 @@ function offline(args: { brief: Brief; vendor: Vendor; goal: string }): string {
   const v = args.vendor;
   return `Hello ${v.name},
 
-Thank you for the proposal — we've shared it with ${b.organizerName} & ${b.partnerName} and they'd like to come back to you with a small counter.
+Thank you for the proposal. we've shared it with ${b.organizerName} & ${b.partnerName} and they'd like to come back to you with a small counter.
 
 ${args.goal || `Could you take another look at the package scope or pricing? We're trying to fit this comfortably inside the budget envelope.`}
 
-If that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.
+If that's not workable, we're flexible on a few details. happy to discuss alternatives that get us close to your standard terms while making this work for the couple.
 
 Looking forward to your reply.
 
@@ -68,7 +68,7 @@ export function synthesizeInbound(vendor: Vendor): VendorMessage {
     id: Math.random().toString(36).slice(2, 12),
     at: new Date().toISOString(),
     direction: "inbound",
-    body: `(Synthesized inbound from ${vendor.name} — used to test reply flow.)`,
+    body: `(Synthesized inbound from ${vendor.name}. used to test reply flow.)`,
     parsedIntent: "needs_info",
   };
 }

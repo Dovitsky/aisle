@@ -1,4 +1,4 @@
-// Cantor — music director (PRD §3.2). Builds the wedding setlist from
+// Cantor. music director (PRD §3.2). Builds the wedding setlist from
 // brief vibe + RSVP-collected song requests + ceremony tradition.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -32,7 +32,7 @@ Coverage:
 - Exactly one entry for each ceremony slot (processional, ceremony_music, recessional).
 - Exactly one for first_dance, introduction, last_dance.
 - 3-5 entries for cocktail_hour, dinner, and open_dancing each.
-Cultural tradition matters — match instrumentation to the brief.`;
+Cultural tradition matters. match instrumentation to the brief.`;
 
 export async function cantorPropose(args: {
   brief: Brief;
@@ -53,7 +53,7 @@ export async function cantorPropose(args: {
   const userPrompt = `${header}
 ${args.guestRequests?.length ? `\nGuest requests so far:\n${args.guestRequests.slice(0, 30).join("\n")}` : ""}
 
-Build the setlist now — anchored to the vibe + venue + design direction above.`;
+Build the setlist now. anchored to the vibe + venue + design direction above.`;
 
   const resp = await createWithWebSearch({
     model: MODELS.orchestrator,
@@ -86,7 +86,7 @@ function coerce(raw: unknown): Omit<MusicCue, "id"> | null {
   };
 }
 
-// Offline setlist — a curated, vibe-shaded baseline so /music renders a real
+// Offline setlist. a curated, vibe-shaded baseline so /music renders a real
 // program even without an API key.
 function offline(args: { brief: Brief; guestRequests?: string[] }): Omit<MusicCue, "id">[] {
   const v = (args.brief.vibe || "").toLowerCase();

@@ -1,12 +1,12 @@
 "use client";
 
-// /website — the builder. Two panes: a quiet editor on the left,
+// /website. the builder. Two panes: a quiet editor on the left,
 // the live public-site renderer on the right. Top bar with publish CTA.
 // Refine drawer slides in from the right edge. Publish modal confirms
 // with a pre-flight checklist.
 //
 // The draft is composed once from ProjectState and held in local state.
-// Every edit lives in memory for the session — autosave indicator
+// Every edit lives in memory for the session. autosave indicator
 // shows the change has been captured. Persisting to the long-term
 // store is a follow-up wire-up; the current code surface demonstrates
 // the full UX without that round-trip.
@@ -36,7 +36,7 @@ export function WebsiteBuilder() {
     if (initialDraft && !draft) setDraft(initialDraft);
   }, [initialDraft, draft]);
 
-  // Tiny autosave indicator. Any patch fires this — flash unsaved, then
+  // Tiny autosave indicator. Any patch fires this. flash unsaved, then
   // settle into saved a beat later.
   const patch = (mut: (d: WebsiteDraft) => WebsiteDraft) => {
     setDraft((prev) => (prev ? mut(prev) : prev));
@@ -87,7 +87,7 @@ export function WebsiteBuilder() {
           }}
           onUndo={(entryId) => {
             // Trivial undo: just remove the log entry. Real undo would
-            // diff the patch — out of scope for this MVP.
+            // diff the patch. out of scope for this MVP.
             patch((d) => ({
               ...d,
               refinementLog: d.refinementLog.filter((e) => e.id !== entryId),
@@ -712,7 +712,7 @@ function RefineDrawer({
   const send = () => {
     if (!input.trim()) return;
     const text = input.trim().toLowerCase();
-    // Naive intent routing — preset matches first; fall back to vibe
+    // Naive intent routing. preset matches first; fall back to vibe
     // keywords; finally apply a copy tweak so it's never a no-op.
     const preset = REFINE_PRESETS.find(
       (p) => p.label.toLowerCase() === text,

@@ -1,10 +1,10 @@
 // Shared "everything the app knows about this wedding" context.
 //
-// FOUNDATIONAL DESIGN PRINCIPLE — the app grows with you. By the time
+// FOUNDATIONAL DESIGN PRINCIPLE. the app grows with you. By the time
 // a couple reaches florals, cake, music, design, the app already knows:
 // region, month/season, vibe, contracted venue, locked palette, cultural
 // tradition, formality, guest count, etc. Each specialist should
-// generate recommendations using ALL of that — not just the brief in
+// generate recommendations using ALL of that. not just the brief in
 // isolation. This helper bundles it into one typed shape so we don't
 // repeat the same `state.vendors.find(...)` / `state.designs.find(...)`
 // boilerplate in every agent.

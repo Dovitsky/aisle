@@ -128,7 +128,7 @@ export function MemorialsView() {
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           A handful of small, intentional ways to remember someone who can't be there.
-          Whatever you pick, it stays small — these moments work best when they don't draw
+          Whatever you pick, it stays small. these moments work best when they don't draw
           attention to themselves.
         </p>
       </header>
@@ -226,7 +226,7 @@ export function MemorialsView() {
             <p className="display text-[26px] text-ink leading-tight">No one here yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Add someone above and we'll thread their tribute through the right moment of
-              the day — a line in the script, a chair held empty, a candle lit just before vows.
+              the day. a line in the script, a chair held empty, a candle lit just before vows.
             </p>
           </div>
         </Reveal>

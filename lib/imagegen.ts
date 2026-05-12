@@ -1,11 +1,11 @@
 // OpenAI image generation for the Mood Board studio.
 //
-// Calls gpt-image-1 via OpenAI's HTTP API (no SDK dependency added — keep the
+// Calls gpt-image-1 via OpenAI's HTTP API (no SDK dependency added. keep the
 // dependency surface small). Returns base64-encoded PNG data URLs so the
 // browser can render them immediately. v2 will upload to Supabase Storage /
 // R2 and return public URLs; for v1, the inline data URL is fine.
 //
-// Falls back gracefully when OPENAI_API_KEY isn't set — returns four sage-
+// Falls back gracefully when OPENAI_API_KEY isn't set. returns four sage-
 // pale placeholder SVGs so the demo flow is exercisable end-to-end.
 
 const AESTHETIC_PREAMBLE =
@@ -48,7 +48,7 @@ async function tryOpenAIModel(model: string, fullPrompt: string): Promise<
     body.size = "1024x1024";
     body.quality = "high";
   } else if (model === "dall-e-3") {
-    body.size = "1792x1024"; // landscape — works better as a hero backdrop
+    body.size = "1792x1024"; // landscape. works better as a hero backdrop
     body.quality = "hd";
     body.response_format = "b64_json";
     body.style = "natural"; // photographic, not illustrated
@@ -85,7 +85,7 @@ async function tryOpenAIModel(model: string, fullPrompt: string): Promise<
 
 export async function generateMoodBoardImage(args: {
   fullPrompt: string;
-  /** Reference image URL — when set, we'd call the /images/edits endpoint. v1 just falls back to /generations. */
+  /** Reference image URL. when set, we'd call the /images/edits endpoint. v1 just falls back to /generations. */
   referenceImageUrl?: string;
 }): Promise<ImageGenResult> {
   if (!hasOpenAIKey()) {

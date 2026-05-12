@@ -11,7 +11,7 @@ export async function GET() {
       error: "Gmail isn't set up yet. Open Settings → Integrations and paste your Google OAuth client ID and secret.",
     }, { status: 412 });
   }
-  // CSRF state — simple random; in real builds tie to session.
+  // CSRF state. simple random; in real builds tie to session.
   const state = Math.random().toString(36).slice(2, 14);
   const url = await consentUrl(state);
   return NextResponse.redirect(url);

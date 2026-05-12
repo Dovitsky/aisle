@@ -67,7 +67,7 @@ export function ThanksView() {
           kind: "agent",
           agent: "Concierge",
           title: `${j.state.thanks.length} cards lined up`,
-          detail: "One per attendee — fill in gifts as they arrive.",
+          detail: "One per attendee. fill in gifts as they arrive.",
         });
       }
     } finally {
@@ -127,7 +127,7 @@ export function ThanksView() {
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           A card per attendee, with a draft started so you don&rsquo;t stare at a blank page.
-          Log the gift, edit the words, mark it sent. Etiquette says within three months —
+          Log the gift, edit the words, mark it sent. Etiquette says within three months.
           we&rsquo;ll quietly keep score.
         </p>
       </header>
@@ -140,7 +140,7 @@ export function ThanksView() {
           </p>
           <p className="text-[14px] text-ink-300 leading-relaxed max-w-[60ch]">
             {totalCount === 0
-              ? `${yesCount || 0} guests have said yes. Click below and Concierge lines up a thank-you card for each — pre-drafted, ready for you to personalize.`
+              ? `${yesCount || 0} guests have said yes. Click below and Concierge lines up a thank-you card for each. pre-drafted, ready for you to personalize.`
               : "Rebuilds the list against current RSVPs. Existing drafts and sent statuses are preserved."}
           </p>
           <div className="mt-4 flex items-center gap-4">
@@ -210,7 +210,7 @@ export function ThanksView() {
             <p className="display text-[26px] text-ink leading-tight">Nothing here yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Once you have RSVP yeses, click <span className="text-ink not-italic">Build</span> above
-              and we&rsquo;ll line up a thank-you card for everyone who came — one per name, all
+              and we&rsquo;ll line up a thank-you card for everyone who came. one per name, all
               pre-drafted in your voice.
             </p>
           </div>

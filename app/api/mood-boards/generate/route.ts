@@ -1,4 +1,4 @@
-// Mood-board image generation — the marquee feature.
+// Mood-board image generation. the marquee feature.
 //
 // POST { boardId, prompt }
 //   → Calls OpenAI gpt-image-1 four times in parallel.

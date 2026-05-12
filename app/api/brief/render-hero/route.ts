@@ -7,11 +7,11 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
 // =====================================================================
-// /api/brief/render-hero — the dashboard hero image.
+// /api/brief/render-hero. the dashboard hero image.
 //
 // FOUNDATIONAL DESIGN PRINCIPLE: the app grows with you.
 //
-// The hero photo is not a stock asset — it's an AI-generated scene that
+// The hero photo is not a stock asset. it's an AI-generated scene that
 // matches the EXACT details in the dossier. The longer the couple uses
 // Corsia, the more theirs the app becomes. As decisions lock in, this
 // prompt picks them up and we re-render:
@@ -93,23 +93,23 @@ function buildHeroPrompt(brief: Brief, state?: ProjectState): string {
     brief.guestCount >= 80  ? "a full reception" :
                               "an intimate gathering";
 
-  // BASE LAYER — always present.
+  // BASE LAYER. always present.
   const base = [
     `An establishing wide shot of ${guestScale} in ${brief.region}`,
     `during ${season}.`,
   ];
 
-  // VIBE LAYER — the couple's own words.
+  // VIBE LAYER. the couple's own words.
   if (brief.vibe) base.push(`Vibe: ${brief.vibe}.`);
 
-  // CULTURAL LAYER — affects ceremony staging cues.
+  // CULTURAL LAYER. affects ceremony staging cues.
   if (brief.cultural && brief.cultural !== "secular") {
     base.push(
       `Cultural setting: ${culturalCue(brief.cultural)}.`,
     );
   }
 
-  // VENUE LAYER — locks in once the couple has contracted a venue.
+  // VENUE LAYER. locks in once the couple has contracted a venue.
   // The venue's name + city give the AI a real, specific place to
   // anchor to, which is the single biggest jump in image quality.
   const venue = state?.vendors.find(
@@ -119,11 +119,11 @@ function buildHeroPrompt(brief: Brief, state?: ProjectState): string {
   );
   if (venue) {
     base.push(
-      `Venue: ${venue.name} in ${venue.city || brief.region} — feature its architectural character.`,
+      `Venue: ${venue.name} in ${venue.city || brief.region}. feature its architectural character.`,
     );
   }
 
-  // DESIGN LAYER — chosen colorway + design direction once approved.
+  // DESIGN LAYER. chosen colorway + design direction once approved.
   // We prefer the moodboard since it carries the overall colorway, and
   // we read swatches[] for the actual hex codes the couple chose.
   const approvedDesign =
@@ -136,7 +136,7 @@ function buildHeroPrompt(brief: Brief, state?: ProjectState): string {
       base.push(`Design direction: ${approvedDesign.title}.`);
   }
 
-  // FLORALS LAYER — once a floral program has approved arrangements,
+  // FLORALS LAYER. once a floral program has approved arrangements,
   // the actual stems enter the frame. We pull primary stems from up to
   // three approved pieces so the AI gets the dominant floral story
   // without drowning in detail.
@@ -154,7 +154,7 @@ function buildHeroPrompt(brief: Brief, state?: ProjectState): string {
       base.push(`Florals on the tables: ${stems.join(", ")}.`);
   }
 
-  // FORMALITY + TECHNICAL FRAME — always last so the editorial
+  // FORMALITY + TECHNICAL FRAME. always last so the editorial
   // composition rules don't get overwritten by later details.
   base.push(`Tone: ${tone}, luxury wedding editorial.`);
   base.push(

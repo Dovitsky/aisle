@@ -1,7 +1,7 @@
 // Approval cascade engine.
 //
 // When an Approval Card transitions to `status: "approved"`, sometimes the
-// natural next step is automatic — sign a contract, you owe a deposit; lock
+// natural next step is automatic. sign a contract, you owe a deposit; lock
 // the design direction, the stationery suite should be drafted; lock seating,
 // thank-yous should be rebuilt.
 //
@@ -65,7 +65,7 @@ export async function cascade(card: ApprovalCard): Promise<string[]> {
       break;
     }
     case "send_caterer_brief": {
-      // For when the caterer brief was sent — Larder's recompute is now stale; just note.
+      // For when the caterer brief was sent. Larder's recompute is now stale; just note.
       summaries.push(`Dietary brief sent to ${card.action.vendor}. Conflicts re-checked.`);
       break;
     }
@@ -87,7 +87,7 @@ export async function cascade(card: ApprovalCard): Promise<string[]> {
     case "publish_engagement_announcement":
     case "lock_stationery_suite":
     case "book_vendor":
-      // No cascade for these — they're terminal or already handled in resolveApproval.
+      // No cascade for these. they're terminal or already handled in resolveApproval.
       break;
   }
 
@@ -177,12 +177,12 @@ async function handleLockBrief(_card: ApprovalCard, state: ProjectState): Promis
         await appendApproval({
           agent: "Scout", phase: cat === "Venue" ? "foundation" : "discovery",
           title: `Open outreach to ${top.name} for ${cat}?`,
-          rationale: `Auto-shortlisted by Scout after brief lock. ${items.length} candidates ranked against your brief. Approving sends Outreach a personalized first email — that itself becomes a separate Approval Card.\n\n${items.map((it, i) => `${i + 1}. ${it.name} — ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100`).join("\n")}`,
+          rationale: `Auto-shortlisted by Scout after brief lock. ${items.length} candidates ranked against your brief. Approving sends Outreach a personalized first email. that itself becomes a separate Approval Card.\n\n${items.map((it, i) => `${i + 1}. ${it.name}. ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100`).join("\n")}`,
           risk: "low",
           action: {
             kind: "send_email",
             to: `${top.name} (via Corsia alias)`,
-            subject: `Inquiry for ${cat} — ${brief.dateWindow}`,
+            subject: `Inquiry for ${cat}. ${brief.dateWindow}`,
             body: `Hello ${top.name},\n\nWe're reaching out from ${brief.organizerName} & ${brief.partnerName}'s wedding planning team. They're looking at ${brief.dateWindow} in ${brief.region} for roughly ${brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nCorsia on behalf of ${brief.organizerName} & ${brief.partnerName}`,
           },
         });
@@ -226,9 +226,9 @@ async function handlePublishDesign(card: ApprovalCard, state: ProjectState): Pro
       palette, font, format: "hybrid",
       items: itemsWithSvg,
     });
-    return `Design direction "${action.title}" locked. Stationer drafted a full ${items.length}-piece suite — review at /stationery.`;
+    return `Design direction "${action.title}" locked. Stationer drafted a full ${items.length}-piece suite. review at /stationery.`;
   } catch {
-    return `Design direction locked. Stationer didn't run automatically — visit /stationery to draft the suite.`;
+    return `Design direction locked. Stationer didn't run automatically. visit /stationery to draft the suite.`;
   }
 }
 
@@ -246,7 +246,7 @@ async function handleLockSeating(state: ProjectState): Promise<string> {
     };
   });
   await setThanks(items);
-  // Larder cross-check refresh — table service notes are now actionable.
+  // Larder cross-check refresh. table service notes are now actionable.
   const conflicts = computeConflicts(state);
   const critical = conflicts.filter((c) => c.severity === "critical" && !c.resolution).length;
   if (critical > 0) {

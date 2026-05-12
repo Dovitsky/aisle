@@ -1,6 +1,6 @@
 "use client";
 
-// /atelier/veil — same UX pattern as the dress builder, veil-specific
+// /atelier/veil. same UX pattern as the dress builder, veil-specific
 // taxonomy. Editorial generations always show the veil paired with the
 // chosen dress concept (handled server-side in the prompt builder).
 
@@ -133,7 +133,7 @@ export function VeilBuilder() {
         </h1>
         {!theDressOne && (
           <p className="text-[13px] text-ink-300 mt-3 leading-relaxed max-w-[560px]">
-            Editorial veil generations show the veil on your chosen dress —
+            Editorial veil generations show the veil on your chosen dress.
             mark a dress as &quot;the one&quot; first. Sketch mode works
             standalone any time.
           </p>

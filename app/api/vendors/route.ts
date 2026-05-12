@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
         action: {
           kind: "send_email",
           to: `${v.name} (via Corsia alias)`,
-          subject: `Inquiry — ${state.brief.organizerName} & ${state.brief.partnerName}, ${state.brief.dateWindow}`,
+          subject: `Inquiry. ${state.brief.organizerName} & ${state.brief.partnerName}, ${state.brief.dateWindow}`,
           body,
         },
       });
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
       const after = await appendApproval({
         agent: "Treasurer", phase,
         title: `Pay ${v.name} $${parsed.data.amountUsd.toLocaleString()} on ${parsed.data.dueDate}?`,
-        rationale: `Vendor: ${v.name}. Amount: $${parsed.data.amountUsd.toLocaleString()}. ${parsed.data.amountUsd > 500 ? "Over the $500 threshold — 2FA will be required at confirm time." : "Under the $500 threshold."}`,
+        rationale: `Vendor: ${v.name}. Amount: $${parsed.data.amountUsd.toLocaleString()}. ${parsed.data.amountUsd > 500 ? "Over the $500 threshold. 2FA will be required at confirm time." : "Under the $500 threshold."}`,
         risk,
         action: { kind: "schedule_payment", vendor: v.name, amountUsd: parsed.data.amountUsd, dueDate: parsed.data.dueDate },
       });
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
         action: {
           kind: "send_email",
           to: `${v.name} (via Corsia alias)`,
-          subject: `Re: Inquiry — ${state.brief.organizerName} & ${state.brief.partnerName}`,
+          subject: `Re: Inquiry. ${state.brief.organizerName} & ${state.brief.partnerName}`,
           body,
         },
       });

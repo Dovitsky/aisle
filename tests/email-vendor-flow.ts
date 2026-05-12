@@ -1,4 +1,4 @@
-// "Email the venue about the rain plan" — natural-language → Approval Card.
+// "Email the venue about the rain plan". natural-language → Approval Card.
 // Verifies offline parser, vendor resolver, and the question-focused Outreach
 // draft, end-to-end without a server.
 

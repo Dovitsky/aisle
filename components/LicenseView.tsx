@@ -101,7 +101,7 @@ export function LicenseView() {
             The paperwork that <span className="italic text-sage-500">makes it real</span>.
           </h1>
           <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
-            State rules vary wildly — application windows, ID requirements, waiting periods,
+            State rules vary wildly. application windows, ID requirements, waiting periods,
             expiration dates. Don't skip this; the license is what makes a wedding legal.
           </p>
         </header>
@@ -211,7 +211,7 @@ export function LicenseView() {
           {filed
             ? "The signed license is back with the county. Officially, on paper, you are married."
             : lic.expiresAt
-              ? <>The pickup-to-wedding window is short — current expiration tracked at <span className="text-ink not-italic">{lic.expiresAt}</span>. Keep an eye on it; if it lapses you'll need to re-apply.</>
+              ? <>The pickup-to-wedding window is short. current expiration tracked at <span className="text-ink not-italic">{lic.expiresAt}</span>. Keep an eye on it; if it lapses you'll need to re-apply.</>
               : "Mark each milestone as it happens. Clerk will warn you if the window's about to close."}
         </p>
       </header>
@@ -342,7 +342,7 @@ export function LicenseView() {
             </p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Filed <span className="text-ink not-italic">{lic.filedAt}</span> in {lic.county}, {lic.state.toUpperCase()}.
-              Keep this date — you'll want it on hand for name-change paperwork, insurance updates,
+              Keep this date. you'll want it on hand for name-change paperwork, insurance updates,
               and the occasional anniversary.
             </p>
           </section>

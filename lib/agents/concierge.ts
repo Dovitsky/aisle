@@ -1,4 +1,4 @@
-// Concierge — Engagement Studio agent (PRD §10.2 — flagged as the most exposed
+// Concierge. Engagement Studio agent (PRD §10.2. flagged as the most exposed
 // product surface). Helps couples plan the ring, the proposal, the engagement
 // photoshoot, and the announcement, before the brief is ever locked.
 
@@ -64,24 +64,24 @@ function offline(): EngagementProposal {
   return {
     milestones: [
       { kind: "ring",
-        title: "Ring sourcing — recycled platinum + lab-grown",
+        title: "Ring sourcing. recycled platinum + lab-grown",
         description: "Brilliant Earth and Vrai both ship recycled platinum settings with lab-grown center stones at 30-50% off mined equivalents. For a 2-3ct round / oval / emerald cut, expect $7,500-$12,000 fully made. Schedule a video consultation; ring sizers are mailed free.",
         status: "idea" },
       { kind: "proposal_plan",
-        title: "Proposal — quiet morning, not Big Reveal",
+        title: "Proposal. quiet morning, not Big Reveal",
         description: "The most photographed proposals get tagged on social before family hears. Pick a Saturday morning at home with coffee, or a small private rooftop at sunrise. Have one trusted photographer hidden 30ft away with a long lens; brief them to leave the moment it's done.",
         status: "idea" },
       { kind: "engagement_photos",
-        title: "Engagement photos — book the wedding photographer",
+        title: "Engagement photos. book the wedding photographer",
         description: "If your wedding photographer offers an engagement session add-on, take it. It builds rapport, lets you see how they direct, and gives you save-the-date imagery. Schedule for golden hour at a place that means something to both of you, not a generic park.",
         status: "idea" },
       { kind: "announcement",
-        title: "Announcement — phone calls before social",
+        title: "Announcement. phone calls before social",
         description: "Parents first (in person or video), then siblings, then the closest five friends. Wait 48 hours before posting publicly so no one finds out from Instagram. Draft the post: one image, one line, no caption olympics.",
         status: "idea" },
       { kind: "engagement_party",
-        title: "Engagement party — small, soon",
-        description: "20-40 people, dinner format, within 6-10 weeks of the engagement. Skip the registry-style gift expectation; ask people instead to bring a memory or a toast. This is the warmest, lowest-pressure event in the wedding cycle — don't over-engineer it.",
+        title: "Engagement party. small, soon",
+        description: "20-40 people, dinner format, within 6-10 weeks of the engagement. Skip the registry-style gift expectation; ask people instead to bring a memory or a toast. This is the warmest, lowest-pressure event in the wedding cycle. don't over-engineer it.",
         status: "idea" },
     ],
   };

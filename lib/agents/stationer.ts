@@ -1,4 +1,4 @@
-// Stationer — generates suite copy and SVG mockups for save-the-dates,
+// Stationer. generates suite copy and SVG mockups for save-the-dates,
 // invitations, response cards, details cards (PRD §5.4.2-5.4.3, §5.4.8).
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -19,13 +19,13 @@ const PIECES: { piece: StationeryPiece; label: string }[] = [
 const SYSTEM = `You are Stationer, Corsia's invitation-suite agent.
 You write the actual paper-card copy for a couple's full stationery suite.
 
-Voice depends on cultural/formality fields; default is "modern formal" — host line
+Voice depends on cultural/formality fields; default is "modern formal". host line
 "Together with their families", names in full, no exclamation points.
 
 Output JSON only:
 { "items": [ { "piece": "save_the_date" | "invitation" | "response_card" | "details_card" | "menu_card" | "place_card" | "program" | "thank_you", "copy": "the literal card text, with newlines between lines" } ] }
 
-Eight items. The copy must be print-ready text — write the literal lines that go on the paper.
+Eight items. The copy must be print-ready text. write the literal lines that go on the paper.
 For invitations include host line, request line, names, date written long-form, time, place, reception line.
 For details card include attire ("Black tie optional" etc.), accommodations line, transportation line.
 For response card include reply-by date and meal selection prompt.`;
@@ -38,7 +38,7 @@ export async function stationerSuite(args: {
   if (!hasApiKey()) return offline(args);
 
   const menuBlock = args.menu && args.menu.length > 0
-    ? `\n\nMenu items already locked for the menu_card piece (use these verbatim, with allergen icons V / VG / GF / DF / N / F / K / H in parentheses after each dish):\n${args.menu.map((m) => `- ${m.name}${m.description ? ` — ${m.description}` : ""}${allergenIcons(m) ? "  " + allergenIcons(m) : ""}`).join("\n")}`
+    ? `\n\nMenu items already locked for the menu_card piece (use these verbatim, with allergen icons V / VG / GF / DF / N / F / K / H in parentheses after each dish):\n${args.menu.map((m) => `- ${m.name}${m.description ? `. ${m.description}` : ""}${allergenIcons(m) ? "  " + allergenIcons(m) : ""}`).join("\n")}`
     : "";
 
   const userPrompt = `Brief:
@@ -161,7 +161,7 @@ export function regenerateMenuCard(brief: Brief, menu: MenuItem[]): StationerySu
   const copy = [
     `${brief.organizerName} & ${brief.partnerName}`,
     "",
-    ...sorted.map((m) => `${m.name}${m.description ? " — " + m.description : ""}`),
+    ...sorted.map((m) => `${m.name}${m.description ? ". " + m.description : ""}`),
   ].join("\n");
   return { piece: "menu_card", copy };
 }

@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `Scout failed: ${msg}` }, { status: 502 });
   }
 
-  // Persist as Vendor records — same shape whether marketplace or web.
+  // Persist as Vendor records. same shape whether marketplace or web.
   // The provenance / sourceUrl / contactPath fields ride along so the UI
   // can render the small "via web" tag in the source line.
   await addVendors(
@@ -113,11 +113,11 @@ export async function POST(req: NextRequest) {
   // For targeted hunts, draft a personalized email anchored on the
   // signaturePortfolioNote so it doesn't read like form mail. For broad
   // shortlists, keep the existing generic "would you have availability"
-  // copy — Outreach polishes that later.
+  // copy. Outreach polishes that later.
   if (top) {
     const subject = targeted
-      ? `${state.brief.organizerName} & ${state.brief.partnerName} — ${parsed.data.category} for ${state.brief.dateWindow}`
-      : `Inquiry for ${parsed.data.category} — ${state.brief.dateWindow}`;
+      ? `${state.brief.organizerName} & ${state.brief.partnerName}. ${parsed.data.category} for ${state.brief.dateWindow}`
+      : `Inquiry for ${parsed.data.category}. ${state.brief.dateWindow}`;
     const body = targeted
       ? buildTargetedOutreach({
           vendorName: top.name,
@@ -133,8 +133,8 @@ export async function POST(req: NextRequest) {
       : `Hello ${top.name},\n\nWe're reaching out from ${state.brief.organizerName} & ${state.brief.partnerName}'s wedding planning team. They're looking at ${state.brief.dateWindow} in ${state.brief.region} for roughly ${state.brief.guestCount} guests.\n\nWould you have availability in that window, and could you share rough pricing for an event our size?\n\nThank you,\nCorsia on behalf of ${state.brief.organizerName} & ${state.brief.partnerName}`;
 
     const rationaleHead = targeted
-      ? `${top.name} — found via open-web search at the couple's request.${top.sourceUrl ? `\nSource: ${top.sourceUrl}` : ""}${top.contactPath ? `\nContact path: ${top.contactPath}` : ""}${top.unverified && top.unverified.length > 0 ? `\nUnverified: ${top.unverified.join("; ")}` : ""}`
-      : `Shortlist of ${items.length} produced against the locked brief. Approving this hands the top match to Outreach for a personalized first email — which itself becomes a separate Approval Card.`;
+      ? `${top.name}. found via open-web search at the couple's request.${top.sourceUrl ? `\nSource: ${top.sourceUrl}` : ""}${top.contactPath ? `\nContact path: ${top.contactPath}` : ""}${top.unverified && top.unverified.length > 0 ? `\nUnverified: ${top.unverified.join("; ")}` : ""}`
+      : `Shortlist of ${items.length} produced against the locked brief. Approving this hands the top match to Outreach for a personalized first email. which itself becomes a separate Approval Card.`;
 
     await appendApproval({
       agent: "Scout",
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
       title: targeted
         ? `Open outreach to ${top.name} (you asked Scout to find them)?`
         : `Open outreach to ${top.name} for ${parsed.data.category}?`,
-      rationale: `${rationaleHead}\n\n${items.map((it, i) => `${i + 1}. ${it.name} — ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100\n   ${it.notes}`).join("\n\n")}`,
+      rationale: `${rationaleHead}\n\n${items.map((it, i) => `${i + 1}. ${it.name}. ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100\n   ${it.notes}`).join("\n\n")}`,
       risk: "low",
       action: {
         kind: "send_email",
@@ -184,8 +184,8 @@ function buildTargetedOutreach(args: {
   contactPath?: string;
 }): string {
   const opener = args.portfolioNote
-    ? `We've been looking at your work — ${args.portfolioNote} stopped us. The light, the feel, the way you held the room.`
-    : `Your work has been on our shortlist for a while — the way you handle light and editorial pacing especially.`;
+    ? `We've been looking at your work. ${args.portfolioNote} stopped us. The light, the feel, the way you held the room.`
+    : `Your work has been on our shortlist for a while. the way you handle light and editorial pacing especially.`;
   return [
     `Hello ${args.vendorName.split(" ")[0] ?? args.vendorName},`,
     "",
@@ -195,7 +195,7 @@ function buildTargetedOutreach(args: {
     "",
     "We'd love to know if you have the date open, what a wedding with you typically looks like at our size, and rough pricing so we can plan honestly.",
     "",
-    `Either way — thank you. Big admirer of the work.`,
+    `Either way. thank you. Big admirer of the work.`,
     "",
     `${args.organizerName} & ${args.partnerName}`,
   ].join("\n");
@@ -211,7 +211,7 @@ function buildTargetedChatReply(
   const first = top.name.split(" ")[0] ?? top.name;
   const press = top.notes ? ` ${top.notes}` : "";
   const lines: string[] = [];
-  lines.push(`Found ${first}. ${top.name} — ${top.city} ${category.toLowerCase()}.${press}`);
+  lines.push(`Found ${first}. ${top.name}. ${top.city} ${category.toLowerCase()}.${press}`);
   const checks: string[] = [];
   if (top.sourceUrl) checks.push(`Verified site: ${top.sourceUrl}`);
   if (top.contactPath && top.contactPath !== top.sourceUrl)
@@ -220,14 +220,14 @@ function buildTargetedChatReply(
   checks.push(`Fit: ${top.fitScore}/100`);
   if (top.unverified && top.unverified.length > 0)
     checks.push(`Unverified: ${top.unverified.join("; ")}`);
-  lines.push(`— ${checks.join("\n— ")}`);
+  lines.push(`,  ${checks.join("\n,  ")}`);
   if (total > 1) {
     lines.push(`On your shortlist now, alongside ${total - 1} other close match${total - 1 === 1 ? "" : "es"} Scout flagged.`);
   } else {
-    lines.push(`On your shortlist now. Same row as marketplace vendors — a small "via web" tag carries the provenance.`);
+    lines.push(`On your shortlist now. Same row as marketplace vendors. a small "via web" tag carries the provenance.`);
   }
   lines.push(
-    `I've drafted a first-contact email — in your Approval Cards. References ${top.signaturePortfolioNote ?? "their portfolio specifically"}.`,
+    `I've drafted a first-contact email. in your Approval Cards. References ${top.signaturePortfolioNote ?? "their portfolio specifically"}.`,
   );
   return lines.join("\n\n");
 }

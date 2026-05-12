@@ -1,4 +1,4 @@
-// Larder — dietary + allergen agent.
+// Larder. dietary + allergen agent.
 //
 // Three jobs:
 //   1. Parse free-text RSVP dietary entries → structured AllergenEntry + DietaryPref
@@ -51,7 +51,7 @@ Output JSON only:
 Rules:
 - Be conservative: if a guest writes "no nuts please" with no severity context, mark as "moderate".
 - If they write "EpiPen" / "hospitalized last time" / "severe" / "anaphylactic", mark "anaphylactic".
-- "Lactose intolerant" → dairy + "intolerant" (NOT severe — they can choose).
+- "Lactose intolerant" → dairy + "intolerant" (NOT severe. they can choose).
 - "Pescatarian" is its own preference, not "no_beef + no_pork".
 - "Eats anything", "no restrictions", or empty input → empty arrays.`;
 
@@ -95,7 +95,7 @@ function coerce(raw: unknown): ParsedDietary {
   return { allergens, preferences, notes: r.notes ? String(r.notes) : undefined };
 }
 
-// Conservative offline parser — keyword/regex based. Used when ANTHROPIC_API_KEY is unset.
+// Conservative offline parser. keyword/regex based. Used when ANTHROPIC_API_KEY is unset.
 function offlineParse(text: string): ParsedDietary {
   const t = text.toLowerCase();
   const allergens: AllergenEntry[] = [];
@@ -184,7 +184,7 @@ export function computeConflicts(state: ProjectState): DietaryConflict[] {
     // is chosen we cross-check against everything served.
     const relevantCourses = new Set<string>();
     if (g.meal) {
-      // Loose mapping — meal text → course code (best-effort; users can override)
+      // Loose mapping. meal text → course code (best-effort; users can override)
       const m = g.meal.toLowerCase();
       if (/beef|steak|chicken|lamb|pork|duck/.test(m)) relevantCourses.add("main_meat");
       else if (/fish|salmon|halibut|sea bass|cod/.test(m)) relevantCourses.add("main_fish");
@@ -335,9 +335,9 @@ export function catererBrief(state: ProjectState): CatererBrief {
   lines.push("");
 
   if (critical.length) {
-    lines.push(`CRITICAL — anaphylactic and severe allergens. Please confirm separate prep, dedicated utensils, and ServSafe protocol:`);
+    lines.push(`CRITICAL. anaphylactic and severe allergens. Please confirm separate prep, dedicated utensils, and ServSafe protocol:`);
     for (const c of critical) {
-      const tags = c.allergens.map((a) => `${ALLERGEN_LABEL[a.code]} (${a.severity})${a.notes ? ` — ${a.notes}` : ""}`).join("; ");
+      const tags = c.allergens.map((a) => `${ALLERGEN_LABEL[a.code]} (${a.severity})${a.notes ? `. ${a.notes}` : ""}`).join("; ");
       lines.push(`  • ${c.name}: ${tags}`);
     }
     lines.push("");
@@ -346,7 +346,7 @@ export function catererBrief(state: ProjectState): CatererBrief {
   if (allergenSummary.length) {
     lines.push("Allergen rollup (count of guests affected):");
     for (const a of allergenSummary) {
-      lines.push(`  • ${ALLERGEN_LABEL[a.allergen]} — ${a.count} guest${a.count === 1 ? "" : "s"} (worst severity: ${a.severity})`);
+      lines.push(`  • ${ALLERGEN_LABEL[a.allergen]}. ${a.count} guest${a.count === 1 ? "" : "s"} (worst severity: ${a.severity})`);
     }
     lines.push("");
   }
@@ -391,7 +391,7 @@ export function tableServiceNotes(state: ProjectState): TableServiceNote[] {
       for (const a of g.allergens ?? []) {
         seated.notes.push({
           guestId, guestName: g.preferredName ?? g.fullName,
-          flag: `${ALLERGEN_LABEL[a.code]} — ${a.severity}${a.notes ? ` · ${a.notes}` : ""}`,
+          flag: `${ALLERGEN_LABEL[a.code]}. ${a.severity}${a.notes ? ` · ${a.notes}` : ""}`,
           severity: a.severity === "anaphylactic" || a.severity === "severe" ? "critical" : "warn",
         });
       }

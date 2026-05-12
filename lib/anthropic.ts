@@ -1,4 +1,4 @@
-// Anthropic SDK helpers — per build brief §7.1.
+// Anthropic SDK helpers. per build brief §7.1.
 // Reads keys from process.env. Never inline.
 
 import Anthropic from "@anthropic-ai/sdk";
@@ -19,18 +19,18 @@ export function client(): Anthropic {
 
 // Three-tier model strategy (cost-optimized).
 //
-//   orchestrator — Opus. Maestro chat (multi-turn tool use, brief extraction
+//   orchestrator. Opus. Maestro chat (multi-turn tool use, brief extraction
 //                  reasoning, decision routing). The single agent that needs
 //                  full Opus depth.
-//   specialist   — Sonnet. Most domain agents — drafting emails, ceremony
+//   specialist  . Sonnet. Most domain agents. drafting emails, ceremony
 //                  scripts, music setlists, cake specs, contract redlines,
 //                  mood directions, etc. Sonnet is plenty for structured
 //                  generation and saves real money at scale.
-//   triage       — Haiku. High-volume / low-latency parsing — email intent
+//   triage      . Haiku. High-volume / low-latency parsing. email intent
 //                  classification, RSVP parse, dietary parse.
 //
 // Anything web-search-driven (Scout, Locator, Itinerist, Curator,
-// Quartermaster, Cantor) stays on Opus by default — the larger model
+// Quartermaster, Cantor) stays on Opus by default. the larger model
 // reads search results substantially better, which more than pays back
 // its premium when the alternative is hallucinated vendor names.
 export const MODELS = {

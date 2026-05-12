@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
         action: {
           kind: "send_email",
           to: `${caterer.name} (via Corsia alias)`,
-          subject: `Dietary brief — ${state.brief?.organizerName ?? ""} & ${state.brief?.partnerName ?? ""} (${brief.guestCount} guests)`,
+          subject: `Dietary brief. ${state.brief?.organizerName ?? ""} & ${state.brief?.partnerName ?? ""} (${brief.guestCount} guests)`,
           body: brief.body,
         },
       });

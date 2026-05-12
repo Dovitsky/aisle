@@ -180,7 +180,7 @@ export function ChatDock() {
 
   return (
     <>
-      {/* Closed-state launcher. A whisper, not a shout — a small soft
+      {/* Closed-state launcher. A whisper, not a shout. a small soft
           ivory circle in the bottom-right corner, semi-transparent until
           hover/tap. No visible name label (the `title` attribute supplies
           the tooltip on desktop hover). The /timeline page embeds Maestro

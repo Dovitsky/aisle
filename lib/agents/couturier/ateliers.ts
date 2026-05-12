@@ -286,7 +286,7 @@ export function buildConstructionNotes(taxonomy: {
     notes.push("Hand-covered buttons along the back placket, all functional.");
   }
   if (taxonomy.fabric?.some((f) => f.toLowerCase().includes("organza"))) {
-    notes.push("Multiple layers of organza required for body — single layer reads thin.");
+    notes.push("Multiple layers of organza required for body. single layer reads thin.");
   }
   if (taxonomy.train?.toLowerCase().includes("detachable")) {
     notes.push("French bustle for train, with hand-stitched eye-and-hook fastening at the waist.");

@@ -1,5 +1,5 @@
 // Build a fully-populated WebsiteDraft from the existing ProjectState.
-// Nothing here is "blank" — every section is auto-filled from real
+// Nothing here is "blank". every section is auto-filled from real
 // wedding data the couple already entered. The builder UI only edits
 // or refines, never creates from scratch.
 
@@ -54,7 +54,7 @@ export interface WebsiteDraft {
     partnerName: string;
     /** ISO date the ceremony begins (for the live countdown). */
     ceremonyAtISO?: string;
-    /** Stylized display date — e.g. "Sixteen May, MMXXVI". */
+    /** Stylized display date. e.g. "Sixteen May, MMXXVI". */
     dateLine: string;
     location: string;
   };
@@ -76,7 +76,7 @@ export interface WebsiteDraft {
   rsvp: {
     deadline?: string;
   };
-  /** A short list of action-log entries — the most recent refinements
+  /** A short list of action-log entries. the most recent refinements
    *  applied by the user via the drawer. */
   refinementLog: { id: string; prompt: string; appliedAt: string }[];
   /** Whether the site has been published. */
@@ -133,7 +133,7 @@ function buildHero(brief: Brief | null, region: string): WebsiteDraft["hero"] {
 function ceremonyMomentFromDate(input?: string): string | undefined {
   const d = parseDateInput(input);
   if (!d) return undefined;
-  // Default ceremony at 4:30pm local — the most common slot.
+  // Default ceremony at 4:30pm local. the most common slot.
   d.setHours(16, 30, 0, 0);
   return d.toISOString();
 }
@@ -358,12 +358,12 @@ function buildFAQs(state: ProjectState): WebsiteFAQ[] {
   );
   push(
     "What's the dress code?",
-    `Each event has its own. The headline events read ${brief?.formalityTone ?? "modern"} formal — most guests will be in black tie or evening attire.`,
+    `Each event has its own. The headline events read ${brief?.formalityTone ?? "modern"} formal. most guests will be in black tie or evening attire.`,
   );
   if (brief?.destination) {
     push(
       "Is this a destination wedding?",
-      `Yes. The whole weekend takes place in ${brief.region}. We've blocked rooms and arranged shuttles — see Travel above.`,
+      `Yes. The whole weekend takes place in ${brief.region}. We've blocked rooms and arranged shuttles. see Travel above.`,
     );
   }
   // Dietary
@@ -371,7 +371,7 @@ function buildFAQs(state: ProjectState): WebsiteFAQ[] {
   if (hasDietary) {
     push(
       "Are dietary needs handled?",
-      "Yes — we've collected dietary information through your RSVP. The kitchen will have a plate for you.",
+      "Yes. we've collected dietary information through your RSVP. The kitchen will have a plate for you.",
     );
   }
   push(
@@ -380,7 +380,7 @@ function buildFAQs(state: ProjectState): WebsiteFAQ[] {
   );
   push(
     "Where do I park?",
-    "There's parking on-site at the venue. Shuttles are recommended after the ceremony — much easier than driving.",
+    "There's parking on-site at the venue. Shuttles are recommended after the ceremony. much easier than driving.",
   );
   push(
     "When do I need to RSVP by?",
@@ -425,9 +425,9 @@ function buildGallery(state: ProjectState): WebsiteGalleryImage[] {
 
 function buildSeedSongRequests(): WebsiteDraft["songRequests"] {
   return [
-    { id: "s-1", title: "September — Earth, Wind & Fire", guestName: "Mark" },
-    { id: "s-2", title: "Linger — The Cranberries", guestName: "Anya" },
-    { id: "s-3", title: "Dancing Queen — ABBA", guestName: "Maya & Theo" },
+    { id: "s-1", title: "September. Earth, Wind & Fire", guestName: "Mark" },
+    { id: "s-2", title: "Linger. The Cranberries", guestName: "Anya" },
+    { id: "s-3", title: "Dancing Queen. ABBA", guestName: "Maya & Theo" },
   ];
 }
 

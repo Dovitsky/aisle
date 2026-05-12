@@ -1,4 +1,4 @@
-// Locator — region/destination scout.
+// Locator. region/destination scout.
 //
 // Takes a vibe + optional constraints (budget, guest count, season) and
 // proposes 3-5 real-world locations using web search. Used during onboarding
@@ -17,7 +17,7 @@ export interface LocatorSuggestion {
 }
 
 const SYSTEM = `You are Locator, Corsia's location agent.
-You help couples pick WHERE to get married — before they pick venues, vendors, or anything else.
+You help couples pick WHERE to get married. before they pick venues, vendors, or anything else.
 
 How you work:
 - Use the web_search tool to ground recommendations in real places, real wedding-season practicalities, real travel logistics.
@@ -25,7 +25,7 @@ How you work:
 - Mix obvious picks with a wildcard. Suggest distinct regions, not five towns in the same valley.
 
 OUTPUT RULES (CRITICAL):
-- Your final assistant message must end with a single JSON array — no trailing prose.
+- Your final assistant message must end with a single JSON array. no trailing prose.
 - Wrap it in a \`\`\`json fenced block.
 - The JSON shape is:
 [
@@ -104,7 +104,7 @@ function extractJsonArray(s: string): string {
   return cleaned.slice(start).trim();
 }
 
-// Offline location suggestions — vibe-shaded baseline so the location-first
+// Offline location suggestions. vibe-shaded baseline so the location-first
 // onboarding moment lights up without a key. Five distinct regions across
 // price points so the choice card has real range.
 function offlineSuggestions(vibe: string, budgetUsd?: number, guestCount?: number): LocatorSuggestion[] {
@@ -120,7 +120,7 @@ function offlineSuggestions(vibe: string, budgetUsd?: number, guestCount?: numbe
     { region: "Amalfi Coast, Italy",        hub: "Maiori / Ravello",    fitScore: isCoastal ? 96 : 78, bestSeason: "Late May or mid-September", estimatedTravelCost: "$$$$",
       rationale: "Cliffside ceremonies, pergola dinners, Mediterranean light. Reception venues like Belmond Caruso are limited and book 12-18 months out." },
     { region: "Hudson Valley, NY",          hub: "Hudson / Rhinebeck",  fitScore: isGarden ? 95 : 84, bestSeason: "Late September or early October", estimatedTravelCost: "$$",
-      rationale: "Working farms, restored barns, easy access from NYC. Foliage peaks early October — book against that calendar carefully." },
+      rationale: "Working farms, restored barns, easy access from NYC. Foliage peaks early October. book against that calendar carefully." },
     { region: "Tuscany, Italy",             hub: "Cortona / Pienza",    fitScore: isHistoric ? 96 : 82, bestSeason: "Mid-May or early September", estimatedTravelCost: "$$$$",
       rationale: "Olive-grove villas, long-table dinners under cypress, real stonework. Paolo Genovesi and Borgo Stomennano set the bar." },
     { region: "Joshua Tree, CA",            hub: "Joshua Tree / Pioneertown", fitScore: isMoody ? 90 : 80, bestSeason: "Late October or early March", estimatedTravelCost: "$$",
@@ -134,7 +134,7 @@ function offlineSuggestions(vibe: string, budgetUsd?: number, guestCount?: numbe
     { region: "Lisbon + Comporta, Portugal", hub: "Lisbon → Comporta",   fitScore: isCoastal ? 90 : 80, bestSeason: "Mid-May or late September", estimatedTravelCost: "$$$",
       rationale: "Editorial weddings under-discovered relative to Italy. Rice fields, pine forests, beach cottages. Strong dollar to euro stretches budget." },
     { region: "Marfa, TX",                  hub: "Marfa",                fitScore: isMoody ? 88 : 70, bestSeason: "Late October or early November", estimatedTravelCost: "$$",
-      rationale: "High-desert minimalism, art-world crowd, El Cosmico's tents and yurts. Travel logistics are real — guests need 2 days minimum." },
+      rationale: "High-desert minimalism, art-world crowd, El Cosmico's tents and yurts. Travel logistics are real. guests need 2 days minimum." },
     { region: "Paris, France",              hub: "Paris (8th, 16th)",    fitScore: isHistoric ? 90 : 78, bestSeason: "Late May or early September", estimatedTravelCost: "$$$$",
       rationale: "City-hall civil + private hotel reception. Hôtel de Crillon, Shangri-La, or rented private mansions like Hôtel de l'Industrie." },
   ];

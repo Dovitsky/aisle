@@ -1,5 +1,5 @@
 // Core domain types for Corsia.
-// Mirrors PRD §6 (Data Model) — full v1 surface.
+// Mirrors PRD §6 (Data Model). full v1 surface.
 
 export type Phase =
   | "discovery"
@@ -14,7 +14,7 @@ export type Phase =
 
 export const PHASES: { id: Phase; label: string; blurb: string }[] = [
   { id: "discovery", label: "Discovery", blurb: "Brief, vibe, budget, dates." },
-  { id: "foundation", label: "Foundation", blurb: "Venue, date, officiant — the hard dependencies." },
+  { id: "foundation", label: "Foundation", blurb: "Venue, date, officiant. the hard dependencies." },
   { id: "design", label: "Design", blurb: "Palette, mood boards, stationery, florals." },
   { id: "logistics", label: "Logistics", blurb: "Catering, rentals, transportation, hotel block." },
   { id: "guest_management", label: "Guest Management", blurb: "List, save-the-dates, invitations, RSVPs." },
@@ -130,7 +130,7 @@ export interface ChatMessage {
 // at the per-section level (see CeremonyTradition below).
 export type CulturalTradition = "secular" | "catholic" | "jewish" | "hindu" | "muslim" | "interfaith" | "civil" | "other";
 
-// Ceremony-level traditions — the selectable curation buckets in /ceremony.
+// Ceremony-level traditions. the selectable curation buckets in /ceremony.
 export type CeremonyTradition =
   | "humanist"        // secular, ceremony-as-meaningful-non-religious
   | "civil"           // judge / clerk-led, minimal
@@ -186,7 +186,7 @@ export interface Brief {
   heroPrompt?: string;
   heroRenderedAt?: string;
   /** When the OpenAI image call failed, this holds the last error so the
-   *  UI can surface "stuck on placeholder — try again" affordances. */
+   *  UI can surface "stuck on placeholder. try again" affordances. */
   heroError?: string;
   /** Which OpenAI model produced the live image (gpt-image-1 / dall-e-3 / dall-e-2). */
   heroModel?: string;
@@ -229,7 +229,7 @@ export interface Vendor {
   gateScope?: GateScope;
   thread?: VendorMessage[];
   verified?: boolean;     // Corsia Verified (PRD §9.2)
-  /** Where this vendor came from — the curated marketplace, an open-web
+  /** Where this vendor came from. the curated marketplace, an open-web
    *  search at the couple's request, or a manual add. Default treated as
    *  "marketplace" when undefined. */
   discoveryMethod?: "marketplace" | "open_web" | "manual";
@@ -237,7 +237,7 @@ export interface Vendor {
   sourceProvenance?: string;
   /** Canonical URL Scout verified for this vendor (their site or IG). */
   sourceUrl?: string;
-  /** Any public contact path Scout located — site form, IG, booking URL. */
+  /** Any public contact path Scout located. site form, IG, booking URL. */
   contactPath?: string;
   /** One concrete detail from their portfolio Scout used to anchor outreach. */
   signaturePortfolioNote?: string;
@@ -408,7 +408,7 @@ export interface DietaryConflict {
   resolution?: DietaryResolution;
 }
 
-// Couple-set resolution per (guest, menu item) — when present, the conflict is
+// Couple-set resolution per (guest, menu item). when present, the conflict is
 // considered acknowledged and stops counting against the "needs caterer attention" pile.
 export type ResolutionKind =
   | "alt_meal"            // serving an alternate course/dish to this guest
@@ -437,7 +437,7 @@ export interface DesignAsset {
   gateScope?: GateScope;
   approved?: boolean;
   /** Optional rendered hero image (data URL or remote URL). Populated when
-   *  the couple taps "Render visuals" — calls OpenAI gpt-image-1 if a key
+   *  the couple taps "Render visuals". calls OpenAI gpt-image-1 if a key
    *  is set, otherwise falls back to the same sage-pale placeholder used by
    *  the Mood Board generator. */
   heroImage?: string;
@@ -666,7 +666,7 @@ export interface CeremonySection {
   body: string;
   reader?: string;
   approved?: boolean;
-  // Curation metadata — which tradition this section comes from, and the
+  // Curation metadata. which tradition this section comes from, and the
   // canonical ritual key if it was inserted from the library.
   tradition?: CeremonyTradition;
   ritualKey?: string;         // e.g., "ketubah_signing", "saptapadi"
@@ -684,7 +684,7 @@ export interface CakeSpec {
   servings: number;
   // Legacy free-text retained for backward compat; structured field below is canonical.
   allergenNotes: string;
-  // Structured — joined to the dietary engine.
+  // Structured. joined to the dietary engine.
   allergens?: AllergenCode[];
   vendorId?: string;
   approved?: boolean;
@@ -773,7 +773,7 @@ export interface VisitAppt {
   done?: boolean;
 }
 
-// ---- Marriage license (NEW — not in PRD) ------------------------------
+// ---- Marriage license (NEW. not in PRD) ------------------------------
 
 export interface MarriageLicense {
   id: string;
@@ -789,10 +789,10 @@ export interface MarriageLicense {
   notes?: string;
 }
 
-// ---- Wedding website (NEW — couples expect this) ----------------------
+// ---- Wedding website (NEW. couples expect this) ----------------------
 
 // A custom question shown on the RSVP form. Smart-RSVP pattern from
-// Joy / RSVPify / Say I Do — couples crowdsource dietary, song requests,
+// Joy / RSVPify / Say I Do. couples crowdsource dietary, song requests,
 // arrival times, transport needs in one form. Responses flow into Larder
 // (allergens), Cantor (playlist), Quartermaster (welcome bag).
 export interface RsvpQuestion {
@@ -850,7 +850,7 @@ export interface PreEvent {
   budgetUsd?: number;
 }
 
-// ---- Tip envelopes (NEW — practical day-of need) ----------------------
+// ---- Tip envelopes (NEW. practical day-of need) ----------------------
 
 export interface TipEnvelope {
   id: string;
@@ -935,12 +935,12 @@ export interface ProjectState {
   speeches: SpeechDraft[];
   registry: RegistryItem[];
   honeymoon: HoneymoonSegment[];
-  // Day-of mode flag — when true, approval queue is suspended,
+  // Day-of mode flag. when true, approval queue is suspended,
   // contingency bands take effect, Maestro Jr. handles in-band decisions.
   dayOfMode: boolean;
   // Plan tier (display only, no payment integration in v0).
   plan: "free" | "couple_plus" | "planner" | "studio";
-  // Approved tokens registry — proves a card was approved before agent acts.
+  // Approved tokens registry. proves a card was approved before agent acts.
   approvedTokens: string[];
   // New v1.5 entities.
   music: MusicCue[];
@@ -962,7 +962,7 @@ export interface ProjectState {
   menu: MenuItem[];
   // Couple-set resolutions per conflict, keyed by `${guestId}__${menuItemId}`.
   dietaryResolutions: Record<string, DietaryResolution>;
-  // Demo Mode flag — true when state was loaded via Settings → "Load Demo".
+  // Demo Mode flag. true when state was loaded via Settings → "Load Demo".
   // Surfaces a banner in the topbar so the user knows actions in this state
   // are showcase, not their own data.
   demoMode?: boolean;
@@ -975,7 +975,7 @@ export interface ProjectState {
   // Daily generation counter for the cost cap.
   generationCount?: { dateISO: string; count: number };
 
-  // The Couturier — atelier surfaces. The dress firewall (gates.dress)
+  // The Couturier. atelier surfaces. The dress firewall (gates.dress)
   // hides all of this from the partner viewer.
   atelier?: AtelierState;
 }
@@ -988,7 +988,7 @@ export interface AtelierState {
   profile?: DressProfile;
   /** Every saved generation, dress + veil. Versioned via parentConceptId. */
   concepts: DressConcept[];
-  /** Curated atelier shortlist — Couturier surfaces these once a concept
+  /** Curated atelier shortlist. Couturier surfaces these once a concept
    *  is marked "the one". */
   ateliers?: AtelierVendor[];
   /** Selected atelier id, set when the user picks one from the shortlist. */
@@ -1022,7 +1022,7 @@ export type DressConceptStatus = "in_consideration" | "shortlist" | "the_one";
 export type DressGenerationMode = "sketch" | "editorial";
 
 /** Taxonomy selections for a dress or veil. Free-form so a single shape
- *  serves both — only the fields relevant to the concept's `kind` are set. */
+ *  serves both. only the fields relevant to the concept's `kind` are set. */
 export interface DressTaxonomy {
   // Dress-only
   silhouette?: string;
@@ -1066,7 +1066,7 @@ export interface AtelierVendor {
   name: string;
   /** City + country, e.g. "New York, NY" or "Paris, France" */
   region: string;
-  /** Tags Couturier uses for matching — "structured", "fluid", "lace",
+  /** Tags Couturier uses for matching. "structured", "fluid", "lace",
    *  "minimal", "drama", "modern", "classic", etc. */
   specialties: string[];
   /** Indicative starting price USD. */

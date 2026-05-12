@@ -1,0 +1,393 @@
+{
+  "brief": {
+    "organizerName": "Maya",
+    "partnerName": "Sam",
+    "dateWindow": "Late September 2026",
+    "region": "Hudson Valley, NY",
+    "guestCount": 120,
+    "budgetUsd": 80000,
+    "vibe": "candlelit barn, editorial film",
+    "plannerStatus": "want_one",
+    "cultural": "secular",
+    "formalityTone": "modern",
+    "destination": false,
+    "locked": true,
+    "lockedAt": "2026-05-11T20:18:18.162Z"
+  },
+  "chat": [],
+  "approvals": [
+    {
+      "id": "mp17g961ii0wr",
+      "createdAt": "2026-05-11T12:55:50.377Z",
+      "status": "pending",
+      "agent": "Negotiator",
+      "phase": "discovery",
+      "title": "Send follow-up to Hudson Valley Barn?",
+      "rationale": "Inbox scan parsed an \"available\" reply quoting $14,500. Negotiator drafted a response. Approve to send via your connected Gmail.",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn <events@hudsonvalleybarn.com>",
+        "subject": "Re: Inquiry for Venue — Late September 2026",
+        "body": "Hello Hudson Valley Barn,\n\nThank you for the proposal — we've shared it with Maya & Sam and they'd like to come back to you with a small counter.\n\nAcknowledge their availability, ask a clarifying question about a few line items, and signal we're price-sensitive without pushing back hard yet.\n\nIf that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.\n\nLooking forward to your reply.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      }
+    },
+    {
+      "id": "mp17g974gyntu",
+      "createdAt": "2026-05-11T12:55:50.416Z",
+      "status": "pending",
+      "agent": "Negotiator",
+      "phase": "discovery",
+      "title": "Reply to Wildgrove Florals's information request?",
+      "rationale": "Inbox scan parsed a \"needs_info\" reply. Negotiator drafted a response.",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Wildgrove Florals <orders@wildgroveflorals.com>",
+        "subject": "Re: Inquiry for Florist",
+        "body": "Hello Wildgrove Florals,\n\nThank you for the proposal — we've shared it with Maya & Sam and they'd like to come back to you with a small counter.\n\nThey asked for more info. Reply with the missing details politely; if anything is genuinely unclear, ask the couple before answering.\n\nIf that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.\n\nLooking forward to your reply.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      }
+    },
+    {
+      "id": "mp17g97qyr2mi",
+      "createdAt": "2026-05-11T12:55:50.438Z",
+      "status": "pending",
+      "agent": "Negotiator",
+      "phase": "discovery",
+      "title": "Send follow-up to Hudson Valley Barn?",
+      "rationale": "Inbox scan parsed an \"available\" reply quoting $145. Negotiator drafted a response. Approve to send via your connected Gmail.",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn <events@hudsonvalleytableco.com>",
+        "subject": "Re: Inquiry for Catering",
+        "body": "Hello Hudson Valley Barn,\n\nThank you for the proposal — we've shared it with Maya & Sam and they'd like to come back to you with a small counter.\n\nAcknowledge their availability, ask a clarifying question about a few line items, and signal we're price-sensitive without pushing back hard yet.\n\nIf that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.\n\nLooking forward to your reply.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      }
+    },
+    {
+      "id": "mp1n99l4tfiez",
+      "createdAt": "2026-05-11T20:18:18.184Z",
+      "status": "pending",
+      "agent": "Negotiator",
+      "phase": "discovery",
+      "title": "Send follow-up to Hudson Valley Barn?",
+      "rationale": "Inbox scan parsed an \"available\" reply quoting $14,500. Negotiator drafted a response. Approve to send via your connected Gmail.",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn <events@hudsonvalleybarn.com>",
+        "subject": "Re: Inquiry for Venue — Late September 2026",
+        "body": "Hello Hudson Valley Barn,\n\nThank you for the proposal — we've shared it with Maya & Sam and they'd like to come back to you with a small counter.\n\nAcknowledge their availability, ask a clarifying question about a few line items, and signal we're price-sensitive without pushing back hard yet.\n\nIf that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.\n\nLooking forward to your reply.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      }
+    },
+    {
+      "id": "mp1n99m97wxmt",
+      "createdAt": "2026-05-11T20:18:18.225Z",
+      "status": "pending",
+      "agent": "Negotiator",
+      "phase": "discovery",
+      "title": "Reply to Wildgrove Florals's information request?",
+      "rationale": "Inbox scan parsed a \"needs_info\" reply. Negotiator drafted a response.",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Wildgrove Florals <orders@wildgroveflorals.com>",
+        "subject": "Re: Inquiry for Florist",
+        "body": "Hello Wildgrove Florals,\n\nThank you for the proposal — we've shared it with Maya & Sam and they'd like to come back to you with a small counter.\n\nThey asked for more info. Reply with the missing details politely; if anything is genuinely unclear, ask the couple before answering.\n\nIf that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.\n\nLooking forward to your reply.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      }
+    },
+    {
+      "id": "mp1n99mujuo8v",
+      "createdAt": "2026-05-11T20:18:18.246Z",
+      "status": "pending",
+      "agent": "Negotiator",
+      "phase": "discovery",
+      "title": "Send follow-up to Hudson Valley Barn?",
+      "rationale": "Inbox scan parsed an \"available\" reply quoting $145. Negotiator drafted a response. Approve to send via your connected Gmail.",
+      "risk": "low",
+      "action": {
+        "kind": "send_email",
+        "to": "Hudson Valley Barn <events@hudsonvalleytableco.com>",
+        "subject": "Re: Inquiry for Catering",
+        "body": "Hello Hudson Valley Barn,\n\nThank you for the proposal — we've shared it with Maya & Sam and they'd like to come back to you with a small counter.\n\nAcknowledge their availability and ask one specific clarifying question about scope before moving toward a contract.\n\nIf that's not workable, we're flexible on a few details — happy to discuss alternatives that get us close to your standard terms while making this work for the couple.\n\nLooking forward to your reply.\n\nWarmly,\nAISLE on behalf of Maya & Sam"
+      }
+    }
+  ],
+  "ledger": [
+    {
+      "id": "mp17g95ra3qdc",
+      "at": "2026-05-11T12:55:50.367Z",
+      "actor": "user",
+      "kind": "brief.locked",
+      "summary": "Brief locked"
+    },
+    {
+      "id": "mp17g9611rkri",
+      "at": "2026-05-11T12:55:50.377Z",
+      "actor": "agent",
+      "agent": "Negotiator",
+      "kind": "approval.created",
+      "summary": "Send follow-up to Hudson Valley Barn?",
+      "meta": {
+        "approvalId": "mp17g961ii0wr",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp17g974h4m0e",
+      "at": "2026-05-11T12:55:50.416Z",
+      "actor": "agent",
+      "agent": "Negotiator",
+      "kind": "approval.created",
+      "summary": "Reply to Wildgrove Florals's information request?",
+      "meta": {
+        "approvalId": "mp17g974gyntu",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp17g97qeenl2",
+      "at": "2026-05-11T12:55:50.438Z",
+      "actor": "agent",
+      "agent": "Negotiator",
+      "kind": "approval.created",
+      "summary": "Send follow-up to Hudson Valley Barn?",
+      "meta": {
+        "approvalId": "mp17g97qyr2mi",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp1n99kswtdag",
+      "at": "2026-05-11T20:18:18.172Z",
+      "actor": "user",
+      "kind": "brief.locked",
+      "summary": "Brief locked"
+    },
+    {
+      "id": "mp1n99l4sg8bu",
+      "at": "2026-05-11T20:18:18.184Z",
+      "actor": "agent",
+      "agent": "Negotiator",
+      "kind": "approval.created",
+      "summary": "Send follow-up to Hudson Valley Barn?",
+      "meta": {
+        "approvalId": "mp1n99l4tfiez",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp1n99m960gg1",
+      "at": "2026-05-11T20:18:18.225Z",
+      "actor": "agent",
+      "agent": "Negotiator",
+      "kind": "approval.created",
+      "summary": "Reply to Wildgrove Florals's information request?",
+      "meta": {
+        "approvalId": "mp1n99m97wxmt",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    },
+    {
+      "id": "mp1n99muxkood",
+      "at": "2026-05-11T20:18:18.246Z",
+      "actor": "agent",
+      "agent": "Negotiator",
+      "kind": "approval.created",
+      "summary": "Send follow-up to Hudson Valley Barn?",
+      "meta": {
+        "approvalId": "mp1n99mujuo8v",
+        "risk": "low",
+        "action": "send_email"
+      },
+      "gateScope": null
+    }
+  ],
+  "paused": false,
+  "vendors": [
+    {
+      "id": "mp17g95s8z1ix",
+      "status": "quoting",
+      "lastTouchAt": "2026-05-11T20:18:18.245Z",
+      "name": "Hudson Valley Barn",
+      "category": "Venue",
+      "city": "Hudson, NY",
+      "fitScore": 95,
+      "priceBracket": "$$$",
+      "notes": "Top venue pick",
+      "thread": [
+        {
+          "id": "mp17g95zhdtk3",
+          "at": "2026-05-11T12:55:50.375Z",
+          "direction": "inbound",
+          "body": "Hi,\n\nThanks for reaching out about Maya & Sam's wedding. We do have availability the weekend you're looking at.\n\nFor 120 guests, our typical site fee is $14,500 and we can accommodate up to 180 seated. We require a $4,000 deposit to hold the date and the balance is due 30 days prior.\n\nWould you like to schedule a venue tour? We have openings the next two weekends.\n\nBest,\nHudson Valley Barn",
+          "parsedIntent": "available",
+          "quotedUsd": 14500
+        },
+        {
+          "id": "mp17g97n4o0l2",
+          "at": "2026-05-11T12:55:50.435Z",
+          "direction": "inbound",
+          "body": "Hi,\n\nWe're available your weekend and would love to be considered. For 120 guests, our family-style menu is $145/pp inclusive of service, and our plated menu is $185/pp. Both include passed apps, three-course main, late-night station, and bar staff.\n\nWe specialize in dietary accommodations — we can flag every plate to allergens at the line. Happy to share a sample menu when you're ready.\n\nWarmly,\nHudson Valley Table Co.",
+          "parsedIntent": "available",
+          "quotedUsd": 145
+        },
+        {
+          "id": "mp1n99l2dj6yd",
+          "at": "2026-05-11T20:18:18.182Z",
+          "direction": "inbound",
+          "body": "Hi,\n\nThanks for reaching out about Maya & Sam's wedding. We do have availability the weekend you're looking at.\n\nFor 120 guests, our typical site fee is $14,500 and we can accommodate up to 180 seated. We require a $4,000 deposit to hold the date and the balance is due 30 days prior.\n\nWould you like to schedule a venue tour? We have openings the next two weekends.\n\nBest,\nHudson Valley Barn",
+          "parsedIntent": "available",
+          "quotedUsd": 14500
+        },
+        {
+          "id": "mp1n99mrlqmgi",
+          "at": "2026-05-11T20:18:18.243Z",
+          "direction": "inbound",
+          "body": "Hi,\n\nWe're available your weekend and would love to be considered. For 120 guests, our family-style menu is $145/pp inclusive of service, and our plated menu is $185/pp. Both include passed apps, three-course main, late-night station, and bar staff.\n\nWe specialize in dietary accommodations — we can flag every plate to allergens at the line. Happy to share a sample menu when you're ready.\n\nWarmly,\nHudson Valley Table Co.",
+          "parsedIntent": "available",
+          "quotedUsd": 145
+        }
+      ],
+      "estimateUsd": 145,
+      "emailAddresses": [
+        "events@hudsonvalleybarn.com",
+        "events@hudsonvalleytableco.com"
+      ]
+    },
+    {
+      "id": "mp17g95saaujb",
+      "status": "shortlisted",
+      "lastTouchAt": "2026-05-11T20:18:18.202Z",
+      "name": "Iris & Oak Studio",
+      "category": "Photographer",
+      "city": "Hudson, NY",
+      "fitScore": 90,
+      "priceBracket": "$$$",
+      "notes": "Editorial doc style",
+      "thread": [
+        {
+          "id": "mp17g96iglypp",
+          "at": "2026-05-11T12:55:50.395Z",
+          "direction": "inbound",
+          "body": "I'm out of office through this Sunday and will reply when I'm back at my desk Monday morning. For urgent inquiries about wedding photography availability, please contact my studio manager at studio@irisoakstudio.com.\n\nThank you,\nIris & Oak Studio",
+          "parsedIntent": "out_of_office"
+        },
+        {
+          "id": "mp1n99llx25w4",
+          "at": "2026-05-11T20:18:18.201Z",
+          "direction": "inbound",
+          "body": "I'm out of office through this Sunday and will reply when I'm back at my desk Monday morning. For urgent inquiries about wedding photography availability, please contact my studio manager at studio@irisoakstudio.com.\n\nThank you,\nIris & Oak Studio",
+          "parsedIntent": "out_of_office"
+        }
+      ],
+      "emailAddresses": [
+        "hello@irisoakstudio.com"
+      ]
+    },
+    {
+      "id": "mp17g95s1hkkl",
+      "status": "negotiating",
+      "lastTouchAt": "2026-05-11T20:18:18.224Z",
+      "name": "Wildgrove Florals",
+      "category": "Florist",
+      "city": "Hudson, NY",
+      "fitScore": 88,
+      "priceBracket": "$$",
+      "notes": "Garden-style",
+      "thread": [
+        {
+          "id": "mp17g971esw9k",
+          "at": "2026-05-11T12:55:50.413Z",
+          "direction": "inbound",
+          "body": "Hello,\n\nThanks for the inquiry. Before I can put a real number together I need a few more details:\n\n1. Are you using a venue with floral restrictions (no candles, height limits)?\n2. Are bouquets going to be carried by the wedding party, or just the couple?\n3. Are you open to seasonal substitutions if a particular variety is unavailable?\n\nOur weddings in your size range typically run $6,500-$12,000 depending on scope. Looking forward to hearing more.\n\nWildgrove Florals",
+          "parsedIntent": "needs_info",
+          "quotedUsd": 6500
+        },
+        {
+          "id": "mp1n99m7c7ic3",
+          "at": "2026-05-11T20:18:18.223Z",
+          "direction": "inbound",
+          "body": "Hello,\n\nThanks for the inquiry. Before I can put a real number together I need a few more details:\n\n1. Are you using a venue with floral restrictions (no candles, height limits)?\n2. Are bouquets going to be carried by the wedding party, or just the couple?\n3. Are you open to seasonal substitutions if a particular variety is unavailable?\n\nOur weddings in your size range typically run $6,500-$12,000 depending on scope. Looking forward to hearing more.\n\nWildgrove Florals",
+          "parsedIntent": "needs_info",
+          "quotedUsd": 6500
+        }
+      ],
+      "emailAddresses": [
+        "orders@wildgroveflorals.com"
+      ]
+    },
+    {
+      "id": "mp17g95sznbw1",
+      "status": "shortlisted",
+      "lastTouchAt": "2026-05-11T12:55:50.368Z",
+      "name": "Hudson Valley Table Co.",
+      "category": "Caterer",
+      "city": "Hudson, NY",
+      "fitScore": 85,
+      "priceBracket": "$$$",
+      "notes": "Family-style menu"
+    }
+  ],
+  "budget": [],
+  "households": [],
+  "guests": [],
+  "designs": [],
+  "seating": {
+    "tables": [],
+    "assignments": {},
+    "constraints": [],
+    "cost": 0
+  },
+  "dayOf": [],
+  "thanks": [],
+  "gates": {
+    "dress": false,
+    "partner_gift": false,
+    "honeymoon": false,
+    "speech": false,
+    "vows_organizer": false,
+    "vows_partner": false
+  },
+  "viewer": "organizer",
+  "stationery": [],
+  "hotelBlocks": [],
+  "shuttles": [],
+  "welcomeBag": [],
+  "contingencies": [],
+  "engagement": [],
+  "vows": [],
+  "speeches": [],
+  "registry": [],
+  "honeymoon": [],
+  "dayOfMode": false,
+  "plan": "couple_plus",
+  "approvedTokens": [],
+  "music": [],
+  "ceremony": [],
+  "ceremonyTradition": "humanist",
+  "cake": null,
+  "bar": null,
+  "florals": [],
+  "rentals": [],
+  "beauty": [],
+  "visits": [],
+  "license": null,
+  "site": null,
+  "weddingParty": [],
+  "preEvents": [],
+  "tips": [],
+  "memorials": [],
+  "menu": [],
+  "dietaryResolutions": {}
+}

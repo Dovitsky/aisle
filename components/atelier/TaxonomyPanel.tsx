@@ -150,7 +150,7 @@ function Section({
           {label}
         </span>
         <span className="text-[11px] text-ink-300 italic max-w-[160px] truncate">
-          {summary || (isOpen ? "" : "—")}
+          {summary || (isOpen ? "" : ", ")}
         </span>
       </button>
       {isOpen && children}

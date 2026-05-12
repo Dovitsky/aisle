@@ -1,7 +1,7 @@
 // Outbound email transport. Three paths, in priority order:
-//   1. User's connected Gmail (preferred — the email comes from the couple's address)
-//   2. Resend (if RESEND_API_KEY set) — system-side send via corsia.email alias
-//   3. Log-only fallback — record the would-have-sent in the ledger
+//   1. User's connected Gmail (preferred. the email comes from the couple's address)
+//   2. Resend (if RESEND_API_KEY set). system-side send via corsia.email alias
+//   3. Log-only fallback. record the would-have-sent in the ledger
 //
 // The cascade engine calls sendEmail() when an approved Approval Card has
 // `action.kind === "send_email"`. The result feeds the vendor thread.

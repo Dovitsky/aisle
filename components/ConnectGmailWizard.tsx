@@ -7,7 +7,7 @@
 //      the exact redirect URI to paste in.
 //   2. Capture their client ID + secret and POST to /api/gmail/credentials.
 //      That persists to data/gmail-credentials.json which the OAuth client
-//      picks up immediately — no dev server restart required.
+//      picks up immediately. no dev server restart required.
 //   3. Hand off to /api/gmail/connect which triggers the Google consent page.
 //
 // On a fresh install this is ~90 seconds end-to-end.
@@ -56,7 +56,7 @@ export function ConnectGmailWizard({ open, onClose, onConnected }: Props) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      /* clipboard blocked — that's fine */
+      /* clipboard blocked. that's fine */
     }
   };
 
@@ -406,7 +406,7 @@ function ReadyStep({
         </span>
         <div className="min-w-0">
           <p className="text-[15px] leading-relaxed text-ink">
-            Credentials saved. Last step — sign in to the Gmail account Corsia
+            Credentials saved. Last step. sign in to the Gmail account Corsia
             should watch and send from.
           </p>
           {source === "env" && (

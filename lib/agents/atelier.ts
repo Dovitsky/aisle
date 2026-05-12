@@ -1,4 +1,4 @@
-// Atelier — hair & makeup agent. Builds a day-of beauty schedule.
+// Atelier. hair & makeup agent. Builds a day-of beauty schedule.
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
@@ -9,7 +9,7 @@ Build a day-of beauty schedule starting from a "ready by" time.
 
 Output JSON only:
 { "appts": [
-  { "who": "named role (e.g., 'Maya — organizer', 'Mom Patel', 'MOH Priya')",
+  { "who": "named role (e.g., 'Maya. organizer', 'Mom Patel', 'MOH Priya')",
     "service": "hair" | "makeup" | "both",
     "startTime": "HH:mm",
     "durationMin": int,
@@ -30,8 +30,8 @@ export async function atelierPropose(args: {
   if (!hasApiKey()) return offline(args);
 
   const peopleNeeding = [
-    `${args.brief.organizerName} — organizer`,
-    `${args.brief.partnerName} — partner`,
+    `${args.brief.organizerName}. organizer`,
+    `${args.brief.partnerName}. partner`,
     ...args.party.filter((m) => m.role === "maid_of_honor" || m.role === "bridesmaid").map((m) => m.name),
   ];
 
@@ -92,7 +92,7 @@ function offline(args: { brief: Brief; ceremonyTime: string; party: WeddingParty
 
   const appts: Omit<BeautyAppt, "id">[] = [];
   // Trials first.
-  appts.push({ who: `${args.brief.organizerName} — organizer`, service: "both", startTime: "10:00", durationMin: 120, trial: true, notes: "Trial appointment, 6-8 weeks before the wedding. Bring veil + hairpiece." });
+  appts.push({ who: `${args.brief.organizerName}. organizer`, service: "both", startTime: "10:00", durationMin: 120, trial: true, notes: "Trial appointment, 6-8 weeks before the wedding. Bring veil + hairpiece." });
   // Hair: starts 5 hr before ceremony, 60 min each, two chairs.
   const hairStart = ceremony - 5 * 60;
   let h1 = hairStart;
@@ -106,7 +106,7 @@ function offline(args: { brief: Brief; ceremonyTime: string; party: WeddingParty
       h2 += 60;
     }
   });
-  appts.push({ who: `${args.brief.organizerName} — organizer`, service: "hair", startTime: fmt(Math.max(h1, h2)), durationMin: 75, trial: false, notes: "Organizer last; allow 75 min for veil pinning." });
+  appts.push({ who: `${args.brief.organizerName}. organizer`, service: "hair", startTime: fmt(Math.max(h1, h2)), durationMin: 75, trial: false, notes: "Organizer last; allow 75 min for veil pinning." });
   // Makeup: starts 3 hr before ceremony.
   const makeupStart = ceremony - 3 * 60;
   let m1 = makeupStart;
@@ -120,6 +120,6 @@ function offline(args: { brief: Brief; ceremonyTime: string; party: WeddingParty
       m2 += 45;
     }
   });
-  appts.push({ who: `${args.brief.organizerName} — organizer`, service: "makeup", startTime: fmt(Math.max(m1, m2)), durationMin: 60, trial: false, notes: "Lead artist; lashes optional." });
+  appts.push({ who: `${args.brief.organizerName}. organizer`, service: "makeup", startTime: fmt(Math.max(m1, m2)), durationMin: 60, trial: false, notes: "Lead artist; lashes optional." });
   return appts;
 }

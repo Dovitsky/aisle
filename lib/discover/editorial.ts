@@ -1,4 +1,4 @@
-// 8 editorial articles. Stubs for v1 — link to /discover/editorial/[slug] which
+// 8 editorial articles. Stubs for v1. link to /discover/editorial/[slug] which
 // renders a "coming soon" page until real content lands.
 
 export interface EditorialArticle {
@@ -22,7 +22,7 @@ export const EDITORIAL: EditorialArticle[] = [
     cover: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
     readMinutes: 5 },
   { slug: "florals-golden-hour", category: "Florals",
-    title: "Florals at golden hour — what to ask your photographer",
+    title: "Florals at golden hour. what to ask your photographer",
     excerpt: "Cool whites, dusty pinks, eucalyptus all shift color in 4pm light. The questions to ask before the bouquets are made.",
     cover: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=1200&q=80",
     readMinutes: 3 },
@@ -33,7 +33,7 @@ export const EDITORIAL: EditorialArticle[] = [
     readMinutes: 8 },
   { slug: "force-majeure",       category: "Contracts",
     title: "How to read a venue's force majeure clause",
-    excerpt: "The pandemic taught the industry. Most venues now have stronger language — but stronger for whom?",
+    excerpt: "The pandemic taught the industry. Most venues now have stronger language. but stronger for whom?",
     cover: "https://images.unsplash.com/photo-1438032005730-c779502df39b?w=1200&q=80",
     readMinutes: 6 },
   { slug: "welcome-bags",        category: "Welcome",

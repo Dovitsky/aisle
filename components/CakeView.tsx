@@ -99,7 +99,7 @@ export function CakeView() {
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
           {cake
             ? `${cake.frostingStyle} frosting, ${cake.flavors.length} flavors. Allergens cross-check against your guests' dietary records automatically.`
-            : "Patissier sketches a starting cake from your vibe and guest count — tiers, flavors, fillings, frosting, decoration. Swap any piece."}
+            : "Patissier sketches a starting cake from your vibe and guest count. tiers, flavors, fillings, frosting, decoration. Swap any piece."}
         </p>
         {briefLocked && (
           <div className="mt-5">
@@ -116,7 +116,7 @@ export function CakeView() {
               Not yet
             </p>
             <p className="text-[14px] text-ink leading-relaxed">
-              Seal the dossier first — Patissier needs the season, palette, and headcount before
+              Seal the dossier first. Patissier needs the season, palette, and headcount before
               sketching a cake.
             </p>
           </div>
@@ -155,7 +155,7 @@ export function CakeView() {
             <p className="display text-[26px] text-ink leading-tight">No cake yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Click <span className="text-ink not-italic">Sketch a cake</span> above and Patissier
-              will draft a starting cake — flavors per tier, fillings, frosting, decoration.
+              will draft a starting cake. flavors per tier, fillings, frosting, decoration.
             </p>
           </div>
         </Reveal>
@@ -171,7 +171,7 @@ export function CakeView() {
                   The stack
                 </p>
                 <p className="text-[11.5px] text-ink-300 italic mt-0.5">
-                  Bottom tier first — what guests cut into.
+                  Bottom tier first. what guests cut into.
                 </p>
               </header>
               <ul className="divide-y hairline">
@@ -189,7 +189,7 @@ export function CakeView() {
                         {f}
                       </span>
                       <span className="text-[12.5px] text-ink-300 text-right leading-relaxed">
-                        {cake.fillings[i] ?? "—"}
+                        {cake.fillings[i] ?? ", "}
                       </span>
                     </li>
                   );

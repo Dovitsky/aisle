@@ -23,7 +23,7 @@ export const SILHOUETTE_TRANSLATIONS: Record<string, string> = {
   "Empire":
     "a fitted bust raised to just under the chest with the skirt falling unbroken from there, romantic and unstructured",
   "Modified A-line":
-    "a slimmer A-line — fitted through the hip, with a quieter flare beginning around the upper thigh",
+    "a slimmer A-line. fitted through the hip, with a quieter flare beginning around the upper thigh",
   "Tea-length":
     "a hemline that falls between the knee and the ankle, vintage and confident",
   "Mini":
@@ -44,13 +44,13 @@ export const NECKLINE_TRANSLATIONS: Record<string, string> = {
   "Off-shoulder":
     "an off-shoulder neckline that sits below the shoulder bone, baring the collarbone and the upper arms",
   "One-shoulder":
-    "a single-shoulder neckline that bares one side entirely — an asymmetry that anchors the dress",
+    "a single-shoulder neckline that bares one side entirely. an asymmetry that anchors the dress",
   "Halter":
     "a halter neckline that wraps the throat or shoulders, bare on the upper arms and back",
   "High neck / mock turtleneck":
     "a high neckline that closes against the throat, often paired with delicate construction at the shoulders",
   "Plunging":
-    "a plunging neckline that travels well past the bust line — drama held by careful construction",
+    "a plunging neckline that travels well past the bust line. drama held by careful construction",
   "Illusion":
     "an illusion neckline of sheer tulle traced with appliqué, the skin showing through without exposure",
   "Strapless":
@@ -61,7 +61,7 @@ export const NECKLINE_TRANSLATIONS: Record<string, string> = {
 
 export const SLEEVE_TRANSLATIONS: Record<string, string> = {
   "None / strapless":
-    "no sleeves — the shoulders are bare",
+    "no sleeves. the shoulders are bare",
   "Spaghetti strap":
     "the slightest spaghetti straps over the shoulders, almost invisible",
   "Cap sleeve":
@@ -77,7 +77,7 @@ export const SLEEVE_TRANSLATIONS: Record<string, string> = {
   "Off-shoulder draped":
     "draped sleeves that fall off the shoulder, soft and unstructured",
   "Detached / removable":
-    "detachable sleeves — the dress reads two ways, the sleeves come off for the reception",
+    "detachable sleeves. the dress reads two ways, the sleeves come off for the reception",
   "Sheer illusion long sleeve":
     "long sleeves of sheer illusion tulle, often traced with appliqué or hand-beading",
 };
@@ -107,7 +107,7 @@ export const BACK_TRANSLATIONS: Record<string, string> = {
 
 export const TRAIN_TRANSLATIONS: Record<string, string> = {
   "None / floor":
-    "no train — the dress finishes cleanly at the floor",
+    "no train. the dress finishes cleanly at the floor",
   "Sweep":
     "a short sweep train, just enough to graze the floor behind",
   "Court":
@@ -117,7 +117,7 @@ export const TRAIN_TRANSLATIONS: Record<string, string> = {
   "Cathedral":
     "a cathedral train of six to eight feet, dramatic and ceremonial",
   "Royal":
-    "a royal train of twelve feet or more — the length of a state occasion",
+    "a royal train of twelve feet or more. the length of a state occasion",
   "Detachable":
     "a detachable train that comes off cleanly for the reception",
   "Watteau":
@@ -126,46 +126,46 @@ export const TRAIN_TRANSLATIONS: Record<string, string> = {
 
 export const FABRIC_TRANSLATIONS: Record<string, string> = {
   "Silk crepe":
-    "silk crepe — a matte, sculptural, weighty silk that holds a clean line",
+    "silk crepe. a matte, sculptural, weighty silk that holds a clean line",
   "Silk satin / mikado":
-    "silk satin or mikado — a heavier silk with a soft sheen, structured enough to hold pleats",
+    "silk satin or mikado. a heavier silk with a soft sheen, structured enough to hold pleats",
   "Silk charmeuse":
-    "silk charmeuse — a soft, fluid silk with a high luster on the face, used for liquid drapes",
+    "silk charmeuse. a soft, fluid silk with a high luster on the face, used for liquid drapes",
   "Silk organza":
-    "silk organza — crisp, sheer, structured, used for volume that holds its shape",
+    "silk organza. crisp, sheer, structured, used for volume that holds its shape",
   "Silk taffeta":
-    "silk taffeta — crisp with a slight rustle, holds a sharp pleat",
+    "silk taffeta. crisp with a slight rustle, holds a sharp pleat",
   "Tulle":
-    "tulle — light, airy, used for layered volume and ethereal effects",
+    "tulle. light, airy, used for layered volume and ethereal effects",
   "French / Chantilly lace":
-    "French Chantilly lace — fine floral motifs on a sheer net, the classical bridal lace",
+    "French Chantilly lace. fine floral motifs on a sheer net, the classical bridal lace",
   "Italian guipure lace":
-    "Italian guipure lace — bolder, sculptural lace motifs without a net ground",
+    "Italian guipure lace. bolder, sculptural lace motifs without a net ground",
   "Mikado":
-    "mikado silk — substantial, slightly stiff, holds architectural shapes",
+    "mikado silk. substantial, slightly stiff, holds architectural shapes",
   "Crepe de chine":
-    "crepe de chine — soft and fluid, drapes against the body",
+    "crepe de chine. soft and fluid, drapes against the body",
   "Chiffon":
-    "chiffon — featherlight, gauzy, fluid",
+    "chiffon. featherlight, gauzy, fluid",
   "Georgette":
-    "georgette — slightly more textured than chiffon, with a soft crinkle",
+    "georgette. slightly more textured than chiffon, with a soft crinkle",
   "Brocade":
-    "brocade — a woven jacquard with raised patterns, formal and rich",
+    "brocade. a woven jacquard with raised patterns, formal and rich",
   "Velvet":
-    "velvet — deep pile, lush, the choice for winter weddings",
+    "velvet. deep pile, lush, the choice for winter weddings",
   "Silk gazar":
-    "silk gazar — crisp and architectural, holds dramatic shapes without weight",
+    "silk gazar. crisp and architectural, holds dramatic shapes without weight",
 };
 
 export const EMBELLISHMENT_TRANSLATIONS: Record<string, string> = {
   "Bare / minimal":
-    "no embellishment — the fabric and silhouette carry the dress",
+    "no embellishment. the fabric and silhouette carry the dress",
   "Hand-beading (allover)":
     "allover hand-beading across the entire dress, dense and shimmering",
   "Hand-beading (selective)":
     "selective hand-beading, scattered through the bodice and lightening toward the hem",
   "Pearl detailing":
-    "pearl detailing — small freshwater pearls hand-sewn through select panels",
+    "pearl detailing. small freshwater pearls hand-sewn through select panels",
   "Crystal detailing":
     "fine crystal detailing that catches candlelight without reading as costume",
   "Embroidered florals":
@@ -179,7 +179,7 @@ export const EMBELLISHMENT_TRANSLATIONS: Record<string, string> = {
   "Sequins (bold)":
     "bold paillette sequins that catch every light",
   "Feather trim":
-    "feather trim at the hem, sleeve, or shoulder — couture-house drama",
+    "feather trim at the hem, sleeve, or shoulder. couture-house drama",
   "Bow accents":
     "structured bow accents at the back, waist, or shoulder",
 };
@@ -188,19 +188,19 @@ export const COLOR_TRANSLATIONS: Record<string, string> = {
   "Pure white":
     "pure bridal white",
   "Ivory":
-    "ivory — warm, off-white, the most flattering white on most skin tones",
+    "ivory. warm, off-white, the most flattering white on most skin tones",
   "Champagne":
-    "champagne — a soft warm-toned cream",
+    "champagne. a soft warm-toned cream",
   "Blush":
-    "blush — the gentlest pink, almost a tone of skin",
+    "blush. the gentlest pink, almost a tone of skin",
   "Nude / skin tone":
     "a nude tone matched to skin, often the base for an illusion construction",
   "Soft pink":
     "soft pink, romantic and unexpected",
   "Powder blue":
-    "powder blue — vintage, old-Hollywood",
+    "powder blue. vintage, old-Hollywood",
   "Black":
-    "black — modern, confident, occasion-dependent",
+    "black. modern, confident, occasion-dependent",
   "Custom":
     "a custom color provided by the bride",
 };
@@ -215,7 +215,7 @@ export const VEIL_LENGTH_TRANSLATIONS: Record<string, string> = {
   "Elbow":
     "an elbow-length veil",
   "Fingertip":
-    "a fingertip-length veil — the classical proportion",
+    "a fingertip-length veil. the classical proportion",
   "Waltz (knee)":
     "a waltz-length veil to the knee, ballroom proportions",
   "Chapel":
@@ -228,7 +228,7 @@ export const VEIL_LENGTH_TRANSLATIONS: Record<string, string> = {
 
 export const VEIL_EDGE_TRANSLATIONS: Record<string, string> = {
   "Raw / cut":
-    "a raw cut edge — clean, unfinished, the silk net allowed to read",
+    "a raw cut edge. clean, unfinished, the silk net allowed to read",
   "Pencil edge":
     "a fine pencil-edge finish",
   "Ribbon edge":
@@ -256,13 +256,13 @@ export const VEIL_TIER_TRANSLATIONS: Record<string, string> = {
 
 export const VEIL_FABRIC_TRANSLATIONS: Record<string, string> = {
   "Silk tulle (softest)":
-    "silk tulle — the softest, most fluid net, used in couture",
+    "silk tulle. the softest, most fluid net, used in couture",
   "English net":
-    "English net — slightly heavier, structured",
+    "English net. slightly heavier, structured",
   "French illusion":
-    "French illusion tulle — fine and sheer",
+    "French illusion tulle. fine and sheer",
   "Italian tulle":
-    "Italian tulle — soft with a slight body",
+    "Italian tulle. soft with a slight body",
   "Drop tulle (denser)":
-    "drop tulle — denser, holds shape better, used for longer veils",
+    "drop tulle. denser, holds shape better, used for longer veils",
 };

@@ -1,4 +1,4 @@
-// Couturier — generates dress concept directions inside the dress firewall (PRD §5.3).
+// Couturier. generates dress concept directions inside the dress firewall (PRD §5.3).
 // Every output of this agent is tagged gateScope: "dress".
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -15,7 +15,7 @@ export interface DressDirection {
 
 const SYSTEM = `You are Couturier, Corsia's bridal-attire agent operating inside a strict privacy gate.
 
-Voice: like a long-time bridal stylist — warm, plainspoken, opinionated.
+Voice: like a long-time bridal stylist. warm, plainspoken, opinionated.
 Output six directions covering a wide range (silhouettes, formality, era).
 
 Output JSON only:
@@ -92,7 +92,7 @@ function offline(): DressDirection[] {
       designerExamples: ["Monique Lhuillier", "Reem Acra", "Marchesa"],
       rationale: "Maximalist option. Best at a black-tie or evening ceremony with cool light." },
     { title: "Modern Mini + Cape",
-      silhouette: "Tailored mini dress with detachable floor-length cape — mini for reception, cape for ceremony.",
+      silhouette: "Tailored mini dress with detachable floor-length cape. mini for reception, cape for ceremony.",
       fabrics: ["Wool crepe", "Silk faille"],
       designerExamples: ["Khaite", "Toteme x bridal", "Halfpenny London"],
       rationale: "Two looks in one for a couple who wants the ceremony moment and freedom to dance." },

@@ -27,8 +27,8 @@ const KIND_LABEL: Record<BarMenuItem["kind"], string> = {
 
 const KIND_BLURB: Record<BarMenuItem["kind"], string> = {
   signature: "Two cocktails named for the couple, easy to batch.",
-  wine: "A small list — a sparkling, a white, a red, a rosé.",
-  beer: "Local where possible — one lager, one ale.",
+  wine: "A small list. a sparkling, a white, a red, a rosé.",
+  beer: "Local where possible. one lager, one ale.",
   spirit: "Rail spirits if open bar; a single feature pour otherwise.",
   non_alcoholic: "A real drink, not garnish-on-soda.",
 };
@@ -72,7 +72,7 @@ export function BarView() {
           });
         } else if (body.op === "set_style" && body.style) {
           const label = STYLE_LABEL[body.style as keyof typeof STYLE_LABEL] ?? body.style;
-          notify({ kind: "info", title: `Bar style — ${label}`, detail: "Rebalancing the volume estimate." });
+          notify({ kind: "info", title: `Bar style. ${label}`, detail: "Rebalancing the volume estimate." });
         }
       }
     } finally {
@@ -140,7 +140,7 @@ export function BarView() {
               Not yet
             </p>
             <p className="text-[14px] text-ink leading-relaxed">
-              Seal the dossier first — Sommelier needs your headcount and tone before drafting
+              Seal the dossier first. Sommelier needs your headcount and tone before drafting
               the bar.
             </p>
           </div>
@@ -179,7 +179,7 @@ export function BarView() {
             <p className="display text-[26px] text-ink leading-tight">No bar program yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Click <span className="text-ink not-italic">Draft the bar</span> above and Sommelier
-              will draft a starting menu — signatures, wine, beer, spirits, and a zero-proof.
+              will draft a starting menu. signatures, wine, beer, spirits, and a zero-proof.
             </p>
           </div>
         </Reveal>

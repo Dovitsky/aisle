@@ -46,7 +46,7 @@ const SLOT_BLURB: Record<MusicSlot, string> = {
   do_not_play: "Songs to never play",
 };
 
-// Order matters — chronological through the day, with "do_not_play" pinned at end.
+// Order matters. chronological through the day, with "do_not_play" pinned at end.
 const ORDER: MusicSlot[] = [
   "processional", "ceremony_music", "recessional",
   "cocktail_hour", "introduction", "first_dance", "parent_dance",
@@ -97,7 +97,7 @@ export function MusicView() {
             kind: "agent",
             agent: "Cantor",
             title: `${j.state.music.length} cues lined up`,
-            detail: "Edit any slot — the band/DJ dossier reflects what's in here.",
+            detail: "Edit any slot. the band/DJ dossier reflects what's in here.",
           });
         }
       }
@@ -151,7 +151,7 @@ export function MusicView() {
           )}
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
-          Cantor pulls a starting setlist by slot — processional through last dance — and a
+          Cantor pulls a starting setlist by slot. processional through last dance. and a
           do-not-play list. Guest song requests from RSVPs feed straight in. Whatever's here
           is what your band or DJ will see.
         </p>
@@ -183,7 +183,7 @@ export function MusicView() {
             </p>
             <p className="text-[14px] text-ink-300 leading-relaxed max-w-[60ch]">
               {total === 0
-                ? "One cue per ceremony slot — processional, recessional, first dance — plus 3–5 each for cocktail hour, dinner, and open dancing."
+                ? "One cue per ceremony slot. processional, recessional, first dance. plus 3–5 each for cocktail hour, dinner, and open dancing."
                 : "Replaces the entire setlist. Manual edits below will be lost."}
             </p>
             <div className="mt-4 flex items-center gap-4">
@@ -222,13 +222,13 @@ export function MusicView() {
                 <li key={i} className="flex items-baseline gap-2 leading-relaxed">
                   <span aria-hidden className="text-sage-400 shrink-0">♪</span>
                   <span className="italic">&ldquo;{r.song}&rdquo;</span>
-                  <span className="text-ink-300 text-[12px] truncate">— {r.by}</span>
+                  <span className="text-ink-300 text-[12px] truncate">,  {r.by}</span>
                 </li>
               ))}
             </ul>
             {guestRequests.length > 12 && (
               <p className="px-5 pb-4 text-[12px] text-ink-300 italic">
-                + {guestRequests.length - 12} more — full list goes to the band/DJ.
+                + {guestRequests.length - 12} more. full list goes to the band/DJ.
               </p>
             )}
           </section>
@@ -242,7 +242,7 @@ export function MusicView() {
             <p className="display text-[26px] text-ink leading-tight">No setlist yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Click <span className="text-ink not-italic">Pull a setlist together</span> above and Cantor
-              will draft cues across every slot — processional through last dance — plus a place to
+              will draft cues across every slot. processional through last dance. plus a place to
               jot songs to never play.
             </p>
           </div>

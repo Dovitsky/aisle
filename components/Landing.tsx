@@ -39,7 +39,7 @@ const CTA_BG_HOVER = `linear-gradient(135deg, ${SAGE_DEEP} 0%, ${SAGE_DARK} 100%
 
 const DISPLAY = '"Cormorant Garamond","Cormorant",Georgia,serif';
 // Helvetica-first system stack. The mono caps "AI startup" look came
-// from JetBrains Mono — gone. This constant kept its old name so the
+// from JetBrains Mono. gone. This constant kept its old name so the
 // many inline `fontFamily: MONO` refs in this file keep working.
 const MONO = '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif';
 
@@ -82,7 +82,7 @@ export function Landing() {
         }
 
         /* =========================================================
-           MOBILE LANDING — strip-down. Photo + headline overlay,
+           MOBILE LANDING. strip-down. Photo + headline overlay,
            one input below, sign-in link. EVERYTHING ELSE pushed
            below ~100vh of whitespace so the first two scrolls feel
            like an App Store hero page, not a magazine article.
@@ -91,7 +91,7 @@ export function Landing() {
            ========================================================= */
         @media (max-width: 720px) {
           /* Header: kill the SIGN IN + BEGIN nav. Just the "aisle"
-             mark in the top-left. One action — the input below —
+             mark in the top-left. One action. the input below.
              is enough. */
           .header-nav {
             display: none !important;
@@ -148,7 +148,7 @@ export function Landing() {
             padding: 16px 26px !important;
           }
 
-          /* Trust / "OUR PROMISE" — natural continuation. Single column,
+          /* Trust / "OUR PROMISE". natural continuation. Single column,
              tighter padding. Combined with hero-editorial's 32px bottom
              padding, gap between input and trust = ~88px (premium, not
              crammed, not a void). */
@@ -164,7 +164,7 @@ export function Landing() {
             padding-top: 4px !important;
           }
 
-          /* ProductMoment — single column on mobile */
+          /* ProductMoment. single column on mobile */
           .product-moment {
             padding: 56px 24px !important;
           }
@@ -173,7 +173,7 @@ export function Landing() {
             gap: 32px !important;
           }
 
-          /* Footer — slimmer on mobile */
+          /* Footer. slimmer on mobile */
           .landing-footer {
             padding: 36px 24px !important;
           }
@@ -512,7 +512,7 @@ function HeroEditorial() {
       </p>
 
       {/* Headline. refined scale, fits. mobile shows headline over the
-          photo instead — this h1 is hidden via .hero-mobile-hide. */}
+          photo instead. this h1 is hidden via .hero-mobile-hide. */}
       <h1
         className="cat-rise hero-mobile-hide"
         style={{
@@ -600,7 +600,7 @@ function HeroEditorial() {
         Takes about a minute · No card required
       </p>
 
-      {/* Bottom-right ornamental mark on the column — hidden on mobile
+      {/* Bottom-right ornamental mark on the column. hidden on mobile
           via the consolidated style block at the end of this component. */}
       <div
         aria-hidden
@@ -637,7 +637,7 @@ function HeroEditorial() {
       </div>
 
       {/* All mobile overrides live in the GLOBAL style block at the
-          top-level Landing component — scoped <style jsx> didn't
+          top-level Landing component. scoped <style jsx> didn't
           consistently win specificity over the inline minHeight on
           .hero-photo. Global media query handles every mobile case. */}
     </div>
@@ -658,7 +658,7 @@ function HeroAction() {
     setBusy(true);
     setError(null);
 
-    // Open the chat dock immediately so the destination is primed —
+    // Open the chat dock immediately so the destination is primed.
     // setChatOpen lives in React context and persists across the
     // client-side navigation below.
     setChatOpen(true);
@@ -707,8 +707,8 @@ function HeroAction() {
       console.error("[HeroAction] /api/chat failed:", e);
       setError(
         e instanceof Error && e.name === "AbortError"
-          ? "Maestro is taking a moment — continuing without waiting."
-          : "Network hiccup — continuing without waiting.",
+          ? "Maestro is taking a moment. continuing without waiting."
+          : "Network hiccup. continuing without waiting.",
       );
       navigateNext();
     } finally {
@@ -718,7 +718,7 @@ function HeroAction() {
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); void send(); }}>
-      {/* Field label. hidden on mobile — placeholder carries the prompt. */}
+      {/* Field label. hidden on mobile. placeholder carries the prompt. */}
       <label
         htmlFor="hero-input"
         className="hero-mobile-hide"
@@ -839,7 +839,7 @@ function HeroAction() {
         </button>
       </div>
 
-      {/* Error surface — the user must always know something went wrong. */}
+      {/* Error surface. the user must always know something went wrong. */}
       {error && (
         <p
           style={{
@@ -965,7 +965,7 @@ function Trust() {
             transition: "opacity 800ms 200ms, transform 800ms 200ms",
           }}
         >
-          From venues to vendors to vows — your AI wedding planner handles
+          From venues to vendors to vows. your AI wedding planner handles
           every detail. Nothing happens without your say.
         </p>
       </div>
@@ -1113,7 +1113,7 @@ function DecisionCard() {
         }}
       />
 
-      {/* Live card. stripped to the bone — headline + three buttons. */}
+      {/* Live card. stripped to the bone. headline + three buttons. */}
       <article
         style={{
           position: "relative",

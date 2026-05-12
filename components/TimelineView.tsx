@@ -1,18 +1,18 @@
 "use client";
 
-// /timeline — rebuilt against AISLE_TIMELINE_REVISION.docx.
+// /timeline. rebuilt against AISLE_TIMELINE_REVISION.docx.
 //
 // Ten fixes from the spec:
-//   1. Hero typography re-weighted — "Foundation" becomes queen.
+//   1. Hero typography re-weighted. "Foundation" becomes queen.
 //   2. Three-state milestones (past/present/future) with date stamps + pulse.
 //   3. Italic Cormorant sentence replaces "1/32 CHECKED OFF".
-//   4. Three checklist card states — done / next / queued.
-//   5. One eyebrow per visual region — "WHAT'S NEXT" gone.
+//   4. Three checklist card states. done / next / queued.
+//   5. One eyebrow per visual region. "WHAT'S NEXT" gone.
 //   6. 12-column staggered grid at lg+.
 //   7. Embedded "Maestro is…" panel; floating pill hidden on this route.
 //   8. Ambient 2.5% noise texture + softer hairlines.
 //   9. One editorial photograph in the right column.
-//   10. Header simplification — page-local restraint only.
+//   10. Header simplification. page-local restraint only.
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -30,7 +30,7 @@ interface PhaseDef {
   key: string;
   label: string;
   tagline: string;
-  /** Months before the wedding when this phase is "current" — used as the
+  /** Months before the wedding when this phase is "current". used as the
    *  anchor for the date-stamp math. */
   anchor: number;
 }
@@ -88,7 +88,7 @@ function weddingMonth(state: ProjectState): Date | null {
 }
 
 function stampForAnchor(weddingAt: Date | null, monthsBefore: number): string {
-  if (!weddingAt) return "—";
+  if (!weddingAt) return ", ";
   const d = new Date(weddingAt);
   d.setMonth(d.getMonth() - monthsBefore);
   return d.toLocaleString("en-US", { month: "short", year: "2-digit" }).replace(" ", " '");
@@ -141,7 +141,7 @@ export function TimelineView() {
 
   return (
     <div className="timeline-page relative" style={{ background: "transparent" }}>
-      {/* Ambient noise — Fix 8. Sits beneath everything. */}
+      {/* Ambient noise. Fix 8. Sits beneath everything. */}
       <NoiseLayer />
 
       <div className="relative z-10 pb-16">
@@ -314,7 +314,7 @@ export function TimelineView() {
                 color: "rgba(26,26,24,0.62)",
               }}
             >
-              Items check themselves as the work lands — book a venue, file the
+              Items check themselves as the work lands. book a venue, file the
               license, RSVPs come in. You don&apos;t tick boxes. Just live your
               life.
             </p>
@@ -741,7 +741,7 @@ function MaestroPanel() {
       <button
         type="button"
         onClick={() => {
-          // The chat dock listens to a global state — keep this gesture
+          // The chat dock listens to a global state. keep this gesture
           // simple: nudge the user toward the ChatDock open button.
           window.dispatchEvent(new CustomEvent("aisle:openMaestro"));
         }}
@@ -791,10 +791,10 @@ function benchmarkSentence(state: ProjectState, now: number): string {
     return `Venue locked early. You're ahead of pace for most ${state.brief?.region ?? "weddings"}.`;
   }
   if (now >= 6 && now < 9) {
-    return `Eight to six months out — the heart of vendor sign. Stay steady.`;
+    return `Eight to six months out. the heart of vendor sign. Stay steady.`;
   }
   if (now < 3 && now >= 0) {
-    return `Inside three months — let the work land. We'll surface anything urgent.`;
+    return `Inside three months. let the work land. We'll surface anything urgent.`;
   }
   return `You're twelve months out. Most couples have booked the venue by now.`;
 }

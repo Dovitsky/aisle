@@ -1,4 +1,4 @@
-// Pin operations — remove + move + reorder.
+// Pin operations. remove + move + reorder.
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";

@@ -1,4 +1,4 @@
-// Cleric — ceremony script writer (PRD §5.4.3 cultural copy variants).
+// Cleric. ceremony script writer (PRD §5.4.3 cultural copy variants).
 //
 // Cleric takes an explicit tradition argument (independent of the brief's
 // cultural flag) so couples can curate. Uses the local ritual library as
@@ -32,10 +32,10 @@ Output JSON only:
 
 Rules:
 - Match the requested tradition. If interfaith, name both source traditions in the welcome.
-- Use real liturgical / ritual language. Don't write "[insert prayer here]" placeholders — write the actual lines.
+- Use real liturgical / ritual language. Don't write "[insert prayer here]" placeholders. write the actual lines.
 - For Catholic, distinguish whether full Mass or outside Mass; default outside Mass unless the couple notes otherwise.
 - Use {{organizer}} and {{partner}} placeholders for the couple's names; we'll substitute on render.
-- Honor the couple's notes verbatim — if they say "skip kanyadaan" or "include hand-fasting after the vows," do that.
+- Honor the couple's notes verbatim. if they say "skip kanyadaan" or "include hand-fasting after the vows," do that.
 - Keep each section's body 2-12 lines unless the tradition demands more (e.g., Sheva Brachot).
 - Do not hallucinate readings from religious texts; quote real verses or use the named blessing as written.`;
 
@@ -82,7 +82,7 @@ function coerce(raw: unknown, tradition: CeremonyTradition): Omit<CeremonySectio
   };
 }
 
-// Offline ceremony — pulls from the local ritual library so /ceremony shows
+// Offline ceremony. pulls from the local ritual library so /ceremony shows
 // a real, tradition-specific script even without an API key.
 function offline(args: ClericArgs): Omit<CeremonySection, "id">[] {
   const tradition = args.tradition || "humanist";

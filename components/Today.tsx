@@ -3,7 +3,7 @@
 // Today. the home screen.
 //
 // Two completely different states:
-//  • No brief locked yet. the editorial Welcome — Landing for a fresh
+//  • No brief locked yet. the editorial Welcome. Landing for a fresh
 //    visitor, or ContinuingDraft when a starter brief is mid-fill.
 //  • Brief locked. the CommandCenter post-lock surface.
 //

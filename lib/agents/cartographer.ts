@@ -1,4 +1,4 @@
-// Cartographer — seating chart agent (build brief §4.5).
+// Cartographer. seating chart agent (build brief §4.5).
 //
 // Combines:
 //   1. Typed constraint model (hard separation, hard placement, strong/soft affinity, comfort, aesthetic).
@@ -62,7 +62,7 @@ export function scoreArrangement(
         if (c.tableId && ta && ta !== c.tableId) cost += COMFORT_PENALTY;
         break;
       case "aesthetic":
-        // Mild side-balancing — keep both sides represented at most tables.
+        // Mild side-balancing. keep both sides represented at most tables.
         // Computed once per arrangement below.
         break;
     }
@@ -208,13 +208,13 @@ export function explainSeat(
         if (other) reasons.push(`Hard separation from ${other.fullName} (${c.reason ?? "no reason given"}).`);
         break;
       case "strong_affinity":
-        if (other) reasons.push(`Strong affinity with ${other.fullName}${c.reason ? ` — ${c.reason}` : ""}.`);
+        if (other) reasons.push(`Strong affinity with ${other.fullName}${c.reason ? `. ${c.reason}` : ""}.`);
         break;
       case "soft_affinity":
         if (other) reasons.push(`Soft affinity with ${other.fullName}.`);
         break;
       case "hard_placement":
-        reasons.push(`Hard placement at this table${c.reason ? ` — ${c.reason}` : ""}.`);
+        reasons.push(`Hard placement at this table${c.reason ? `. ${c.reason}` : ""}.`);
         break;
       case "comfort":
         reasons.push(`Comfort: ${c.reason ?? "accessibility/dietary preference"}.`);

@@ -1,4 +1,4 @@
-// Integration flow test. replays the full investor-demo path without a
+// Integration flow test — replays the full investor-demo path without a
 // running server:
 //   1. Sample brief loaded via setBrief
 //   2. Maestro extracts names from chat in offline mode

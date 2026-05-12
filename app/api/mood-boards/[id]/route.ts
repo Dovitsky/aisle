@@ -1,4 +1,4 @@
-// Single mood board — patch + delete.
+// Single mood board. patch + delete.
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";

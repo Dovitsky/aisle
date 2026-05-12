@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       agent: "Treasurer",
       phase: "discovery",
       title: "Lock this budget allocation as the working plan?",
-      rationale: `Treasurer proposed ${proposal.lines.length} lines totaling $${proposal.total.toLocaleString()}. Approve to make this the source of truth; commitments and payments will track variance against it.\n\n${proposal.lines.map((l) => `• ${l.category} — $${l.planUsd.toLocaleString()}: ${l.rationale}`).join("\n")}`,
+      rationale: `Treasurer proposed ${proposal.lines.length} lines totaling $${proposal.total.toLocaleString()}. Approve to make this the source of truth; commitments and payments will track variance against it.\n\n${proposal.lines.map((l) => `• ${l.category}. $${l.planUsd.toLocaleString()}: ${l.rationale}`).join("\n")}`,
       risk: "medium",
       action: { kind: "lock_brief", summary: "Lock budget allocation" },
     });

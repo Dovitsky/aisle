@@ -29,8 +29,8 @@ function L(opts: Partial<LedgerEvent> & { id: string; at: string; summary: strin
 // 2) Only-user-events ledger → empty (ambient channel is agent-only).
 {
   const led: LedgerEvent[] = [
-    L({ id: "1", at: "2026-05-09T10:00:00Z", actor: "user", summary: "approved — Tre Posti deposit", kind: "approval.approved" }),
-    L({ id: "2", at: "2026-05-09T10:01:00Z", actor: "user", summary: "rejected — second band", kind: "approval.rejected" }),
+    L({ id: "1", at: "2026-05-09T10:00:00Z", actor: "user", summary: "approved. Tre Posti deposit", kind: "approval.approved" }),
+    L({ id: "2", at: "2026-05-09T10:01:00Z", actor: "user", summary: "rejected. second band", kind: "approval.rejected" }),
   ];
   ok(pickAmbient(led).length === 0, "User-only ledger filters down to nothing");
 }
@@ -83,17 +83,17 @@ function L(opts: Partial<LedgerEvent> & { id: string; at: string; summary: strin
   ok(got[0].id === "3", "Real entry surfaces");
 }
 
-// 7) Mixed user+agent — user entries strip out, agent ordering preserved.
+// 7) Mixed user+agent. user entries strip out, agent ordering preserved.
 {
   const led: LedgerEvent[] = [
     L({ id: "1", at: "2026-05-09T10:00:00Z", agent: "Scout", summary: "Scout shortlisted 5 venues" }),
-    L({ id: "2", at: "2026-05-09T10:01:00Z", actor: "user", summary: "approved — Scout pick", kind: "approval.approved" }),
+    L({ id: "2", at: "2026-05-09T10:01:00Z", actor: "user", summary: "approved. Scout pick", kind: "approval.approved" }),
     L({ id: "3", at: "2026-05-09T10:02:00Z", agent: "Treasurer", summary: "Treasurer allocated the envelope" }),
-    L({ id: "4", at: "2026-05-09T10:03:00Z", actor: "user", summary: "edited — budget envelope", kind: "approval.edited" }),
+    L({ id: "4", at: "2026-05-09T10:03:00Z", actor: "user", summary: "edited. budget envelope", kind: "approval.edited" }),
   ];
   const got = pickAmbient(led);
   ok(got.length === 2, "User entries stripped from ambient channel");
   ok(got[0].id === "3" && got[1].id === "1", "Agent entries kept in recency order");
 }
 
-console.log(`\nAmbient ticker selector — ${pass} assertions green.`);
+console.log(`\nAmbient ticker selector. ${pass} assertions green.`);

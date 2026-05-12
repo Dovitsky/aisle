@@ -2,10 +2,10 @@
 
 Append-only log of every iteration.
 
-## Iteration 0 — 2026-05-07 — initialization + audit
+## Iteration 0. 2026-05-07. initialization + audit
 
 Focus: audit
-Backlog item: none — first audit
+Backlog item: none. first audit
 Research: none
 
 Built: nothing. Loop infrastructure only.
@@ -16,8 +16,8 @@ Built: nothing. Loop infrastructure only.
 
 Tested:
 - `npx tsc --noEmit` clean.
-- `npm test` blocked in the Linux sandbox by an esbuild platform-package mismatch (darwin-arm64 binary present, linux-arm64 expected). The user's host (macOS) is unaffected — this is a cron/CI concern only. Filed P0 in BACKLOG.
-- No git repo present — filed P0 in BACKLOG.
+- `npm test` blocked in the Linux sandbox by an esbuild platform-package mismatch (darwin-arm64 binary present, linux-arm64 expected). The user's host (macOS) is unaffected. this is a cron/CI concern only. Filed P0 in BACKLOG.
+- No git repo present. filed P0 in BACKLOG.
 
 Audit findings:
 - 51 routes under `app/`, 26 specialist agents in `lib/agents/`, 51 React Views in `components/`, ~1000 lines of types covering PRD §6.
@@ -25,16 +25,16 @@ Audit findings:
 - BACKLOG seeded with 3 P0, 14 P1, 19 P2 items pulled from the existing BUILD_LOG.md "Backlog candidates" section, README.md "Still deferred", and direct code observation (thin Views, missing tests, log-only Gmail send, etc.).
 - Top P0 next session picks up: initialize git so the loop's commit step works.
 
-Decisions made: none. ADR-0 implicit — operative contract until PRD docx files commit is `README.md` + `BUILD_LOG.md`. Will write a real ADR when that changes.
+Decisions made: none. ADR-0 implicit. operative contract until PRD docx files commit is `README.md` + `BUILD_LOG.md`. Will write a real ADR when that changes.
 
-Commit: pending — repo is not yet a git repo.
+Commit: pending. repo is not yet a git repo.
 
 Next session should: Initialize git (init, set main branch, initial commit), then pick the next P0 (esbuild cross-platform fix for the cron sandbox).
 
-## Iteration 1 — 2026-05-07 — git, tests, smoke fix, route audit
+## Iteration 1. 2026-05-07. git, tests, smoke fix, route audit
 
 Focus: build (fix-broken-tree took priority over feature work)
-Backlog item: top P0s — git init + esbuild cross-platform + smoke test wiring.
+Backlog item: top P0s. git init + esbuild cross-platform + smoke test wiring.
 Research: none.
 
 Built:
@@ -50,26 +50,26 @@ Tested:
 - `npx tsc --noEmit` clean.
 - `npm test` green: 17 property/firewall/budget asserts pass + 5 smoke asserts pass ("Brief saved", "Brief locked", "Scout returned 0", "vendors=1, pending approvals=1", "PASS").
 - Static route audit: 46 API endpoints fetch'd from components all exist on disk; 10 distinct internal Link `href`s all resolve to extant pages; no `alert()` / `console.error` placeholder UX in components; no `TODO`/`FIXME`/`XXX` in source.
-- Live route smoke deferred — Next.js 15 dev server consistently never finishes "Starting…" inside this bwrap sandbox within 25s, even with `setsid` and `disown`. Not an app bug. The user's host machine is unaffected; the cron will need to run outside this network namespace or accept static checks.
+- Live route smoke deferred. Next.js 15 dev server consistently never finishes "Starting…" inside this bwrap sandbox within 25s, even with `setsid` and `disown`. Not an app bug. The user's host machine is unaffected; the cron will need to run outside this network namespace or accept static checks.
 
 Decisions made: none warranting an ADR. Implicit choice: when offline (no API key), tests synthesize a minimal seed rather than skip downstream wiring assertions. Documented inline in `smoke-onboarding.ts`.
 
-Commit: NOT WRITTEN — the bwrap sandbox could not remove `.git/HEAD.lock` from the previous `git init` warning chain ("Operation not permitted" from kernel). The five staged files are intact in the working tree; the user can `git commit` from their macOS host. Captured as a P0 in BACKLOG so the next session resolves the cron-environment git issue before treating commits as a hard step.
+Commit: NOT WRITTEN. the bwrap sandbox could not remove `.git/HEAD.lock` from the previous `git init` warning chain ("Operation not permitted" from kernel). The five staged files are intact in the working tree; the user can `git commit` from their macOS host. Captured as a P0 in BACKLOG so the next session resolves the cron-environment git issue before treating commits as a hard step.
 
 Next session should: Resolve the cron sandbox git-commit limitation (top P0). One concrete proposal: have the cron write a JSONL change journal under `docs/loop/journal/` and let a small host-side hook materialize iterations into git. Until that lands, the loop should still update LOOP_STATE / BACKLOG / SESSION_LOG even when commit fails, and surface the failure clearly.
 
-## Iteration 2 — 2026-05-08 — make every flow work end-to-end
+## Iteration 2. 2026-05-08. make every flow work end-to-end
 
 Focus: build (investor-demo readiness override of audit-only nightly cadence)
-Backlog item: explicit user mandate — "every click, every flow, every agent
+Backlog item: explicit user mandate. "every click, every flow, every agent
 interaction must work."
 
 Research: none. Direct code observation.
 
-Built — keystone fixes:
+Built. keystone fixes:
 
 **Offline Maestro is now functional.** Was returning a static "I'm in demo
-mode" message with zero tool calls — meaning chat → brief → lock → Scout was
+mode" message with zero tool calls. meaning chat → brief → lock → Scout was
 dead in the water without an `ANTHROPIC_API_KEY`. Replaced with a rule-based
 extractor (`extractBriefFields`) that reads names ("we're Maya and Sam",
 "I'm Maya", bare "Sam.", partner-of patterns), guest counts ("around 120"),
@@ -85,7 +85,7 @@ next step. Lifted `chatOpen` state to `StateProvider`; `StarterBriefs` calls
 `setChatOpen(true)` 350ms after apply.
 
 **Every offline agent now produces real demo-grade output.** 18 of 26
-specialists were returning `[]` or zero-tier specs — cascade fired, populated
+specialists were returning `[]` or zero-tier specs. cascade fired, populated
 nothing, looked broken. Fixed:
 - Scout → 5 region-keyed vendors per category (10 regions × 9 pools)
 - Designer → 3 vibe-shaded mood directions with palettes + refs
@@ -114,7 +114,7 @@ wedding website). After a single starter-brief click + "yes" the dashboard
 fills with real cards.
 
 **Gmail offline fixture restored.** README claims "5-message simulated fixture"
-but `lib/gmail/scan.ts` had `messages = []` — "Scan now" did nothing.
+but `lib/gmail/scan.ts` had `messages = []`. "Scan now" did nothing.
 Replaced with real fixture: one message per top vendor (Venue/Photographer/
 Florist/Caterer) plus marketing-noise. Uses actual vendor names so the
 matcher binds and Negotiator follow-up cascade fires for "available" intents.
@@ -129,7 +129,7 @@ counsel drafts → approval queued → approval resolved → cascade engine runs
 
 Tested:
 - `npx tsc --noEmit` clean.
-- `npm test` green: **73 total assertions** — 17 property/firewall/budget +
+- `npm test` green: **73 total assertions**. 17 property/firewall/budget +
   17 offline-Maestro + 5 onboarding smoke + 35 integration flow.
 
 Decisions made: ADR (implicit, inline): for the investor-demo path, populated
@@ -138,7 +138,7 @@ was correct for production-with-real-data; the no-API-key demo path is the
 inverse case. Every fixture references brief fields so output is
 unambiguously generated, not stale.
 
-Commit: NOT WRITTEN — same `.git/HEAD.lock` sandbox limitation as iter-1.
+Commit: NOT WRITTEN. same `.git/HEAD.lock` sandbox limitation as iter-1.
 Full diff (15+ files modified, 2 new tests, ~1500 lines of fixtures and
 extractors) intact in working tree. User can `git commit` from macOS.
 
@@ -150,10 +150,10 @@ when the user lands on the host.
 
 
 
-## Iteration 3 — 2026-05-08 — full cascade, Maps, Demo Mode, Triage
+## Iteration 3. 2026-05-08. full cascade, Maps, Demo Mode, Triage
 
 Focus: build (continuing investor-demo readiness sprint per user override).
-Backlog item: explicit user mandates — agents trigger in order on lock,
+Backlog item: explicit user mandates. agents trigger in order on lock,
 Gmail working, Google Maps integration, Demo Mode toggle in Settings.
 
 Built:
@@ -200,7 +200,7 @@ a complete, internally-consistent ProjectState exercising every module:
 - Brief: Maya & Sam, 2026-09-19, Hudson Valley, 120 guests, $110k, locked
 - 28 vendors across every status (5 contracted, 5 quoting, multiple
   shortlisted, 2 negotiating, 4 passed)
-- 9 designs (3 mood directions, 6 dress concepts — gated)
+- 9 designs (3 mood directions, 6 dress concepts. gated)
 - 14 budget lines, deposits paid on contracted, invariants honored
 - 29 guests across 13 households with mixed RSVPs, dietary entries
   including anaphylactic peanut + tree nut + kosher + vegan + diabetic
@@ -214,7 +214,7 @@ a complete, internally-consistent ProjectState exercising every module:
 - 9 approvals in mixed states (5 pending, 3 approved, 1 rejected)
 - 6-message chat history showing organic onboarding
 - Marriage license, wedding website, hotel blocks, shuttles, vows,
-  speeches, thanks, ledger events, menu, stationery suite — all real
+  speeches, thanks, ledger events, menu, stationery suite. all real
 
 The topbar shows a sage "DEMO" pill linking to Settings while demo mode is
 active. Settings has "Continue from this seed" or "Reload demo" buttons.
@@ -226,7 +226,7 @@ every required vendor status is represented, etc.).
 
 Tested:
 - `npx tsc --noEmit` clean.
-- `npm test`: **152 total assertions** green — 17 property/firewall/budget +
+- `npm test`: **152 total assertions** green. 17 property/firewall/budget +
   17 offline-Maestro + 51 demo-state + 5 onboarding smoke + 48 integration
   flow (now covers Concierge, Locator, Stationer) + 14 inbox flow.
 
@@ -236,7 +236,7 @@ demo and production, and matches the visual register of "static reference"
 that fits next to a status-grouped vendor pipeline. Documented inline in
 `components/VendorMap.tsx`.
 
-Commit: NOT WRITTEN — sandbox `.git/HEAD.lock` issue persists. Diff is intact
+Commit: NOT WRITTEN. sandbox `.git/HEAD.lock` issue persists. Diff is intact
 in working tree (~25 files modified, 3 new tests, 1 new component, 1 new
 fixture file) and tested green.
 
@@ -245,15 +245,15 @@ polish thin Views (PricingView through DressView) to /vendors level, then
 add image generation for Designer + Couturier so /design and the dress
 gating renders actual visuals not just text + palette swatches.
 
-## Iteration 4 — 2026-05-08 — luxury post-lock dashboard
+## Iteration 4. 2026-05-08. luxury post-lock dashboard
 
-Focus: build (UX-critical user feedback — the post-signup landing was still
+Focus: build (UX-critical user feedback. the post-signup landing was still
 showing the welcome hero, sample briefs, and onboarding CTA after the brief
 was locked, which felt like a SaaS dashboard not a luxury concierge).
 
-Built — `components/Today.tsx` rebuilt:
+Built. `components/Today.tsx` rebuilt:
 
-**Conditional layout — three states.** `if (!state.brief)` → full editorial
+**Conditional layout. three states.** `if (!state.brief)` → full editorial
 Welcome (hero, manifesto, starter briefs). `if (brief && !brief.locked)` →
 new "continuing your story" surface (soft, single-column, nudges into chat,
 lists what Maestro still needs as a quiet bullet list). `if (brief.locked)`
@@ -262,25 +262,25 @@ CTA never show after lock, per user requirement.
 
 **Editorial hero.** Greeting line ("Good morning · your wedding") with
 breathing dot. Couple's names typeset at clamp(52px, 100px) with the &
-animated. Below: a giant countdown — `clamp(120px, 180px)` of the days
+animated. Below: a giant countdown. `clamp(120px, 180px)` of the days
 remaining, with the number rendered with a sage→bronze gradient when ≤ 7
 days out (celebratory, not clinical). Beside the countdown: a save-the-date
-style detail block — "The day · The place · The room" — with the formatted
+style detail block. "The day · The place · The room". with the formatted
 date, contracted venue (or region fallback), guest count, all in italic
 Cormorant. Watcher flag surfaces as a subtle alert pill.
 
-**Two-column body** — left wider for primary attention, right for context:
+**Two-column body**. left wider for primary attention, right for context:
 
-- LEFT — Decisions (concierge cards via existing ApprovalCardView, max 4 on
+- LEFT. Decisions (concierge cards via existing ApprovalCardView, max 4 on
   the home screen, "All decisions →" link to /approvals). Activity Feed
   (merges `ledger` + recently resolved `approvals` into a unified
   time-sorted timeline with sage / oxblood / muted dots, time-ago, agent
   attribution, and a hover state).
 
-- RIGHT — Budget Snapshot (3-band progress bar showing paid / committed /
+- RIGHT. Budget Snapshot (3-band progress bar showing paid / committed /
   planned-not-committed against the envelope; over-envelope state turns the
   remaining cell oxblood with an italic alert). Vendor Glance (top 5
-  categories with stage chip — "Booked" sage / "Negotiating" / "Quoting" /
+  categories with stage chip. "Booked" sage / "Negotiating" / "Quoting" /
   "Awaiting reply" / "N on shortlist" / "Not started"). Upcoming Tasks
   (next 5 open items from the master checklist filtered to current
   monthsOut, each linking to the right route, with area chip). Quick Nav
@@ -308,7 +308,7 @@ Tested:
 - `npx tsc --noEmit` clean.
 - `npm test` green: 152 assertions still passing.
 
-Commit: NOT WRITTEN — sandbox `.git/HEAD.lock` issue persists. Diff intact.
+Commit: NOT WRITTEN. sandbox `.git/HEAD.lock` issue persists. Diff intact.
 
 Next session should: Push iter-1 + iter-2 + iter-3 + iter-4 to git on the
 host. Then exercise the new dashboard live (load demo state in Settings,
@@ -316,15 +316,15 @@ verify the layout renders cleanly, screenshot for the SESSION_LOG). Then
 audit the remaining thin Views (Pricing 69 lines, Florals 83, Planner 85,
 License 87, Memorials 87, Pre-events 88, Beauty 94, Tips 95, Rentals 97,
 Registry 99, Visits 99, Speeches 101, Bar 102, Engagement 102, Dress 107,
-Thanks 107) and bring them to /vendors-level polish — one or two per
+Thanks 107) and bring them to /vendors-level polish. one or two per
 iteration.
 
-## Iteration 5 — 2026-05-08 — group decisions by phase
+## Iteration 5. 2026-05-08. group decisions by phase
 
-Focus: build (UX feedback — pending decisions felt random; user wanted them
+Focus: build (UX feedback. pending decisions felt random; user wanted them
 categorized).
 
-Built — `components/Today.tsx` + `components/ApprovalsList.tsx`:
+Built. `components/Today.tsx` + `components/ApprovalsList.tsx`:
 - DecisionsBlock on the dashboard now groups pending approvals by wedding
   phase using the canonical PRD order: Foundation → Discovery → Design →
   Logistics → Guest management → Personal prep → Week-of → Wedding day →
@@ -336,39 +336,39 @@ Built — `components/Today.tsx` + `components/ApprovalsList.tsx`:
 - /approvals adds a "grouped by Risk / Phase" toggle alongside the existing
   Pending/History tabs. Risk is still the default. Phase view shows phase
   label + count + risk-dot summary chips so each phase tells you "Foundation:
-  2 decisions — 1 medium-risk, 1 low" at a glance.
+  2 decisions. 1 medium-risk, 1 low" at a glance.
 
 Tested: tsc clean, 152 assertions green.
 
-## Iteration 6 — 2026-05-08 — pace the cascade by monthsOut
+## Iteration 6. 2026-05-08. pace the cascade by monthsOut
 
-Focus: build (UX feedback — locking the brief 12 months out shouldn't push
+Focus: build (UX feedback. locking the brief 12 months out shouldn't push
 the music setlist into the queue; the flow should feel guided, not
 overwhelming).
 
-Built — `app/api/chat/route.ts` `lockAndIgnite()`:
+Built. `app/api/chat/route.ts` `lockAndIgnite()`:
 - New `monthsUntilWedding(brief)` helper extracts months remaining from
   the brief.dateWindow (ISO date or year fallback).
 - Replaced the all-at-once cascade with a CascadeWave[] pipeline modeled
   on how a top wedding planner actually works:
-  - **Wave 1 (always) — Foundation.** Scout for Venue + Photographer,
+  - **Wave 1 (always). Foundation.** Scout for Venue + Photographer,
     Designer mood directions, Treasurer envelope allocation, wedding-website
     reminder.
-  - **Wave 2 (≤12mo) — Big bookings.** Scout for Caterer + Florist + Officiant.
-  - **Wave 3 (≤9mo) — Design + save-the-dates.** Scout for Stationer,
+  - **Wave 2 (≤12mo). Big bookings.** Scout for Caterer + Florist + Officiant.
+  - **Wave 3 (≤9mo). Design + save-the-dates.** Scout for Stationer,
     save-the-date approval reminder.
-  - **Wave 4 (≤6mo) — Music + cake + rentals.** Scout for Band + DJ + HMU
+  - **Wave 4 (≤6mo). Music + cake + rentals.** Scout for Band + DJ + HMU
     + Rentals; Cantor setlist; Patissier cake; Steward rentals; Sommelier
     bar; Botanist florals; rehearsal-dinner reminder.
-  - **Wave 5 (≤4mo) — Ceremony + invitations.** Cleric ceremony script;
+  - **Wave 5 (≤4mo). Ceremony + invitations.** Cleric ceremony script;
     Curator registry; invitations reminder.
-  - **Wave 6 (≤3mo) — License + welcome bag + vows.** Quartermaster welcome
+  - **Wave 6 (≤3mo). License + welcome bag + vows.** Quartermaster welcome
     bag; marriage-license reminder; vows-drafting nudge.
-  - **Wave 7 (≤1mo) — Day-of details.** Weather contingency; seating chart
+  - **Wave 7 (≤1mo). Day-of details.** Weather contingency; seating chart
     nudge; dietary brief reminder.
-- New `composeLockMessage()` writes a planner-voice response — "We have
-  ~12 months — plenty of time. Right now: Foundation. Music, cake, rentals
-  comes later — I'll surface it when it's time. You can always jump to any
+- New `composeLockMessage()` writes a planner-voice response. "We have
+  ~12 months. plenty of time. Right now: Foundation. Music, cake, rentals
+  comes later. I'll surface it when it's time. You can always jump to any
   module from the menu if you want to look ahead." Replaces the previous
   "releasing every specialist in parallel" overwhelm.
 - Retired `backgroundProactiveReminders` (which dumped four cards on every
@@ -376,58 +376,58 @@ Built — `app/api/chat/route.ts` `lockAndIgnite()`:
   their wave activates.
 
 Tested: tsc clean, 152 assertions green. Demo Mode (which already builds a
-populated state directly) is unaffected — it sidesteps the cascade entirely
+populated state directly) is unaffected. it sidesteps the cascade entirely
 and writes a complete state in one go.
 
-## Iteration 7 — 2026-05-08 — concierge-voice copy pass
+## Iteration 7. 2026-05-08. concierge-voice copy pass
 
-Focus: build (UX feedback — technical lingo leaked into user-facing copy;
+Focus: build (UX feedback. technical lingo leaked into user-facing copy;
 "Set GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET + GOOGLE_REDIRECT_URI to
 enable" type strings).
 
 Rewrote every user-visible string we found that mentioned implementation
 details (env vars, OAuth scopes, "API key", "fixture", "stub", "demo
 mode") in a luxury-planner voice. Targets:
-- `components/InboxView.tsx` — the Connect Gmail block now reads "Connect
+- `components/InboxView.tsx`. the Connect Gmail block now reads "Connect
   Gmail and we'll read incoming vendor replies, match them to your
   shortlist, and draft your follow-ups for approval. Nothing is sent
   without your okay." Demo-mode hint becomes "Until you connect Gmail,
   we'll show you a sample inbox so you can see what tracking vendor
   replies looks like." Scan button reads "Check for replies" / "See it
   in action".
-- `components/LoginView.tsx` — the no-Supabase fallback was a wall of
+- `components/LoginView.tsx`. the no-Supabase fallback was a wall of
   env-var names. Now reads: "Just you, for now / Corsia is running locally
-  on this device. Everything works — every flow, every agent, every
+  on this device. Everything works. every flow, every agent, every
   decision. There's only one wedding here, and it's yours."
-- `components/Settings.tsx` IntegrationsPanel — renamed "Integrations" →
+- `components/Settings.tsx` IntegrationsPanel. renamed "Integrations" →
   "Connections", reframed the two cards (Gmail / sync across devices) in
   warm, non-technical prose. Demo-mode section retitled "See an example
   wedding"; CTA reads "Show me the example wedding →"; while active, the
   buttons read "Make this mine" or "Start the example over".
-- `app/api/gmail/connect/route.ts` — error response no longer mentions
+- `app/api/gmail/connect/route.ts`. error response no longer mentions
   env vars. Reads: "Gmail isn't set up on this account yet. Reach out to
   your Corsia team and they'll have it ready in a few minutes."
-- `components/AppShell.tsx` topbar pill — "demo" → "example" (clearer
+- `components/AppShell.tsx` topbar pill. "demo" → "example" (clearer
   what it means; aligns with the Settings copy).
-- `app/api/chat/route.ts` Maestro error fallback — "Maestro hit an error
-  reaching the model: <msg>" → "Apologies — something on my end glitched.
+- `app/api/chat/route.ts` Maestro error fallback. "Maestro hit an error
+  reaching the model: <msg>" → "Apologies. something on my end glitched.
   Mind asking again?"
 
 Tested: tsc clean, 152 assertions green. No test references the old copy
 strings; no regressions.
 
-Commit: NOT WRITTEN — sandbox `.git/HEAD.lock` issue persists.
+Commit: NOT WRITTEN. sandbox `.git/HEAD.lock` issue persists.
 
 Next session should: Push iter-1 through iter-7 to git on the host. Then
 audit any other technical strings that surface (live URL paths,
 console.error messages the user might see, error toasts). Then continue
 polishing thin Views.
 
-## Iteration 8 — 2026-05-08 — Sonnet for lightweight specialists
+## Iteration 8. 2026-05-08. Sonnet for lightweight specialists
 
 Focus: build (cost-optimization request).
 
-Built — `lib/anthropic.ts` `MODELS`:
+Built. `lib/anthropic.ts` `MODELS`:
 - Added third tier `MODELS.specialist` defaulting to `claude-sonnet-4-6`
   (overridable via `ANTHROPIC_MODEL_SPECIALIST`). The orchestrator stays
   on Opus, Triage stays on Haiku.
@@ -443,12 +443,12 @@ Built — `lib/anthropic.ts` `MODELS`:
 
 Tested: tsc clean, 152 assertions still green.
 
-## Iteration 9 — 2026-05-08 — landing page rebuild per AISLE_LANDING_REVISION_v2
+## Iteration 9. 2026-05-08. landing page rebuild per AISLE_LANDING_REVISION_v2
 
 Focus: build (user-uploaded brief).
 
 Conflicts flagged and resolved:
-- AppShell topbar leaked product chrome onto marketing — added a
+- AppShell topbar leaked product chrome onto marketing. added a
   `isMarketingLanding` branch (`pathname === "/" && !brief.locked`) that
   bypasses AppShell so Landing renders its own minimal header.
 - Sample-brief tiles (Amalfi / Hudson Valley / Tuscany / Joshua Tree /
@@ -461,22 +461,22 @@ Conflicts flagged and resolved:
 - LetterReveal animation dropped from the new hero in favor of a single
   subtle fade.
 
-Built — `components/Landing.tsx` (new, ~770 lines):
+Built. `components/Landing.tsx` (new, ~770 lines):
 
-**Section 1 — Header.** Sticky minimal: `aisle` Cormorant italic 22px
+**Section 1. Header.** Sticky minimal: `aisle` Cormorant italic 22px
 left, Sign in Inter 14px right. Hairline border-bottom appears only after
 8px scroll (intersection-style listener). 24px vertical / 40px horizontal
 padding.
 
-**Section 2 — Hero.** Two-column 60/40 split (single column under 900px,
-polaroids scaled to 0.85). Headline reweighted per spec — Line 1 *"Plan
+**Section 2. Hero.** Two-column 60/40 split (single column under 900px,
+polaroids scaled to 0.85). Headline reweighted per spec. Line 1 *"Plan
 nothing."* roman ink, Line 2 *"Decide everything."* italic sage; both lines
 clamp(56px, 8vw, 96px) with -0.02em tracking and tight line-height 1.0,
 period after each. Plain-language descriptor in Inter 16px muted ("A
 fleet of AI agents plans your entire wedding from venue to thank-yous
 while you approve the moves that matter."). LiveTicker component cycling
 through 10 agent-activity messages every 4s with 300ms fade and a 6px
-pulsing sage dot — respects `prefers-reduced-motion`. Hairline rule + the
+pulsing sage dot. respects `prefers-reduced-motion`. Hairline rule + the
 single-sentence supporting paragraph in Cormorant italic. Pill-shaped
 input (radius 999px, max-width 560px, sage circular send button inside)
 that POSTs to `/api/chat` and opens the chat dock with the response.
@@ -488,10 +488,10 @@ with a tighter inner shadow. Caveat handwritten captions (Val d'Orcia
 April / Joshua Tree dusk october / Maiori golden hour) hand-rotated to
 counter the photo angle. Unsplash hotlinks per the brief.
 
-**Section 3 — How it works.** White background, Inter 11px uppercase
+**Section 3. How it works.** White background, Inter 11px uppercase
 eyebrow → Cormorant 48px headline ("One screen. Everything you're
 deciding, everything we're handling.") → italic supporting paragraph →
-inline DashboardMockup. Mockup is real HTML/CSS — radius 28px hairline
+inline DashboardMockup. Mockup is real HTML/CSS. radius 28px hairline
 border, mini "aisle / Sign in" header, three stacked tiles:
 - TOP OF MIND: Tre Posti contract approval card (sage dot, Review/Later
   pills) + queued ceremony arch card (hint dot, opacity 0.65).
@@ -501,56 +501,56 @@ border, mini "aisle / Sign in" header, three stacked tiles:
   ("drafting Emiliano's tasting follow-up · scheduling the florist
   consult · reconciling the hotel block deposit").
 
-**Section 4 — Seating chart.** Warm-white background, two-column grid:
-- Left: FloorPlanSVG — 12 round tables in 3×4 grid, dance floor in the
+**Section 4. Seating chart.** Warm-white background, two-column grid:
+- Left: FloorPlanSVG. 12 round tables in 3×4 grid, dance floor in the
   center, tables 2 and 9 highlighted sage with a dashed sage arc
   connecting them and the label *"now apart"*. Each table has 8 chair
   dots and an italic Cormorant number.
-- Right: chat transcript — user bubble *"don't sit my parents together"*
+- Right: chat transcript. user bubble *"don't sit my parents together"*
   → italic *"Cartographer is re-solving"* with pulsing dot → Maestro
   reply in italic Cormorant 18px. Meta line: *"Re-solved in 1.4s · 4
   guests reseated · 0 hard constraints violated"*.
 
-**Section 5 — What we won't do.** Centered max-width 720px (intentionally
-narrower — intimate moment). Eyebrow "The trust layer" → headline split
+**Section 5. What we won't do.** Centered max-width 720px (intentionally
+narrower. intimate moment). Eyebrow "The trust layer" → headline split
 across three weight-changes: roman ink "We will never," + italic sage
 "without your tap," + roman ink "send an email, sign a contract, or
 spend a dollar." Italic supporting paragraph. Three columns underneath
-(Emails / Contracts / Payments) — each with a 60px sage rule, mono caps
+(Emails / Contracts / Payments). each with a 60px sage rule, mono caps
 eyebrow, Cormorant 18px description.
 
-**Section 6 — Footer.** White background, hairline border-top, single
+**Section 6. Footer.** White background, hairline border-top, single
 centered Inter 12px line: *"Corsia · the autonomous wedding platform · hello@corsia.com"*. No nav, no social.
 
 **Other touches:**
 - Loaded Caveat from Google Fonts via `<style jsx global>`.
 - `prefers-reduced-motion` respected: ticker freezes on current message,
   pulsing dot stops, fade animations disabled.
-- ChatDock still wired globally — the hero input opens it after a successful
+- ChatDock still wired globally. the hero input opens it after a successful
   POST so the user lands in the conversation.
 - AppShell suppressed entirely on the marketing landing (no topbar, no
   mobile-tab nav, no menu overlay) so Landing renders edge-to-edge.
 
 Tested: tsc clean, 152 assertions still green. Live render not exercised in
-this sandbox (Next dev server limitation noted in iter-1) — recommend
+this sandbox (Next dev server limitation noted in iter-1). recommend
 host-side smoke test before commit.
 
-Commit: NOT WRITTEN — sandbox `.git/HEAD.lock` issue persists.
+Commit: NOT WRITTEN. sandbox `.git/HEAD.lock` issue persists.
 
 Next session should: Push iter-1 through iter-9 to git on the host. Then
 exercise the new landing in a host browser at 1440x900 + 768px breakpoints
 and screenshot. Resolve any visual regressions vs. the brief's intent.
 
-## Iteration 10 — 2026-05-08 — Discover + Mood Board + OpenAI generation
+## Iteration 10. 2026-05-08. Discover + Mood Board + OpenAI generation
 
 Focus: build (user-uploaded `AISLE_DISCOVER_MOODBOARD` spec).
 
-Built — `/discover` + `/mood-board` + cascade pacing fix:
+Built. `/discover` + `/mood-board` + cascade pacing fix:
 
 **Discover surface (`/discover`).** Five sections per spec: Trending Now (12
 mixed cards spanning photo/vibe/trend/wedding types), Trending Venues (12
 venues filterable by Coastal/Vineyard/Urban/Garden/Destination), Trending
-Vibes (8-card horizontal scroller — Coastal Italian, Tuscan Garden, Quiet
+Vibes (8-card horizontal scroller. Coastal Italian, Tuscan Garden, Quiet
 Modern, Pressed Linen, Greenhouse, Mountain Lodge, Old Money Garden Party,
 English Countryside), Real Weddings (6 case studies with vendor lists +
 pull quotes), Editorial (8 article stubs). Pin-to-board modal opens from
@@ -560,7 +560,7 @@ CTA. Editorial detail page is a "coming soon" stub.
 
 **Mood Board studio (`/mood-board`).** Three-column masonry. Five default
 boards auto-created on first visit (Overall, Ceremony, Reception, Florals,
-Attire — Attire gated under existing dress firewall). Per-pin: Move, Remove.
+Attire. Attire gated under existing dress firewall). Per-pin: Move, Remove.
 Sticky header with board picker dropdown + 3 primary actions: + Add image
 (upload OR URL with JPG/PNG/WebP validation, 10MB cap), ✦ Generate with
 Maestro, ⚙ Board settings.
@@ -597,9 +597,9 @@ at you").** Two changes:
 
 Tested: tsc clean, 152 assertions green.
 
-## Iteration 11 — 2026-05-08 — natural-language vendor email tool
+## Iteration 11. 2026-05-08. natural-language vendor email tool
 
-Focus: build (user feature request — "email the venue about the rain plan"
+Focus: build (user feature request. "email the venue about the rain plan"
 should produce a sent email + tracked reply).
 
 Built:
@@ -617,10 +617,10 @@ Built:
     1. Exact / case-insensitive name match
     2. Substring (both directions)
     3. Role lookup via 22-key alias table (venue, photographer, photog,
-       caterer, florist, hmu, hair & makeup, bar, etc.) — preferring
+       caterer, florist, hmu, hair & makeup, bar, etc.). preferring
        contracted → paid → negotiating → quoting → contacted →
        shortlisted, ties broken by fitScore.
-- Offline Maestro `parseVendorEmailIntent(msg)` — recognizes both the
+- Offline Maestro `parseVendorEmailIntent(msg)`. recognizes both the
   "about/regarding" form and the "if/whether" form. Strips articles
   ("the/our/my"). Doesn't false-fire on name-extraction or lock messages.
 - Fires immediately as `dispatch_email_vendor` from offline Maestro before
@@ -632,15 +632,15 @@ Built:
 Tested: 26 new assertions in `tests/email-vendor-flow.ts`. Total npm test:
 178 assertions green.
 
-## Iteration 12 — 2026-05-08 — toasts + error boundary + thin-view polish
+## Iteration 12. 2026-05-08. toasts + error boundary + thin-view polish
 
-Focus: build (user mandate — "polish, fix anything rough, micro-interactions
+Focus: build (user mandate. "polish, fix anything rough, micro-interactions
 that make it feel alive, error states, mobile responsiveness, investor-demo
 quality on every screen").
 
 Built:
 
-**`components/Toast.tsx` — concierge-style notifications.** Global
+**`components/Toast.tsx`. concierge-style notifications.** Global
 `<ToastProvider>` wired into RootClient. Tones: agent (sage), approval
 (sage), info (neutral), warn (amber), error (oxblood). Each toast is a
 small chip with a colored dot + agent eyebrow + Cormorant italic title +
@@ -649,20 +649,20 @@ optional detail line. Slides up from bottom (toast-rise keyframe), dwells
 `prefers-reduced-motion` honored.
 
 Wired into:
-- ApprovalCardView — every Approve/Pass/Tweak surfaces a confirmation toast
+- ApprovalCardView. every Approve/Pass/Tweak surfaces a confirmation toast
   with a contextual detail line per action kind ("$X scheduled to vendor
   for Y" / "Email queued to X" / "Contract signed; Treasurer is queuing
   the deposit." / "Going out to N addresses (hybrid)" / etc.).
-- Settings — load_demo / exit_demo show concierge toasts.
-- MoodBoardView — generation-complete toast ("4 images ready"); save-to-
+- Settings. load_demo / exit_demo show concierge toasts.
+- MoodBoardView. generation-complete toast ("4 images ready"); save-to-
   board toast.
-- InboxView — scan-complete toast ("N vendor replies, threaded onto their
+- InboxView. scan-complete toast ("N vendor replies, threaded onto their
   cards"; navigates to /approvals if follow-ups were drafted).
-- StarterBriefs — "Starting from <template>" toast on apply.
+- StarterBriefs. "Starting from <template>" toast on apply.
 
 **`components/ErrorBoundary.tsx`.** Wraps RootClient. On uncaught render
 error, shows a calm recovery surface ("Take a breath. A small wrinkle on
-our end. Your work is safe — every approval and every change is on the
+our end. Your work is safe. every approval and every change is on the
 ledger.") with "Try again" and "Take me home" buttons instead of a blank
 screen.
 
@@ -679,7 +679,7 @@ screen.
 
 Tested: tsc clean, 178 assertions green.
 
-Commit: NOT WRITTEN — sandbox `.git/HEAD.lock` issue persists.
+Commit: NOT WRITTEN. sandbox `.git/HEAD.lock` issue persists.
 
 Next session should: Push iter-1 through iter-12 to git on the host.
 Continue thin-view polish (BeautyView, TipsView, RentalsView, RegistryView,
@@ -689,13 +689,13 @@ the chat-message flow so a user sees "Maestro queued 5 cards" after the
 lock cascade. Add ledger-based activity ticker on the dashboard
 (decoupled from the toast stream) for ambient feel-alive signal.
 
-## Iteration 13 — 2026-05-09 — ambient ticker + lock-cascade toast + thin-view polish
+## Iteration 13. 2026-05-09. ambient ticker + lock-cascade toast + thin-view polish
 
-Focus: build (the three things iter-12's pointer asked for — make the
+Focus: build (the three things iter-12's pointer asked for. make the
 dashboard feel alive between explicit cascades, signal the lock cascade
 from chat, knock two more thin views off the polish list).
 
-Backlog item: top P2 / P1 — ambient ledger ticker (P2 from iter-12
+Backlog item: top P2 / P1. ambient ledger ticker (P2 from iter-12
 pointer), chat-flow toast on lock cascade (P1-grade UX), continue
 thin-view polish on BeautyView and BarView.
 
@@ -705,7 +705,7 @@ StateProvider for the polling lifecycle, lib/store for ledger writes.
 
 Built:
 
-**`components/AmbientTicker.tsx` (new) + `lib/ambient.ts` (new) — quiet
+**`components/AmbientTicker.tsx` (new) + `lib/ambient.ts` (new). quiet
 specialist heartbeat.** A subtle pill-shaped strip that sits between the
 editorial hero and the phase strip on the dashboard. Pulls the most
 recent agent ledger entries (deduplicated on summary, oldest dropped after
@@ -720,14 +720,14 @@ small `1/5` rotation index when more than one entry is in the queue.
 The pure selector `pickAmbient(ledger, limit)` lives in `lib/ambient.ts`
 so the test suite can exercise the dedup + ordering logic without
 pulling in the React tree. The ticker reads it via the StateProvider's
-existing polling lifecycle — no extra fetches, no extra timers beyond
+existing polling lifecycle. no extra fetches, no extra timers beyond
 the one rotation interval.
 
 **Lock-cascade toast in ChatDock.** Was: chat reply lands silent; user
 has to notice the dashboard fill in to know the cascade fired. Now:
 on lock transition (`!wasLocked && isLocked`), Maestro emits a sage
 "Foundation in flight" toast with detail "Scout, Designer, and Treasurer
-are working — decisions will land as they finish" and `hrefOnClick
+are working. decisions will land as they finish" and `hrefOnClick
 =/approvals`. Two related branches: when `dispatched` array contains
 `dispatch_email_vendor`, an Outreach toast surfaces ("Email drafted
 for your approval"); when a material-pivot refire is detected (existing
@@ -735,34 +735,34 @@ for your approval"); when a material-pivot refire is detected (existing
 surfaces ("Re-running the shortlist"). All three toasts route to the
 relevant page on click. The `/api/chat` route already returned
 `dispatched: result.toolUses.map((t) => t.name)`, so no API surface
-change was needed — purely a client-side wiring upgrade.
+change was needed. purely a client-side wiring upgrade.
 
-**`components/BeautyView.tsx` — polished from 94 to 230 lines.** Editorial
-PageHeader with italic sage emphasis ("Hair & makeup — *day-of*"). Sage
+**`components/BeautyView.tsx`. polished from 94 to 230 lines.** Editorial
+PageHeader with italic sage emphasis ("Hair & makeup. *day-of*"). Sage
 CTA shadow on the propose button. Hero stat row: appointments / people /
 window (start → end with chair-time sub) / tracks (which services
 present). Day-of timeline grouped by service track (hair vs. makeup vs.
-both — the parallel-streams view a stylist actually thinks in), each
+both. the parallel-streams view a stylist actually thinks in), each
 appointment row with start time + duration in mono caps + person + italic
 notes + a sage "Last" tag on the last item in each track. Trials moved
 into a calmer secondary panel with a paper-50 background so they read as
 context, not the headline. Toast on propose with appointment count and
 the back-schedule rationale.
 
-**`components/BarView.tsx` — polished from 102 to 235 lines.** Same
-pattern: italic sage emphasis ("Bar program — *how it pours*"), sage CTA
+**`components/BarView.tsx`. polished from 102 to 235 lines.** Same
+pattern: italic sage emphasis ("Bar program. *how it pours*"), sage CTA
 shadow, hero stat row (style / signatures / items + zero-proof / dollar
 estimate + drinks-per-guest-per-hour). Bar policy chips moved out of the
 status grid into their own labeled row with humanized labels ("Open bar"
 / "Limited bar" / "Beer + wine only" / "Dry"). Menu reorganized into
 five panels (signatures / wine / beer / spirits / zero-proof) with the
-signatures panel highlighted in sage-50 + a warm border — the planner
+signatures panel highlighted in sage-50 + a warm border. the planner
 move (a great Sommelier presents the signatures first because they're
 what the couple cares most about). Each panel has a one-line italic
 philosophy blurb under its header. Toast on propose with menu count;
 toast on style change with the rebalance rationale.
 
-**`tests/ambient-ticker.ts` (new — 14 assertions).** Covers: empty ledger,
+**`tests/ambient-ticker.ts` (new. 14 assertions).** Covers: empty ledger,
 user-only ledger, recency ordering, dedup on summary keeps the most
 recent, limit honored, empty/whitespace summaries skipped, mixed
 user+agent stripping. Wired into `npm test` between `lanes-flow` and
@@ -777,7 +777,7 @@ Tested:
 - `npm test`: **314 total assertions** green (+14 from the new
   ambient-ticker test relative to iter-12's 178; iter-12's count predates
   several test additions that weren't reflected in LOOP_STATE).
-- Curl smoke test against `next dev` skipped — same Next.js 15
+- Curl smoke test against `next dev` skipped. same Next.js 15
   bwrap-sandbox behavior documented in iter-1.
 
 Decisions made: ADR-worthy choice was to extract `pickAmbient` into
@@ -795,7 +795,7 @@ Caterer pool…"). That requires a new in-flight ledger or a derived
 state from background tasks. Filed as the next-session pointer rather
 than a P2 because the bones of the ambient channel are now in place.
 
-Commit: NOT WRITTEN — same sandbox `.git/HEAD.lock` limitation as
+Commit: NOT WRITTEN. same sandbox `.git/HEAD.lock` limitation as
 iters 1-12. Confirmed at the start of this session: the lock files
 are owned by the sandbox user but `unlink()` returns `Operation not
 permitted` regardless. `git checkout -b loop/iter-13` reproduces the
@@ -810,24 +810,24 @@ dashboard + lock-cascade toast in ChatDock + BeautyView/BarView polish"`.
 Next session should: Push iter-1 through iter-13 to git on the host.
 Continue thin-view polish (TipsView, RentalsView, RegistryView,
 VisitsView, SpeechesView, EngagementView, DressView, ThanksView,
-PreEventsView, MemorialsView, LicenseView, PlannerView — BeautyView and
+PreEventsView, MemorialsView, LicenseView, PlannerView. BeautyView and
 BarView are done now). Consider extending the AmbientTicker to also
 surface in-flight cascade waves *before* they land in the ledger
 (today the strip is still silent during the first second of a fresh
 cascade until the first specialist's approval lands).
 
 
-## Iteration 21 — 2026-05-09 — loading UX, nav reorg, menu redesign, jargon detox, vendor detail page
+## Iteration 21. 2026-05-09. loading UX, nav reorg, menu redesign, jargon detox, vendor detail page
 
 Focus: ux + voice
 Backlog: BACKLOG.md "thin-view polish" + observed UX gaps from live demo session
 
 Built:
 
-**Loading UX system** — new `components/ThoughtStream.tsx` with three exports:
+**Loading UX system**. new `components/ThoughtStream.tsx` with three exports:
 ThoughtStream (rotating italic phrase + breathing dot), ThoughtTileOverlay
 (absolute overlay for placeholder image tiles), ThoughtPill (in-button
-indicator). Phrase banks per kind — image-gen, design-render, dress-render,
+indicator). Phrase banks per kind. image-gen, design-render, dress-render,
 agent-thinking, chat-thinking, lock-cascade, scout-search, demo-load,
 negotiation, discover-search. Phrases shuffle on mount so retries feel
 different. Wired into ChatDock (replaces silent triple-dot during sending),
@@ -835,34 +835,34 @@ MoodBoardView (fades onto each placeholder tile during 4-image generate),
 DesignView (during propose + render-all + per-card overlay during render),
 VendorsView (during scout-search), VendorDetailView (during agent actions).
 
-**Top-bar nav reorg** — the right side of the topbar now reads
+**Top-bar nav reorg**. the right side of the topbar now reads
 Discover · The Wedding · Build · The Day, each with a hover/focus-driven
 subnav popover (italic-Cormorant items, sage-50 hover, active-page mark).
 Mobile bottom-tab nav matches the same four primaries plus More. Pending-
 decisions pill now shows as a standalone sage chip beside the menu trigger
 instead of an inline "Decisions 3" link.
 
-**MenuOverlay redesign** — backdrop is now fully opaque (radial sage halo
+**MenuOverlay redesign**. backdrop is now fully opaque (radial sage halo
 on a deep-ink gradient + film noise) so the underlying page never bleeds
 through. Layout shifted to a centered editorial column with the search
 prompt at the top, four directory groups underneath in a 2/3/4-column
 grid (xl), and a quiet bottom signature. Type sizes reduced to ease the
 overflow seen in the screenshot.
 
-**ChatDock flipped to right edge** — the closed-state launcher tab now
+**ChatDock flipped to right edge**. the closed-state launcher tab now
 docks to `right-0` (rounded-l-full, glyph points back-arrow). The panel
 itself is `right-0 / translate-x-full` when closed, `border-l` instead of
 `border-r`. AppShell pushes content with `lg:pr-[420px]` instead of
 `lg:pl-[420px]` when the panel is open.
 
-**Designer "the look" copy detox** — the AI-slop heading
-"Six directions, one feeling. Six distinct directions per pass — different
+**Designer "the look" copy detox**. the AI-slop heading
+"Six directions, one feeling. Six distinct directions per pass. different
 formality, density, color, cultural reference. Lock one and the system
 color and tone cascade…" is gone. Replaced with "Pick a vibe" + "A handful
 of mood directions to look at side by side. Pick one and the look carries
-through — flowers, paper, cake, signs."
+through. flowers, paper, cake, signs."
 
-**"seed" jargon sweep** — removed user-visible "seed" / "Seed sample" /
+**"seed" jargon sweep**. removed user-visible "seed" / "Seed sample" /
 "Seed default bands" / "Seed standard timeline" / "Or seed demo" copy
 across DayOfView, DietaryView, LogisticsView, WebsiteView, ThanksView,
 SeatingView, TipsView, GuestsView. Replaced with luxury-app voice: "Add
@@ -870,24 +870,24 @@ a sample 3-course menu", "Add a starter block", "Add starter shuttles",
 "Use a standard timeline", "Or load a sample list", "Pull from your
 booked vendors", etc. ThoughtStream demo-load phrases also detoxed.
 
-**"Maestro Jr." stripped** — DayOfView's user-visible references gone.
+**"Maestro Jr." stripped**. DayOfView's user-visible references gone.
 "Approval queue is suspended in this mode. Maestro Jr. handles real-time
 decisions inside pre-approved bands; anything outside escalates first to
 the planner, then the couple as last resort." became "On the day, the chat
-goes quiet. Small calls inside your playbook get handled automatically —
+goes quiet. Small calls inside your playbook get handled automatically.
 anything bigger goes to your planner first, then to you only if it has to."
 "Engaged. Chat is read-only. Bands armed." → "On. Small day-of calls
 handled for you." "Engage/Release" → "Turn on/Turn off". "Contingency
 bands" → "If-this-then-that plans". The dialog body for triggering a band
 also rewritten in plain English.
 
-**"Run Scout" → "Find venues"** — the Scout-trigger button on
+**"Run Scout" → "Find venues"**. the Scout-trigger button on
 /vendors is no longer a small text link in the corner. It's now a primary
 ink button labeled "Find {category}s" (or "Find more" once the list
 exists), with a sage ThoughtStream during the search. Empty-state hint
 copy updated to point at the new button.
 
-**Long venue list** — `app/api/scout/route.ts` now accepts an optional
+**Long venue list**. `app/api/scout/route.ts` now accepts an optional
 `count` parameter and defaults are category-aware: Venue=15,
 Photographer=10, Videographer=8, Florist=8, Caterer=8, Band=8, DJ=8,
 Officiant=6, fallback=8. The offline VENUE_POOL grew from 5 → 18 entries
@@ -895,24 +895,24 @@ Officiant=6, fallback=8. The offline VENUE_POOL grew from 5 → 18 entries
 yacht club, manor, olive farm, loft, lake house, chapel+hall, hotel,
 orchard, pavilion, distillery). PHOTOGRAPHER_POOL grew from 5 → 10. Other
 pools left at their existing sizes (the offline shortlist's `slice(0, count)`
-is fine — it just returns what's available).
+is fine. it just returns what's available).
 
-**Unified timelines** — `/timeline` now leads with the same `PhaseStrip`
+**Unified timelines**. `/timeline` now leads with the same `PhaseStrip`
 the dashboard uses, so "where you are" / countdown / 8-phase rail show
 identically on both screens. Replaced the redundant "Twelve months, in
 order" + "X / Y done" + 100% progress bar header with the PhaseStrip + a
-quieter "What's next — Month-by-month, in plain English" eyebrow. The
+quieter "What's next. Month-by-month, in plain English" eyebrow. The
 months-out groups are now reordered: current month (with "you are here"
 sage treatment) → "Coming up" (months counting down to day-of) → "After
 the wedding" → "Already handled" (collapsed, opacity-80) at the bottom.
 
-**ChatDock pendingChatPrompt flow** — StateProvider now exposes
+**ChatDock pendingChatPrompt flow**. StateProvider now exposes
 `pendingChatPrompt`, `sendChatMessage(text)`, and `clearPendingChatPrompt`.
 Any view can call sendChatMessage() to push a ready-made prompt into the
 dock; ChatDock watches it via useEffect, opens itself, fires the message
 as if the user typed it, and clears the slot.
 
-**Vendor detail page** — new route `/vendors/[id]/page.tsx` mounting
+**Vendor detail page**. new route `/vendors/[id]/page.tsx` mounting
 `components/VendorDetailView.tsx`. Full-page profile: hero with name,
 category, fit, bracket, Corsia-verified chip; primary action rail (Draft
 outreach goes through chat dock, Simulate reply, Counter via Negotiator,
@@ -924,19 +924,19 @@ nearby block (icons + 4 items per vendor), vibe-match block (progress
 bar + chips combining brief vibe + category staples), thread-so-far panel
 (last 3 messages if any), and an "Ask Maestro" CTA card with three
 suggested prompts that fly into chat. VendorCard + RecommendedCard in
-VendorsView already wrapped in `<Link href="/vendors/${v.id}">` — the
+VendorsView already wrapped in `<Link href="/vendors/${v.id}">`. the
 inline expanding detail panel still exists as a fallback for the
 recommended pick but cards now navigate.
 
-**Draft outreach flies into chat** — VendorsView's `askMaestroDraftOutreach`
+**Draft outreach flies into chat**. VendorsView's `askMaestroDraftOutreach`
 helper uses `sendChatMessage` instead of POSTing to the approvals API. Same
 on the new VendorDetailView's primary "Draft outreach" tile. Result: the
 draft is composed by Maestro inline in the right-side chat panel where the
 couple can review it, instead of being buried as another approval card.
 
 Tested:
-- `npx tsc --noEmit` — clean.
-- `npm test` — 314 assertions still green.
+- `npx tsc --noEmit`. clean.
+- `npm test`. 314 assertions still green.
 - Manual sanity: `/timeline` and `/` both render the same PhaseStrip data,
   no double countdown.
 
@@ -953,53 +953,53 @@ for real OpenAI-rendered hero shots when an API key is present. Push
 iter-1 through iter-21 to git on the host machine.
 
 
-## Iteration 21.1 — 2026-05-10 — thin-view polish sweep
+## Iteration 21.1. 2026-05-10. thin-view polish sweep
 
-Continuing iter-21. Wide pass of thin views — same editorial pattern as
+Continuing iter-21. Wide pass of thin views. same editorial pattern as
 RegistryView/FloralsView: italic-sage hero header, stat row, grouped
 sections with phase-style mono-caps eyebrow, hover transitions, toast on
 meaningful actions, ThoughtStream during agent work where applicable.
 
 Polished:
 
-- **RentalsView** (97 → ~180 lines) — italic stat-row hero, category
+- **RentalsView** (97 → ~180 lines). italic stat-row hero, category
   blurbs (CAT_BLURB explaining what each rental kind covers), CAT_ORDER
   for chronological flow (tent, seating, tables, linens…), per-category
   hover row with tabular-nums totals, ThoughtStream during Steward propose.
 
-- **ThanksView** (107 → ~190 lines) — stat row showing cards / drafting /
+- **ThanksView** (107 → ~190 lines). stat row showing cards / drafting /
   ready / sent counts, sage progress bar tied to % sent, status-filter
   chip row, italic-Cormorant guest names, rounded-pill status indicator
   per card, tighter editable textarea/input UX.
 
-- **VisitsView** (99 → ~200 lines) — stat row (upcoming / done / next-up)
+- **VisitsView** (99 → ~200 lines). stat row (upcoming / done / next-up)
   with the next visit's date and label called out, kind icons (tasting
   🍷, fitting 👗, walk 🏛, trial 💄, consultation 🗒), book-a-visit form
   in a labelled section, formatted short-date display in the upcoming
   list, hover lift on each row.
 
-- **EngagementView** (102 → ~170 lines) — luxe header copy ("The
+- **EngagementView** (102 → ~170 lines). luxe header copy ("The
   getting-engaged bit"), stat row (milestones / ideas / planned / done),
   status pill chips per card, ThoughtStream during Concierge propose.
 
-- **MemorialsView** (87 → ~190 lines) — same shape: stat row by side,
+- **MemorialsView** (87 → ~190 lines). same shape: stat row by side,
   treatment-blurb text under the picker that updates as the choice
   changes, side-aware "Your side / Their side / Both" labels, per-card
   italic name + treatment chip + edit-in-place notes textarea.
 
-- **LicenseView** (87 → ~210 lines) — stat row (progress % / expires
+- **LicenseView** (87 → ~210 lines). stat row (progress % / expires
   date / filed-or-not), sage progress bar tied to the four date stages,
   "Up next" chip showing what's next, per-stage DateField labels with
   mono-caps, deferred filing button label flips to "Already filed" when
   filed.
 
-- **PlannerView** (85 → ~210 lines) — sub-grouped jump-to grid (Core /
-  Build / The day / Personal / After — five groups), Watcher flag block
+- **PlannerView** (85 → ~210 lines). sub-grouped jump-to grid (Core /
+  Build / The day / Personal / After. five groups), Watcher flag block
   with severity counts in the header (N critical · N warning · All clear),
   module-aware deep links from each flag, expanded stat row showing
   pending / RSVPs ratio / committed-of-planned dollars / foundation 0/2.
 
-- **DressView** (107 → ~230 lines) — firewall card switches color and
+- **DressView** (107 → ~230 lines). firewall card switches color and
   copy by gate state (sage halo and pulse-soft dot when on; calm white
   when off), Couturier interview with concrete reference prompt, stat
   row when concepts exist (directions / saved / fittings booked), per-
@@ -1007,8 +1007,8 @@ Polished:
   ThoughtStream during dress-render.
 
 Tested:
-- `npx tsc --noEmit` — clean.
-- `npm test` — 314 assertions, all green.
+- `npx tsc --noEmit`. clean.
+- `npm test`. 314 assertions, all green.
 
 Total iter-21 line-count delta across views: ~660 → ~1500 (≈ 2.3× more
 visible UI per page, with no new tests broken).
@@ -1023,45 +1023,45 @@ Next session should:
   unlink .git/HEAD.lock).
 
 
-## Iteration 22 — 2026-05-10 — touch/mobile, nav cramping, four more polishes
+## Iteration 22. 2026-05-10. touch/mobile, nav cramping, four more polishes
 
 Continuing the overnight loop. User said "do not stop." Going through the
 checklist again to find anything still imperfect.
 
 Built:
 
-**Touch/click for top-bar nav** — `PrimaryNavLink` was hover-only, which
+**Touch/click for top-bar nav**. `PrimaryNavLink` was hover-only, which
 quietly broke on touch and tablets. Now the chevron-bearing primaries are
 click-to-toggle with click-outside + Escape + route-change auto-close, and
 the dropdown still hover-opens on desktop. Discover (no submenu) stays a
 plain Link.
 
-**Top-bar primaries hidden below `lg`** — they were appearing at `md`
+**Top-bar primaries hidden below `lg`**. they were appearing at `md`
 (768px), where 4 primaries + couple-name + decisions chip + menu trigger +
 viewer switch was overflowing. Now they show from `lg` (1024px) up; below
 that the menu trigger ⋯ + bottom-tab nav cover navigation. No more cramped
 header on tablets.
 
-**CakeView polish** (108 → ~190 lines) — italic-sage hero, stat row
+**CakeView polish** (108 → ~190 lines). italic-sage hero, stat row
 (tiers / servings + per-guest / flavors / locked), flavor-stack section
 with bottom→top numbering, frosting + decoration two-col, allergen
 callout in risk-medium chrome with cross-check link to /dietary, send-to-
 decisions lock CTA. ThoughtStream during Patissier propose.
 
-**WeddingPartyView polish** (108 → ~210 lines) — stat row (total / your
+**WeddingPartyView polish** (108 → ~210 lines). stat row (total / your
 side / their side / attire-ordered ratio), proper add form with Your-side
 / Their-side labels (no more "organizer" jargon), per-member card with
 italic name + role chip, attire ordered toggle + remove with luxury hover
 treatment.
 
-**MusicView polish** (123 → ~240 lines) — stat row (cues / slots filled
+**MusicView polish** (123 → ~240 lines). stat row (cues / slots filled
 ratio / guest requests / do-not-play count), guest-requests highlight
 card pulling from RSVP song requests, slot blurbs ("Walking down the
 aisle", "The two of you, alone on the floor", "The party"),
 do-not-play styled in risk-medium chrome, slot-by-slot grid with inline
 add-cue form, ThoughtStream during Cantor propose, send-to-decisions lock.
 
-**PersonalPrepView polish** (146 → ~230 lines) — top stat row (your
+**PersonalPrepView polish** (146 → ~230 lines). top stat row (your
 vows words / their vows words / speeches / dress firewall state), two
 big tiles to /dress and /speeches with status copy that reflects the
 gate state, vows-block card that distinguishes "Your vows" vs "Your
@@ -1070,8 +1070,8 @@ block, organizer can't see partner's if gated), draft-then-edit textarea
 in italic Cormorant for the actual vows, ThoughtStream during draft.
 
 Tested:
-- `npx tsc --noEmit` — clean.
-- `npm test` — 314 assertions, green.
+- `npx tsc --noEmit`. clean.
+- `npm test`. 314 assertions, green.
 
 Total iter-21 + iter-22 line-count delta across 12 polished views:
 - iter-21: RentalsView, ThanksView, VisitsView, EngagementView,
@@ -1089,14 +1089,14 @@ Next session should:
 - Push iter-1 through iter-22 to git on the host.
 
 
-## Iteration 23 — 2026-05-10 — copy consistency + LoginView + LogisticsView
+## Iteration 23. 2026-05-10. copy consistency + LoginView + LogisticsView
 
 Continuing the overnight loop. Iter-23 focuses on internal-team-name
 language leaking into user-facing copy, and rewriting two more thin views.
 
 Built:
 
-**Specialist-name jargon swept** — every "Have Specialist propose" /
+**Specialist-name jargon swept**. every "Have Specialist propose" /
 "Specialist working…" / "Specialist drafting…" pattern across the app has
 been rewritten in plain action language:
 - "Have Curator propose" → "Pull a registry together"
@@ -1122,15 +1122,15 @@ The agents stay named in the toast metadata (`agent: "Concierge"`) and in
 ledger entries, but the buttons the couple clicks now read like things a
 real planner would say.
 
-**LogisticsView polish** (145 → ~250 lines) — three-section layout
+**LogisticsView polish** (145 → ~250 lines). three-section layout
 (hotel block / transportation / welcome bag), stat row showing households-
 traveling / rooms-booked-of-blocked / shuttle-seats-of-capacity / welcome-
 bag-cost-and-grand-total, per-block card with a sage progress bar showing
 booking %, italic-hotel-name treatment, contextual empty-state copy
 explaining when each pillar matters ("Boutique hotels usually want 90+
-days notice — start any time the venue is locked").
+days notice. start any time the venue is locked").
 
-**LoginView polish** (128 → ~190 lines) — magic-link + Google OAuth
+**LoginView polish** (128 → ~190 lines). magic-link + Google OAuth
 landing now uses the Corsia editorial header pattern (mono-caps brand
 eyebrow + display-italic headline), Google glyph (real 4-color SVG, not
 text-only), confirmation-state card with sage-50 chrome and a "Use a
@@ -1140,8 +1140,8 @@ after thirty"). The offline single-tenant path stays (Supabase not
 configured), restyled as a soft luxury "Just you, for now" handoff.
 
 Tested:
-- `npx tsc --noEmit` — clean.
-- `npm test` — 314 assertions, green.
+- `npx tsc --noEmit`. clean.
+- `npm test`. 314 assertions, green.
 
 Iter-21 + iter-22 + iter-23 cumulative views polished:
 - iter-21 (8): RentalsView, ThanksView, VisitsView, EngagementView,
@@ -1162,13 +1162,13 @@ Next session should:
 - Push iter-1 through iter-23 to git on the host.
 
 
-## Iteration 24 — 2026-05-10 — VendorPortalView polish + e2e verification
+## Iteration 24. 2026-05-10. VendorPortalView polish + e2e verification
 
 Continuing the overnight loop.
 
 Built:
 
-**VendorPortalView polish** (121 → ~250 lines) — magic-link landing for
+**VendorPortalView polish** (121 → ~250 lines). magic-link landing for
 vendors, redacted to their slice only. Italic-sage hero, stat row showing
 status / contract / inbound count / outbound count, a vendor switcher
 section with explanation copy ("In production each vendor signs in via a
@@ -1179,7 +1179,7 @@ left, with date subtitles), reply textarea + send with concierge-style
 toast confirmation. Empty state for "pick a vendor" is now a centered
 luxe card instead of a bare EmptyState block.
 
-**End-to-end verification** —
+**End-to-end verification**.
 - 46 page routes mounted under `app/`, all building.
 - `app/vendors/[id]/page.tsx` exists and points at VendorDetailView.
 - `npx tsc --noEmit` clean.
@@ -1212,7 +1212,7 @@ Next session should:
 - Eventually push iter-1 through iter-24 to git on the host.
 
 
-## Iteration 25 — 2026-05-10 — eyebrow detox + final hint sweep
+## Iteration 25. 2026-05-10. eyebrow detox + final hint sweep
 
 Continuing the overnight loop. Final pass on internal-team-name jargon
 that was still leaking into user-visible copy via empty-state hints,
@@ -1241,7 +1241,7 @@ Built:
   flagged…"
 
 **Page eyebrows rewritten** (the small mono-caps caption above each
-title) — these were exposing the internal specialist names to the
+title). these were exposing the internal specialist names to the
 luxury user. Each room now reads as a purpose, not a person:
 - FloralsView: "Botanist" → "The flowers"
 - StationeryView: "Stationer" → "The paper goods"
@@ -1262,12 +1262,12 @@ luxury user. Each room now reads as a purpose, not a person:
   "Click to ask why"
 
 The agents stay named in the underlying ledger, toast `agent` metadata,
-and code comments — but the front-of-house language now treats them as
+and code comments. but the front-of-house language now treats them as
 "the team" rather than as a roster the user has to memorize.
 
 Tested:
-- `npx tsc --noEmit` — clean.
-- `npm test` — 314 assertions, green.
+- `npx tsc --noEmit`. clean.
+- `npm test`. 314 assertions, green.
 
 Iter-21 + iter-22 + iter-23 + iter-24 + iter-25 cumulative summary:
 - 15 thin views fully polished (RentalsView, ThanksView, VisitsView,
@@ -1294,7 +1294,7 @@ Next session should:
 - Push iter-1 through iter-25 to git on the host.
 
 
-## Iteration 26 — 2026-05-10 — Editorial Obsidian: full Landing revamp
+## Iteration 26. 2026-05-10. Editorial Obsidian: full Landing revamp
 
 User feedback: the AI-slop copy ("A fleet of AI agents…", "Maître scheduled
 the tasting with Emiliano", "We find the venue, draft the emails, negotiate
@@ -1306,34 +1306,34 @@ Aesthetic direction committed: **Editorial Obsidian**.
 
 Built:
 
-**Landing.tsx — total rewrite from 1,182 lines to 510**. Three sections of
+**Landing.tsx. total rewrite from 1,182 lines to 510**. Three sections of
 substance, every word earned:
 
-1. **Header** — minimal. Brand left (Cormorant italic 24px on void),
+1. **Header**. minimal. Brand left (Cormorant italic 24px on void),
    ghost-luxe "Sign in" pill right.
 
-2. **Hero** — full-bleed obsidian (radial sage halos + grain via .obsidian
+2. **Hero**. full-bleed obsidian (radial sage halos + grain via .obsidian
    utility), single sage halo orb up-right with breathing pulse animation.
    Asymmetric two-column. Left: mono-caps eyebrow ("FOR THE WEDDING ONLY
    YOU CAN SEE"), monumental headline (Cormorant italic, clamp 72-152px,
-   "Plan nothing. — Decide everything." with the second line painted in
+   "Plan nothing.. Decide everything." with the second line painted in
    a sage-conic gradient), italic sub-line ("We make the calls. You make
    the decisions."), liquid-glass input pill with decisive luxe CTA
    ("Begin →"), hairline + sign-in fallback. Right: liquid-glass decision
-   card showing "Tre Posti revised the contract. — Deal score 62 → 78"
+   card showing "Tre Posti revised the contract.. Deal score 62 → 78"
    with Review (luxe primary) and Later (ghost) buttons, plus a quiet
    ambient ticker line. A second, partially-obscured glass card peeks from
    below for depth. Every paragraph staggered-reveal on page load
    (obs-rise keyframe).
 
-3. **Trust** — monumental statement section. Left: mono eyebrow + a
+3. **Trust**. monumental statement section. Left: mono eyebrow + a
    massive three-line italic statement, "Nothing leaves your name without
    your tap." (with "tap." gradient-painted in sage). Right: three
-   columns of consequence — Emails / Contracts / Payments, each with an
+   columns of consequence. Emails / Contracts / Payments, each with an
    accent rule, mono-caps label, and a single intentional sentence.
    IntersectionObserver-driven reveal on scroll.
 
-4. **Footer** — single hairline rule, three-up: brand mark, mono-caps
+4. **Footer**. single hairline rule, three-up: brand mark, mono-caps
    trust-line repeat, hello@corsia.com mailto.
 
 **Removed entirely**:
@@ -1342,40 +1342,40 @@ substance, every word earned:
 - "We find the venue, draft the emails, negotiate the contracts, build
   the seating chart, write the thank-you cards. You make the decisions.
   We do everything else." (gone)
-- "Maître scheduled the tasting with Emiliano." LiveTicker (gone — entire
+- "Maître scheduled the tasting with Emiliano." LiveTicker (gone. entire
   rotating ticker component removed; its function replaced by a single,
   ambient italic line inside the decision card)
-- The Polaroids cluster (gone — replaced with a single floating glass
+- The Polaroids cluster (gone. replaced with a single floating glass
   decision card that proves the product instead of staging a vibe)
-- The HowItWorks dashboard mockup section (gone — its job is done by the
+- The HowItWorks dashboard mockup section (gone. its job is done by the
   hero artifact)
 - The SeatingDemo two-column with floor plan SVG + chat transcript (gone
-  — adds visual weight without earning it)
+ . adds visual weight without earning it)
 - The four-paragraph TrustSection (collapsed to a tighter monument)
 
-**globals.css additions** — Editorial Obsidian utility set:
-- `.obsidian` — multi-radial-gradient void with grain via ::after
-- `.liquid-glass` — frosted card on dark with layered highlights, glow
+**globals.css additions**. Editorial Obsidian utility set:
+- `.obsidian`. multi-radial-gradient void with grain via ::after
+- `.liquid-glass`. frosted card on dark with layered highlights, glow
   rim, deep cast shadow
-- `.text-paper-soft / -faint / -hush` — light-on-dark muted text scale
-- `.mono-caps` — JetBrains Mono small caps system (drops Inter feel)
-- `.btn-luxe` — decisive primary CTA on dark: white-fill pill with sage
+- `.text-paper-soft / -faint / -hush`. light-on-dark muted text scale
+- `.mono-caps`. JetBrains Mono small caps system (drops Inter feel)
+- `.btn-luxe`. decisive primary CTA on dark: white-fill pill with sage
   conic-gradient ::before that spins, hover-lift, glowing shadow
-- `.btn-ghost-luxe` — subtle bordered CTA on dark
-- `.glass-input-pill` — input matching the card depth, sage focus ring
-- `.sage-halo` — single decorative atmosphere orb (used in two places)
-- `.rule-fade`, `.accent-rule` — restrained separator system
-- `obs-rise / obs-fade / obs-glow` keyframes — orchestrated page-load
+- `.btn-ghost-luxe`. subtle bordered CTA on dark
+- `.glass-input-pill`. input matching the card depth, sage focus ring
+- `.sage-halo`. single decorative atmosphere orb (used in two places)
+- `.rule-fade`, `.accent-rule`. restrained separator system
+- `obs-rise / obs-fade / obs-glow` keyframes. orchestrated page-load
   cascade
 - JetBrains Mono added to the font import (for mono-caps without leaning
   on system Inter)
 
-**Root vars** — paper cooled from #FAFAF7 to #FCFCFB; paper-200 from
+**Root vars**. paper cooled from #FAFAF7 to #FCFCFB; paper-200 from
 #F2F2EE to #F4F4F2. Less tan warmth on the dashboard surfaces too.
 
 Tested:
-- `npx tsc --noEmit` — clean.
-- `npm test` — 314 assertions, green.
+- `npx tsc --noEmit`. clean.
+- `npm test`. 314 assertions, green.
 
 Next session should:
 - Visually verify the new landing on a real browser session.
@@ -1385,20 +1385,20 @@ Next session should:
 - Push iter-1 through iter-26 to git on the host.
 
 
-## Iteration 28 — 2026-05-10 — global loading-state system
+## Iteration 28. 2026-05-10. global loading-state system
 
-User: "no loading states anywhere — you click and there's no visual cue
+User: "no loading states anywhere. you click and there's no visual cue
 something is happening. critical."
 
 Built:
 
-**`components/Pending.tsx`** — three primitives:
-- `<Spinner size tone />` — quiet rotating sage ring
-- `<DotsPulse tone />` — three pulsing dots
-- `<ButtonContent busy idle busyLabel />` — wraps a button label so the
+**`components/Pending.tsx`**. three primitives:
+- `<Spinner size tone />`. quiet rotating sage ring
+- `<DotsPulse tone />`. three pulsing dots
+- `<ButtonContent busy idle busyLabel />`. wraps a button label so the
   spinner-and-text replace the idle content during work
 
-**`components/RouteProgress.tsx`** — a thin, top-of-page sage gradient
+**`components/RouteProgress.tsx`**. a thin, top-of-page sage gradient
 bar (2px). Patches `window.fetch` once on mount; every outgoing request
 increments an in-flight counter and the bar shows. Bar animates 0 → 80%
 while requests are open, parks at 80%, then completes to 100% and fades
@@ -1412,13 +1412,13 @@ automatically. Zero per-component plumbing required.
 silent "…" text) and **into ApprovalCard's Yes/Pass buttons** (also
 replaces "…" with spinner + "Approving" / "Passing" labels).
 
-**Fixed a Next.js 15 type error** on `/app/vendors/[id]/page.tsx` —
+**Fixed a Next.js 15 type error** on `/app/vendors/[id]/page.tsx`.
 params is now a Promise in Next 15; awaited it.
 
 Tested: tsc clean, 314 tests green.
 
 
-## Iteration 29 — 2026-05-10 — Command Center revamp
+## Iteration 29. 2026-05-10. Command Center revamp
 
 User: "this app needs a way better command center, that should recommend
 steps in each stage, pending actions, vendors that replied, everything
@@ -1426,21 +1426,21 @@ needs to feel intentional and easy to use."
 
 Built:
 
-**`components/CommandCenter.tsx`** (608 lines) — replaces the old
+**`components/CommandCenter.tsx`** (608 lines). replaces the old
 Dashboard inside Today.tsx. Organized around four questions, top to
 bottom:
 
-1. **BriefStrip** — compressed editorial header. Greeting + phase pill
+1. **BriefStrip**. compressed editorial header. Greeting + phase pill
    on the top row, names + countdown paired horizontally (not stacked
    180px tall). Date · venue or region · guest count. Phase tagline
-   reads as the countdown caption ("Foundation — Venue, photographer,
-   budget — the bones").
+   reads as the countdown caption ("Foundation. Venue, photographer,
+   budget. the bones").
 
-2. **RightNow** — single big card holding the most pressing pending
+2. **RightNow**. single big card holding the most pressing pending
    decision. Sage halo gradient, breathing dot eyebrow, "X more after
    this" link. If nothing is pending, a soft "All quiet" callout instead.
 
-3. **RecommendedForPhase** — phase-aware contextual recommendations.
+3. **RecommendedForPhase**. phase-aware contextual recommendations.
    New `inferPhase(state)` derives the active phase from the state
    (foundation / discovery / design / logistics / paperwork / day-of /
    after). New `recommendForPhase(phase, state)` returns 3-5 concrete
@@ -1453,14 +1453,14 @@ bottom:
    ahead" tally.
 
 4. **Two-column body**:
-   - **Left**: PendingDecisions — the next 3 pending approvals after
+   - **Left**: PendingDecisions. the next 3 pending approvals after
      the RightNow card.
-   - **Right**: VendorReplies (NEW) — pulls inbound messages from each
+   - **Right**: VendorReplies (NEW). pulls inbound messages from each
      vendor's `thread`, sorts by date, shows top 4 as cards linking to
      /vendors/[id]. Surfaces parsed intent + quoted USD as chips so
      the user sees at a glance "this vendor came back available, $42k."
-     AtAGlance — quiet 4-cell stat row (vendors booked / RSVPs /
-     budget committed / decisions resolved). FlagsBlock — Watcher
+     AtAGlance. quiet 4-cell stat row (vendors booked / RSVPs /
+     budget committed / decisions resolved). FlagsBlock. Watcher
      concerns, max 3, severity-tinted.
 
 `Today.tsx` now branches:
@@ -1470,7 +1470,7 @@ bottom:
 
 The old `Dashboard` function and its widget components (EditorialHero,
 BudgetSnapshot, VendorGlance, UpcomingTasks, QuickNav, ActivityFeed)
-are still in the file as dead code — leaving them for a follow-up
+are still in the file as dead code. leaving them for a follow-up
 removal pass since the file is 879 lines and ripping them out has
 diff/test risk.
 
@@ -1483,22 +1483,22 @@ Next session should:
 - Push iter-1 through iter-29 to git on the host.
 
 
-## Iteration 30 — 2026-05-10 — Home page is now the calm sequence (and nothing else)
+## Iteration 30. 2026-05-10. Home page is now the calm sequence (and nothing else)
 
 Focus: post-lock home polish + dead-code sweep.
-Backlog item: explicit next_session_should pointer — delete the dead
+Backlog item: explicit next_session_should pointer. delete the dead
 Dashboard widget helpers in Today.tsx, decide on the CommandCenter
 across-states question.
 Research: none.
 
-Built — three coupled changes:
+Built. three coupled changes:
 
 **1. `components/Today.tsx` 896 → 212 lines.** The whole Dashboard
 pipeline that iter-29 replaced was still sitting in the file as dead
 code: `Dashboard`, `EditorialHero`, `DecisionsBlock`, `LaneProgressBar`,
 `ActivityFeed`, `BudgetSnapshot`, `BudgetCell`, `VendorGlance`,
 `describeStage`, `UpcomingTasks`, `QuickNav`, `SectionHeader`,
-`timeAgo`, `labelFor`, `greeting`, `countdownDays` — eleven dead
+`timeAgo`, `labelFor`, `greeting`, `countdownDays`. eleven dead
 components plus five dead helpers. All removed. Today.tsx is now a
 thin router: PageSkeleton → Welcome/ContinuingDraft → CommandCenter,
 plus the one live pre-lock surface (`ContinuingDraft`). The 700-line
@@ -1506,7 +1506,7 @@ Dashboard implementation is gone; CommandCenter is the single
 canonical post-lock surface. Import cleanup: dropped `ApprovalCardView`,
 `PhaseStrip`, `BotanicalAccent`, `AmbientTicker`, `CountUp`, `Reveal`,
 `CHECKLIST`, `currentMonthsOut`, `useMemo`, `ApprovalCard`,
-`LedgerEvent`, `laneProgress`, `Lane`, `LaneProgress` — all unused
+`LedgerEvent`, `laneProgress`, `Lane`, `LaneProgress`. all unused
 after the cleanup.
 
 **2. CommandCenter actually surfaces the urgent thing.** Iter-29
@@ -1517,19 +1517,19 @@ upstream. Restored `RightNow` (with `NoDecisionsRightNow` fallback)
 and `FlagsBlock` to the render path. RightNow always shows: it picks
 up the top pending approval card and links onward to /approvals if
 more await; with no pending approvals the soft "All quiet" callout
-runs instead. FlagsBlock is conditional — only renders when Watcher
-has at least one warn or critical flag — so the empty-state remains
+runs instead. FlagsBlock is conditional. only renders when Watcher
+has at least one warn or critical flag. so the empty-state remains
 calm.
 
 **3. CommandCenter trim.** Removed `PendingDecisions`, `VendorReplies`,
-`AtAGlance`, `Glance`, and `recentVendorReplies` per ADR 001 — the
+`AtAGlance`, `Glance`, and `recentVendorReplies` per ADR 001. the
 inline product call ("Pending approvals live on /approvals. Vendor
 replies live on /vendors. Stats live on each module.") was already
 correct; the unrendered components made the contract ambiguous. File
 went from 1183 → 979 lines. Updated the top-of-file doc-comment to
 describe the actual three-section sequence.
 
-Decisions made: ADR 001 — *The post-lock home is a calm sequence, not
+Decisions made: ADR 001. *The post-lock home is a calm sequence, not
 a dashboard buffet*. Documents that the post-lock home renders three
 sections only (BriefStrip, RightNow + conditional FlagsBlock,
 RecommendedForPhase) and that secondary affordances live on their own
@@ -1541,11 +1541,11 @@ Tested:
   baseline.
 - Manual code audit: no remaining references to any of the deleted
   identifiers anywhere in `components/` or `lib/`.
-- Live dev-server smoke skipped — same bwrap sandbox limitation
+- Live dev-server smoke skipped. same bwrap sandbox limitation
   documented in iter-1 (Next.js dev never completes "Starting…"
   inside this network namespace). User's host machine is unaffected.
 
-Commit: NOT WRITTEN — the bwrap sandbox `unlink` permission issue on
+Commit: NOT WRITTEN. the bwrap sandbox `unlink` permission issue on
 `.git/HEAD.lock` remains in place (documented as P0 since iter-1).
 Diff intact in the working tree; the host will pick up
 `loop/iter-30` and the cumulative iter-1-through-iter-30 backlog.
@@ -1557,6 +1557,6 @@ Next session should:
   top pending approval in RightNow and the rest behind the "X more
   after this" pivot. With at least one warn-level Watcher flag, the
   Heads up block should appear between RightNow and Recommended.
-- Pick the next P2 thin-view polish target — `/planner` (85 lines) is
+- Pick the next P2 thin-view polish target. `/planner` (85 lines) is
   the smallest remaining and the next in the queue.
 - Push iter-1 through iter-30 to git on the host.

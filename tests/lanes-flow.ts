@@ -1,4 +1,4 @@
-// Planning lanes — verify the demo state lands on Lane 4 (Aesthetics) as
+// Planning lanes. verify the demo state lands on Lane 4 (Aesthetics) as
 // the active lane with 2-3 pending cards, lanes 1-3 sealed, lanes 5-8
 // queued. Mirrors what the dashboard's DecisionsBlock will render.
 
@@ -20,7 +20,7 @@ async function main() {
   ok(LANES.every((l, i) => l.order === i + 1), "Lanes ordered 1..8");
 
   // Demo-specific expectations
-  ok(p.completed.length === 3, `3 lanes sealed (got ${p.completed.length} — ${p.completed.map((l) => l.label).join(", ")})`);
+  ok(p.completed.length === 3, `3 lanes sealed (got ${p.completed.length}. ${p.completed.map((l) => l.label).join(", ")})`);
   ok(p.completed[0].id === "foundation", "Lane 1 (Foundation) is sealed");
   ok(p.completed[1].id === "food_and_drink", "Lane 2 (Food & Drink) is sealed");
   ok(p.completed[2].id === "capture", "Lane 3 (Capture) is sealed");
@@ -44,7 +44,7 @@ async function main() {
   ok(p.upcoming.map((l) => l.id).includes("stationery"), "Stationery lane queued");
   ok(p.upcoming.map((l) => l.id).includes("day_of"), "Day-of lane queued");
 
-  // Lane mapping sanity — feed any pending card and verify mapping is sensible
+  // Lane mapping sanity. feed any pending card and verify mapping is sensible
   const pending = state.approvals.filter((a) => a.status === "pending");
   for (const c of pending) {
     const id = laneFor(c);

@@ -4,7 +4,7 @@
 // for both partners (gated separately so neither has to read the other's
 // before the day), with cross-links into Speeches and Dress.
 //
-// Layout: editorial hero with the most personal frame in the app — "the
+// Layout: editorial hero with the most personal frame in the app. "the
 // lines you'll say to each other." Two-card cross-link to /dress and
 // /speeches. Then two VowsBlock sections, one per partner, with
 // viewer-aware visibility (partner-of-organizer never sees organizer's
@@ -65,7 +65,7 @@ export function PersonalPrepView() {
           )}
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
-          Vows, speeches, the dress. Each piece has its own scope — you can hide your draft
+          Vows, speeches, the dress. Each piece has its own scope. you can hide your draft
           from your partner until the day, and the gates around the dress and surprise gifts
           work the same way.
         </p>
@@ -86,7 +86,7 @@ export function PersonalPrepView() {
             </h3>
             <p className="text-[13px] text-ink-300 mt-2 leading-relaxed">
               {state.gates.dress
-                ? "Firewall on — your partner can&rsquo;t see anything in this room."
+                ? "Firewall on. your partner can&rsquo;t see anything in this room."
                 : "Visible to both right now. Turn the firewall on inside if you want it private."}
             </p>
           </Link>
@@ -143,8 +143,8 @@ function VowsBlock({
   const gateOn = state.gates[whose === "organizer" ? "vows_organizer" : "vows_partner"];
 
   // Visibility rules:
-  //  • Partner viewing the organizer's block — never.
-  //  • Organizer viewing partner's block — only if partner's vows aren't gated.
+  //  • Partner viewing the organizer's block. never.
+  //  • Organizer viewing partner's block. only if partner's vows aren't gated.
   if (state.viewer === "partner" && whose === "organizer") return null;
   if (state.viewer === "organizer" && whose === "partner" && state.gates.vows_partner) return null;
 
@@ -170,7 +170,7 @@ function VowsBlock({
           kind: "agent",
           agent: "Voice",
           title: "A first draft, on you",
-          detail: "Edit anything — read it aloud at full volume before the day.",
+          detail: "Edit anything. read it aloud at full volume before the day.",
         });
       }
     } finally {
@@ -236,7 +236,7 @@ function VowsBlock({
           {!draft ? (
             <>
               <p className="text-[13.5px] text-ink-300 italic mb-3 leading-relaxed">
-                Tell Voice what you want to say. Specifics over abstractions — the moment you
+                Tell Voice what you want to say. Specifics over abstractions. the moment you
                 knew, the small habits, the promises you actually intend to keep.
               </p>
               <textarea

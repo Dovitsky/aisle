@@ -3,7 +3,7 @@
 // CommandCenter. the post-lock dashboard.
 //
 // This is the screen the couple lands on every morning. It is the calm
-// sequence — three sections, top to bottom, with everything else
+// sequence. three sections, top to bottom, with everything else
 // living on its own module:
 //
 //   1. Where am I in the wedding?       → BriefStrip (editorial hero)
@@ -12,8 +12,8 @@
 //                                          if any flags are warn/critical
 //   3. What should I do this phase?     → RecommendedForPhase
 //
-// Everything else — the rest of the pending approvals, vendor replies,
-// at-a-glance stats — lives on the dedicated module surfaces. This
+// Everything else. the rest of the pending approvals, vendor replies,
+// at-a-glance stats. lives on the dedicated module surfaces. This
 // page is deliberately not a dashboard buffet.
 
 import Link from "next/link";
@@ -384,12 +384,12 @@ export function CommandCenter({
   const recs = recommendForPhase(phase, state);
 
   // Mission-control home. Four sections, top to bottom:
-  //   1. BriefStrip — names + countdown + phase, the editorial hero.
-  //   2. Decisions — all pending approval cards inline (was a separate
+  //   1. BriefStrip. names + countdown + phase, the editorial hero.
+  //   2. Decisions. all pending approval cards inline (was a separate
   //      /approvals page; now lives here). When zero pending, the
   //      "Your team is getting started…" agent activity shows instead.
-  //   3. FlagsBlock — Watcher critical/warn heads-up if any.
-  //   4. RecommendedForPhase — concrete steps for the current phase.
+  //   3. FlagsBlock. Watcher critical/warn heads-up if any.
+  //   4. RecommendedForPhase. concrete steps for the current phase.
   const criticalOrWarn = flags.filter(
     (f) => f.level === "critical" || f.level === "warn",
   );
@@ -507,7 +507,7 @@ function Decisions({
   );
 }
 
-// "Your team is getting started…" — shown right after lock, before any
+// "Your team is getting started…". shown right after lock, before any
 // approvals exist. A roster of named specialists with breathing dots so
 // the user understands the silence isn't emptiness, it's preparation.
 const STARTING_TEAM = [
@@ -673,7 +673,7 @@ function BriefStrip({
     .map((f) => f.id)
     .join("|");
   useEffect(() => {
-    // Only fire when we genuinely need a render — either the image is
+    // Only fire when we genuinely need a render. either the image is
     // missing, OR it's the placeholder SVG, OR a meaningful state
     // signal has changed since the last render.
     const promptKey = [
@@ -714,7 +714,7 @@ function BriefStrip({
       className="relative animate-fade-in-soft overflow-hidden -mx-5 lg:-mx-12 px-5 lg:px-12 min-h-[440px] lg:min-h-[560px] flex flex-col justify-end"
       style={{ borderRadius: 0 }}
     >
-      {/* The hero image. Always present — AI-rendered when ready,
+      {/* The hero image. Always present. AI-rendered when ready,
           region-matched stock photo as the fallback. Never blank. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -733,7 +733,7 @@ function BriefStrip({
           opacity: 0.95,
         }}
       />
-      {/* Subtle dark gradient at the bottom edge only — keeps the
+      {/* Subtle dark gradient at the bottom edge only. keeps the
           photo dominant while giving white type something to land on. */}
       <div
         aria-hidden
@@ -926,7 +926,7 @@ function BriefStrip({
       </div>
 
       {/* OpenAI error surfacing. Only shown when the image render failed
-          AND we have an actual error message — used to debug why the
+          AND we have an actual error message. used to debug why the
           hero is still a placeholder. */}
       {renderError && isPlaceholder && (
         <div
@@ -972,7 +972,7 @@ function RightNow({
           "0 28px 72px -28px rgba(79,93,68,0.32), 0 10px 26px -10px rgba(110,128,104,0.18), inset 0 1px 0 rgba(255,255,255,1)",
       }}
     >
-      {/* Left edge sage accent stripe — signals "this is THE thing" */}
+      {/* Left edge sage accent stripe. signals "this is THE thing" */}
       <span
         aria-hidden
         className="absolute left-0 top-0 bottom-0 w-1"

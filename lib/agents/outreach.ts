@@ -1,4 +1,4 @@
-// Outreach — drafts personalized first-contact emails to vendors (PRD §4.2).
+// Outreach. drafts personalized first-contact emails to vendors (PRD §4.2).
 // Gated by Approval Card. Never sends without an approved token.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -15,7 +15,7 @@ Constraints:
 - Sign off as "Corsia on behalf of <couple>".
 - 4-7 sentences total. No emojis, no exclamation points.
 
-Return only the email body — no subject line, no headers.`;
+Return only the email body. no subject line, no headers.`;
 
 export async function outreachDraft(args: {
   brief: Brief;
@@ -49,14 +49,14 @@ Draft the email body now.`;
   return text || offline(args);
 }
 
-// Question-focused follow-up to a vendor we already know — "ask the venue
+// Question-focused follow-up to a vendor we already know. "ask the venue
 // about the rain plan", "ask the photographer if they shoot film", etc.
 // Voice: warm, direct, references the prior thread implicitly.
 
 const QUESTION_SYSTEM = `You are Outreach, Corsia's vendor-contact agent.
 
 You write concise follow-up email bodies asking a vendor a specific question on
-behalf of the couple. The vendor and couple are already in conversation — this
+behalf of the couple. The vendor and couple are already in conversation. this
 is a follow-up, not a first contact.
 
 Voice: warm, professional, one-question-focused. Write as the couple's planning
@@ -69,7 +69,7 @@ Return ONLY the email body. No subject line, no headers.`;
 export async function outreachQuestion(args: {
   brief: Brief;
   vendor: Vendor;
-  topic: string;       // free-text question or topic — "the rain plan", "if they shoot film"
+  topic: string;       // free-text question or topic. "the rain plan", "if they shoot film"
   note?: string;
 }): Promise<string> {
   if (!hasApiKey()) return offlineQuestion(args);
@@ -102,7 +102,7 @@ function offlineQuestion(args: { brief: Brief; vendor: Vendor; topic: string; no
   const noteLine = args.note ? `\n\nA quick bit of context: ${args.note}` : "";
   return `Hello ${v.name},
 
-Following up from ${b.organizerName} & ${b.partnerName}'s wedding on ${b.dateWindow} — they had one question they wanted to put to you.
+Following up from ${b.organizerName} & ${b.partnerName}'s wedding on ${b.dateWindow}. they had one question they wanted to put to you.
 
 ${capitalizeQuestion(args.topic)}${noteLine}
 

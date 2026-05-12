@@ -160,13 +160,13 @@ export function EngagementView() {
         </section>
       </Reveal>
 
-      {/* MILESTONES — grouped by kind */}
+      {/* MILESTONES. grouped by kind */}
       {total === 0 ? (
         <Reveal>
           <div className="rounded-card border hairline bg-white/55 px-7 py-12 max-w-xl">
             <p className="display text-[26px] text-ink leading-tight">Nothing here yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Concierge proposes milestones across five tracks at once — ring, proposal, photos, announcement, party.
+              Concierge proposes milestones across five tracks at once. ring, proposal, photos, announcement, party.
               You decide which to keep, which to plan, which to skip.
             </p>
           </div>

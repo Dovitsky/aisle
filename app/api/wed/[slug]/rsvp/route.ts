@@ -66,7 +66,7 @@ export async function POST(
   const answers = parsed.data.answers ?? {};
 
   // Aggregate route-to fields. Multiple questions can route to the same
-  // agent — concatenate answers into the relevant guest field.
+  // agent. concatenate answers into the relevant guest field.
   let dietaryAdd = "";
   let songAdd = "";
   for (const q of questions) {
@@ -97,7 +97,7 @@ export async function POST(
       .filter(([, v]) => v?.trim())
       .map(([k, v]) => {
         const q = questions.find((x) => x.id === k);
-        return q ? `${q.question} — ${v}` : null;
+        return q ? `${q.question}. ${v}` : null;
       })
       .filter(Boolean)
       .join("\n");

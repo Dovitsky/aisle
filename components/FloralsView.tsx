@@ -19,8 +19,8 @@ const PIECE_LABEL: Record<FloralPiece, string> = {
   ceremony_arch: "Ceremony arch",
   ceremony_aisle: "Aisle markers",
   centerpiece: "Centerpiece",
-  bouquet_organizer: "Bouquet — yours",
-  bouquet_partner: "Bouquet — partner",
+  bouquet_organizer: "Bouquet. yours",
+  bouquet_partner: "Bouquet. partner",
   bouquet_party: "Wedding-party bouquets",
   boutonniere: "Boutonnières",
   corsage: "Corsages",
@@ -116,7 +116,7 @@ export function FloralsView() {
           )}
         </div>
         <p className="text-[14px] text-ink-300 mt-4 leading-relaxed max-w-[60ch]">
-          Real stems, real vessels, real quantities — pulled from your locked design palette
+          Real stems, real vessels, real quantities. pulled from your locked design palette
           and the season we&rsquo;re in. Edit individual pieces; the line goes to your florist
           as a dossier.
         </p>
@@ -135,7 +135,7 @@ export function FloralsView() {
               Not yet
             </p>
             <p className="text-[14px] text-ink leading-relaxed">
-              Seal the dossier first — Botanist needs your season, palette, and headcount before
+              Seal the dossier first. Botanist needs your season, palette, and headcount before
               proposing real arrangements.
             </p>
           </div>
@@ -149,7 +149,7 @@ export function FloralsView() {
             <p className="text-[14px] text-ink-300 leading-relaxed max-w-[60ch]">
               {hasFlorals
                 ? "Replaces the entire program. Existing edits will be lost."
-                : "Botanist drafts per-piece specs — arch, aisle, centerpieces, bouquets, boutonnières, corsages, cake florals — with stems, vessels, and quantities."}
+                : "Botanist drafts per-piece specs. arch, aisle, centerpieces, bouquets, boutonnières, corsages, cake florals. with stems, vessels, and quantities."}
             </p>
             <div className="mt-4 flex items-center gap-4">
               <button
@@ -186,7 +186,7 @@ export function FloralsView() {
             <p className="display text-[26px] text-ink leading-tight">No florals yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
               Per-piece specs (arch, aisle, centerpieces, bouquets, boutonnières, corsages,
-              cake florals, head-table garland) with real stems, vessels, and quantities — all
+              cake florals, head-table garland) with real stems, vessels, and quantities. all
               pulled from your design palette.
             </p>
           </div>

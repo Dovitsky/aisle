@@ -3,7 +3,7 @@
 // Two-layer lookup so the user can paste credentials into the in-app
 // wizard at runtime without needing to restart the Next dev server:
 //
-//   1. process.env  (preferred — set via .env.local for production deploys)
+//   1. process.env  (preferred. set via .env.local for production deploys)
 //   2. data/gmail-credentials.json  (written by the in-app setup wizard)
 //
 // Either source satisfies `hasGoogleOAuth()`. The wizard route stores into

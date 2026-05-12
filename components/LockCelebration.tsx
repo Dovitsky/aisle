@@ -3,7 +3,7 @@
 // LockCelebration. the dramatic full-screen moment when the brief locks.
 //
 // Watches state.brief.locked and renders a 4-second takeover when it
-// transitions false → true. Editorial magazine-cover reveal — paper-cream
+// transitions false → true. Editorial magazine-cover reveal. paper-cream
 // backdrop, ink names, sage ampersand, champagne ribbon sweep, specialist
 // cascade in mono. Airy, refined, never dark.
 
@@ -66,7 +66,7 @@ export function LockCelebration() {
         }}
       />
 
-      {/* Botanical accents — a stylized olive sprig drawn on each side */}
+      {/* Botanical accents. a stylized olive sprig drawn on each side */}
       <svg
         className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
         width="240"
@@ -152,7 +152,7 @@ export function LockCelebration() {
         </span>
       </h1>
 
-      {/* Champagne ribbon sweep — animates left to right under names */}
+      {/* Champagne ribbon sweep. animates left to right under names */}
       <div
         className="relative mt-12 h-px w-[320px] overflow-hidden"
         style={{ background: "rgba(184,153,104,0.18)" }}

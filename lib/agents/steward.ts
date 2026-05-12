@@ -1,4 +1,4 @@
-// Steward — rentals agent (PRD §3.2). Builds the inventory from guest count
+// Steward. rentals agent (PRD §3.2). Builds the inventory from guest count
 // + venue type + design direction.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -76,7 +76,7 @@ function offline(args: { brief: Brief; tableCount?: number }): Omit<RentalItem, 
   const buffer = Math.ceil(guests * 0.1);
   return [
     { category: "seating",     item: "Chiavari chair, ivory",          quantity: guests,             unitCost: 11, notes: "Reception. Reuse for ceremony if venue permits." },
-    { category: "seating",     item: "Folding chair, white wood",      quantity: guests,             unitCost: 6,  notes: "Ceremony only — saves a flip if reception is in a separate space." },
+    { category: "seating",     item: "Folding chair, white wood",      quantity: guests,             unitCost: 6,  notes: "Ceremony only. saves a flip if reception is in a separate space." },
     { category: "tables",      item: "Round dinner table, 60in",       quantity: tables,             unitCost: 14, notes: "Seats 8 each." },
     { category: "tables",      item: "Sweetheart table, 48in",         quantity: 1,                  unitCost: 14, notes: "Couple's table." },
     { category: "tables",      item: "Cocktail high-top",              quantity: Math.ceil(guests / 20), unitCost: 18, notes: "Cocktail hour." },

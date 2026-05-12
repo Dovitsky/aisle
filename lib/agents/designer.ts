@@ -1,4 +1,4 @@
-// Designer — generates mood board concepts and color palettes (PRD §4.2).
+// Designer. generates mood board concepts and color palettes (PRD §4.2).
 // v0 returns named directions with palette swatches; real build calls image gen.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -30,7 +30,7 @@ Output JSON only:
   ]
 }
 
-Constraints: no orange/teal/gen-z palettes. No "boho" — that word is exhausted. Palettes should look like adults could live in them.`;
+Constraints: no orange/teal/gen-z palettes. No "boho". that word is exhausted. Palettes should look like adults could live in them.`;
 
 export async function designerDirections(brief: Brief): Promise<MoodDirection[]> {
   if (!hasApiKey()) return offline(brief);
@@ -72,7 +72,7 @@ function coerce(raw: unknown): MoodDirection | null {
   };
 }
 
-// Offline mood directions — three taste-distinct palettes derived from the
+// Offline mood directions. three taste-distinct palettes derived from the
 // brief's vibe text. Lets /design and the dashboard cards populate without
 // an API key. Each direction is a real-feeling design route, not a stub.
 function offline(brief: Brief): MoodDirection[] {
@@ -103,7 +103,7 @@ function offline(brief: Brief): MoodDirection[] {
     {
       title: isGarden ? "Wildflower Field & Linen" : "Modern Minimal",
       description: isGarden
-        ? `Loose, organic florals — cosmos, queen anne's lace, dahlias direct from local farms. Long farmhouse tables, mismatched cane chairs, linen napkins in three soft tones. Unfussy, abundant.`
+        ? `Loose, organic florals. cosmos, queen anne's lace, dahlias direct from local farms. Long farmhouse tables, mismatched cane chairs, linen napkins in three soft tones. Unfussy, abundant.`
         : `Architectural floral installs, no centerpieces; sculptural taper candles; brushed-brass flatware; ivory linen with no overlay. Reception lit from above. ${region} feels reset.`,
       palette: isGarden
         ? ["#E8E5D8", "#D5BFA0", "#A88E6A", "#525443", "#FAF6E9"]

@@ -258,7 +258,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const pendingCount = state?.approvals.filter((a) => a.status === "pending").length ?? 0;
   const isPublic = pathname.startsWith("/wed/");
-  // /dossier owns its own full-bleed dark layout — skip the dashboard chrome.
+  // /dossier owns its own full-bleed dark layout. skip the dashboard chrome.
   const isDossier = pathname === "/dossier";
   // Marketing landing. kill the dashboard chrome (topbar, mobile-tab nav,
   // chat dock). The Landing component renders its own minimal header.
@@ -362,7 +362,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               Primaries hide below `lg` (tablets keep the menu trigger; mobile
               keeps bottom-tab nav) so the bar never gets cramped.
               They ALSO hide on Build/Day pages since the section sidebar is
-              the canonical navigation there — no double-rendering. */}
+              the canonical navigation there. no double-rendering. */}
           <div className="flex items-center gap-4 lg:gap-6 shrink-0">
             {!activeSection(pathname) && (
               <nav className="hidden lg:flex items-center gap-5 xl:gap-7">

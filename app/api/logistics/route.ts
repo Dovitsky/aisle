@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
   switch (parsed.data.op) {
     case "seed_blocks": {
       if (state.hotelBlocks.length) return NextResponse.json({ state });
-      const region = state.brief?.region ?? "—";
+      const region = state.brief?.region ?? ", ";
       const after = await mutate((s) => {
         s.hotelBlocks = [
           { id: "hb1", hotel: "The Roundhouse", city: region, nightlyRateUsd: 320, roomsBlocked: 20, roomsBooked: 0, releaseDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) },

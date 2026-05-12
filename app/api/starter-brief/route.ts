@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   await appendChat({
     role: "agent",
     agent: "Maestro",
-    content: `Starting from "${tpl.title}". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names — what should I write into the cards?`,
+    content: `Starting from "${tpl.title}". I've loaded the date window, region, guest count, budget, and vibe. The only thing missing is your names. what should I write into the cards?`,
   });
 
   const after = await readState();

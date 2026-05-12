@@ -1,4 +1,4 @@
-// Demo-state test — verifies buildDemoState produces a fully populated
+// Demo-state test. verifies buildDemoState produces a fully populated
 // ProjectState that exercises every module. Without this, "Load demo state"
 // in Settings could ship a half-populated state and break the demo.
 
@@ -18,7 +18,7 @@ async function main() {
   ok(s.brief?.partnerName === "Sam", "Brief: partner = Sam");
   ok(s.demoMode === true, "demoMode: flag is set");
 
-  // Vendors — every status represented
+  // Vendors. every status represented
   const statuses = new Set(s.vendors.map((v) => v.status));
   ok(s.vendors.length >= 25, `Vendors: ${s.vendors.length} total (≥25)`);
   ok(statuses.has("contracted"), "Vendors: at least one contracted");
@@ -34,7 +34,7 @@ async function main() {
   ok(cats.has("Caterer"), "Vendors: Caterer category");
   ok(cats.has("Hair & Makeup"), "Vendors: Hair & Makeup category");
 
-  // Approvals — mixed states
+  // Approvals. mixed states
   const apStatuses = new Set(s.approvals.map((a) => a.status));
   ok(s.approvals.length >= 8, `Approvals: ${s.approvals.length} total`);
   ok(apStatuses.has("pending"), "Approvals: at least one pending");
@@ -77,8 +77,8 @@ async function main() {
   ok(s.chat.length >= 5, `Chat: ${s.chat.length} messages`);
 
   // Internal consistency
-  ok(s.budget.every((l) => l.paidUsd <= l.committedUsd), "Budget: invariant — paid ≤ committed");
-  ok(s.budget.every((l) => l.committedUsd <= l.planUsd), "Budget: invariant — committed ≤ plan");
+  ok(s.budget.every((l) => l.paidUsd <= l.committedUsd), "Budget: invariant. paid ≤ committed");
+  ok(s.budget.every((l) => l.committedUsd <= l.planUsd), "Budget: invariant. committed ≤ plan");
   ok(s.guests.every((g) => s.households.some((h) => h.id === g.householdId)), "Guests: every guest's household exists");
 
   console.log("\nDemo state: all modules populated, internally consistent.");

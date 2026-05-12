@@ -210,7 +210,7 @@ async function dietaryTestAsync() {
     if (!parsed1.allergens.find((a) => a.code === "peanut" && a.severity === "anaphylactic")) {
       throw new Error("Parser failed to detect anaphylactic peanut from EpiPen text");
     }
-    const parsed2 = await larderParse("Lactose intolerant — milk products give me trouble");
+    const parsed2 = await larderParse("Lactose intolerant. milk products give me trouble");
     if (!parsed2.allergens.find((a) => a.code === "dairy" && a.severity === "intolerant")) {
       throw new Error("Parser failed to detect dairy intolerance");
     }

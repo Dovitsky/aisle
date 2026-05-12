@@ -9,12 +9,12 @@ export function hasSupabaseAuth(): boolean {
   return !!(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY);
 }
 
-// Client-side (browser) — used by the login page + any client component that needs the session.
+// Client-side (browser). used by the login page + any client component that needs the session.
 export function browserClient() {
   return createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 }
 
-// Server-side — used in route handlers and Server Components.
+// Server-side. used in route handlers and Server Components.
 // Reads cookies via Next.js cookies() so we get the user's session.
 export async function serverClient() {
   const cookieStore = await cookies();
@@ -30,7 +30,7 @@ export async function serverClient() {
           try {
             cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
           } catch {
-            // Server Component context — cookies are read-only.
+            // Server Component context. cookies are read-only.
             // Auth refresh happens in middleware instead.
           }
         },

@@ -1,4 +1,4 @@
-// Pure selector for the ambient activity ticker — extracted from the React
+// Pure selector for the ambient activity ticker. extracted from the React
 // component so it can be unit-tested without pulling in the React tree.
 
 import type { LedgerEvent } from "./types";

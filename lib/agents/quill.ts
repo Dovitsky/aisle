@@ -1,10 +1,10 @@
-// Quill — receipt / email / screenshot text parser.
+// Quill. receipt / email / screenshot text parser.
 //
 // Takes arbitrary text the couple paste in (forwarded vendor email, an
 // OCR'd PDF estimate, a screenshot transcription) and extracts the
 // structured business: vendor name, total dollar amount, line items, and
 // useful metadata (the contact, the date, the category). Used by the
-// Maestro `parse_estimate` tool — the user dumps text, Maestro renders a
+// Maestro `parse_estimate` tool. the user dumps text, Maestro renders a
 // summary card, the couple confirms to log into Budget + Vendors.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -12,13 +12,13 @@ import { client, MODELS, hasApiKey } from "../anthropic";
 
 export interface ParsedEstimate {
   vendorName: string;        // "Hudson Barn", "Atelier Maison Photography"
-  category?: string;         // "Venue" | "Photographer" | "Florist" | etc — match VendorCategory
+  category?: string;         // "Venue" | "Photographer" | "Florist" | etc. match VendorCategory
   totalUsd: number;          // best-guess all-in number
   lineItems: { label: string; amountUsd: number }[];
   contact?: {
     email?: string;
     phone?: string;
-    person?: string;         // "Maria — bookings"
+    person?: string;         // "Maria. bookings"
   };
   notes?: string;            // 1-line summary of any caveats / fine print
   confidence: "high" | "medium" | "low";
@@ -26,8 +26,8 @@ export interface ParsedEstimate {
 
 const SYSTEM = `You are Quill, Corsia's text parser.
 
-You receive arbitrary text from the couple — a forwarded vendor email, a
-screenshot transcription, a PDF excerpt, an SMS thread — and extract the
+You receive arbitrary text from the couple. a forwarded vendor email, a
+screenshot transcription, a PDF excerpt, an SMS thread. and extract the
 business of any wedding-vendor estimate, quote, or invoice inside.
 
 Rules:
@@ -64,7 +64,7 @@ export async function quillParse(text: string): Promise<ParsedEstimate | null> {
   if (!text.trim()) return null;
 
   const resp = await client().messages.create({
-    model: MODELS.triage,    // fast + cheap — Haiku is enough for parsing
+    model: MODELS.triage,    // fast + cheap. Haiku is enough for parsing
     max_tokens: 1500,
     system: SYSTEM,
     messages: [{

@@ -67,8 +67,8 @@ export function BriefForm() {
       }
       if (j.state) setState(j.state);
       // Post-lock, drop the user back on / (the command center). The home
-      // page is the unified mission control — countdown, decisions queue,
-      // agent activity — there's no separate Decisions page anymore.
+      // page is the unified mission control. countdown, decisions queue,
+      // agent activity. there's no separate Decisions page anymore.
       if (lock) router.push("/");
     } finally { setBusy(null); }
   };

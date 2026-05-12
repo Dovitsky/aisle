@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     case "propose": {
       if (!state.brief?.locked) return NextResponse.json({ error: "Lock the brief first." }, { status: 412 });
       // Pass full WeddingContext so Patissier sees venue + palette +
-      // season — not just the brief in isolation.
+      // season. not just the brief in isolation.
       const ctx = weddingContext(state) ?? undefined;
       const spec = await patissierPropose({ brief: state.brief, context: ctx });
       const after = await setCake({ id: "cake_" + Date.now().toString(36), ...spec });

@@ -3,7 +3,7 @@
 // Google Cloud OAuth. Used when GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET
 // aren't set.
 //
-// This isn't fake data with a wink — it's an explicit demonstration mode
+// This isn't fake data with a wink. it's an explicit demonstration mode
 // the couple can toggle on. The connection record is tagged with a
 // recognizable email address so they know what they're looking at.
 

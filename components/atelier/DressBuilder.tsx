@@ -1,6 +1,6 @@
 "use client";
 
-// /atelier/dress — the dress builder.
+// /atelier/dress. the dress builder.
 //
 // Three-column layout on desktop, stacked on mobile:
 //   Left: taxonomy panel (8 collapsible sections) + natural language input
@@ -314,7 +314,7 @@ function Canvas({
         </div>
       )}
 
-      {/* Full-screen lightbox — opens when you tap any of the 4 tiles. */}
+      {/* Full-screen lightbox. opens when you tap any of the 4 tiles. */}
       {concept && lightboxIndex !== null && (
         <ImageLightbox
           concept={concept}
@@ -542,7 +542,7 @@ function EmptyCanvas() {
         </p>
         <p className="text-[13px] text-ink-300 mt-3 leading-relaxed">
           Or just type the dress you see in your head. Either path works.
-          When you&apos;re ready, sketch first — they&apos;re fast.
+          When you&apos;re ready, sketch first. they&apos;re fast.
         </p>
       </div>
     </div>

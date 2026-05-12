@@ -1,4 +1,4 @@
-// Quartermaster — welcome bag composition (PRD §5.4.6 references via downstream;
+// Quartermaster. welcome bag composition (PRD §5.4.6 references via downstream;
 // build brief mentions Quartermaster as one of the 28 specialists).
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -47,7 +47,7 @@ Compose the welcome bag now.`;
       const x = (r ?? {}) as Record<string, unknown>;
       return {
         id: Math.random().toString(36).slice(2, 10),
-        item: String(x.item ?? "—"),
+        item: String(x.item ?? ", "),
         unitCostUsd: Math.max(0, Math.round(Number(x.unitCostUsd) || 0)),
         rationale: String(x.rationale ?? ""),
       };
@@ -65,7 +65,7 @@ function offline(brief: Brief): WelcomeBagItem[] {
   const items: WelcomeBagItem[] = [
     { id: id(), item: "Hand-illustrated weekend itinerary card",          unitCostUsd: 3,  rationale: "Sets expectations and reduces texts-to-host volume." },
     { id: id(), item: "Custom bottled water with monogram label",         unitCostUsd: 2,  rationale: "Hydration is the single highest-impact welcome-bag item." },
-    { id: id(), item: "Locally-roasted single-origin coffee, 4oz",        unitCostUsd: 8,  rationale: isWine ? "Regional roaster — supports local economy." : "Boutique coffee for in-room brewing." },
+    { id: id(), item: "Locally-roasted single-origin coffee, 4oz",        unitCostUsd: 8,  rationale: isWine ? "Regional roaster. supports local economy." : "Boutique coffee for in-room brewing." },
     { id: id(), item: "Artisan granola bars (2 ea)",                      unitCostUsd: 4,  rationale: "Day-of fuel during the morning timeline gap." },
     { id: id(), item: "Local chocolate or sweet specialty",               unitCostUsd: 6,  rationale: isCoastal ? "Salt-water taffy or local fudge." : "Regional confectioner." },
     { id: id(), item: "Hangover kit (electrolytes + ibuprofen + mint)",   unitCostUsd: 5,  rationale: "Quietly indispensable; guests notice." },

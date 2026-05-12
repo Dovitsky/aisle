@@ -1,4 +1,4 @@
-// Inbox flow test — verifies the offline Gmail fixture + Triage classifier +
+// Inbox flow test. verifies the offline Gmail fixture + Triage classifier +
 // vendor matcher + Negotiator follow-up cascade produce real demo output.
 //
 // Without these wired together, "Scan now" on /inbox is a no-op in offline mode.
@@ -24,7 +24,7 @@ const BRIEF: Brief = {
 };
 
 async function main() {
-  // 1. Triage classifier — independently of Gmail, verify offline parser.
+  // 1. Triage classifier. independently of Gmail, verify offline parser.
   const tAvail = await triageVendorReply(
     "Hi! Yes we have availability that weekend. For 120 guests our site fee is $14,500.",
   );
@@ -60,7 +60,7 @@ async function main() {
     { name: "Hudson Valley Table Co.",     category: "Caterer",      city: "Hudson, NY",     fitScore: 85, priceBracket: "$$$" as const, notes: "Family-style menu" },
   ]);
 
-  // 3. Run scanInbox — uses the offline fixture which generates one message per
+  // 3. Run scanInbox. uses the offline fixture which generates one message per
   // top vendor in each category + one marketing-noise message.
   const result = await scanInbox({ max: 25 });
   ok(result.scanned >= 4, `Inbox scan: ${result.scanned} messages scanned`);

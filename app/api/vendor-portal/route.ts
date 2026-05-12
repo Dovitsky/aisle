@@ -1,4 +1,4 @@
-// Vendor portal endpoint — returns only the slice a vendor should see (PRD §8.2).
+// Vendor portal endpoint. returns only the slice a vendor should see (PRD §8.2).
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
           dateWindow: state.brief.dateWindow,
           region: state.brief.region,
           guestCount: state.brief.guestCount,
-          // Couple's full names not exposed — just initials.
+          // Couple's full names not exposed. just initials.
           aliasFrom: `${state.brief.organizerName[0]}${state.brief.partnerName[0]}@corsia.email`,
         }
       : null,

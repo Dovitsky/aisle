@@ -3,7 +3,7 @@
 // Each item declares when it should land (monthsOut), a short title, the
 // agent or page that owns the work, and an `isDone(state)` predicate that
 // auto-checks the item from real signals (vendor contracted, approval
-// resolved, license filed, etc.) — no manual checkbox needed.
+// resolved, license filed, etc.). no manual checkbox needed.
 
 import type { ProjectState } from "./types";
 
@@ -70,7 +70,7 @@ export const CHECKLIST: ChecklistItem[] = [
     id: "choose-officiant",
     monthsOut: 10,
     title: "Choose the officiant",
-    detail: "Friend, civil, or clergy — affects ceremony script and license rules.",
+    detail: "Friend, civil, or clergy. affects ceremony script and license rules.",
     area: "Discovery",
     href: "/ceremony",
     isDone: (s) => cat(s, "Officiant") || (s.ceremony && s.ceremony.length > 0),
@@ -90,7 +90,7 @@ export const CHECKLIST: ChecklistItem[] = [
     id: "save-the-dates",
     monthsOut: 9,
     title: "Send save-the-dates",
-    detail: "Six to eight months ahead — earlier for destinations.",
+    detail: "Six to eight months ahead. earlier for destinations.",
     area: "Discovery",
     href: "/stationery",
     isDone: (s) => approvalApproved(s, "send_save_the_date"),

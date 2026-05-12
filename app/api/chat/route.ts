@@ -68,23 +68,23 @@ function detectMaterialPivot(prev: Brief, next: Brief): string[] {
 }
 
 // ---------------------------------------------------------------------
-// Cascade pacing — channeling the best wedding planner in the world.
+// Cascade pacing. channeling the best wedding planner in the world.
 //
 // A world-class planner never dumps the music setlist, the cake spec, and
-// the seating chart on a couple 12 months out — they pace the work in
+// the seating chart on a couple 12 months out. they pace the work in
 // waves keyed off two signals:
 //
-//   1. monthsOut from the wedding date — calendar-driven phases.
+//   1. monthsOut from the wedding date. calendar-driven phases.
 //      Foundation work (venue, photographer, budget) goes first; music,
 //      cake, rentals come 4-6 months later; license, seating, dietary,
 //      day-of timeline come in the final weeks.
 //
-//   2. state-based unlocks — some decisions only make sense after others.
+//   2. state-based unlocks. some decisions only make sense after others.
 //      Caterer hunt is more useful AFTER venue is contracted (some venues
 //      have exclusive caterers). Stationer waits for a design direction
 //      to be locked. Patissier waits for caterer (often in-house desserts).
 //
-// The couple can still jump to any module manually — /music, /cake, etc.
+// The couple can still jump to any module manually. /music, /cake, etc.
 // remain navigable. This pacing only governs what Corsia pushes UP into
 // the decisions queue automatically.
 // ---------------------------------------------------------------------
@@ -103,11 +103,11 @@ function monthsUntilWedding(brief: Brief): number {
 }
 
 interface CascadeWave {
-  /** Human label for the wave — surfaces in the lock-message prose. */
+  /** Human label for the wave. surfaces in the lock-message prose. */
   label: string;
   /** When this wave should kick in, expressed as months remaining. */
   fireWhenMonthsOutAtMost: number;
-  /** Run() — the actual fire-and-forget side effects. */
+  /** Run(). the actual fire-and-forget side effects. */
   run: (b: Brief) => Promise<void> | void;
 }
 
@@ -119,20 +119,20 @@ async function lockAndIgnite(): Promise<string> {
 
   const missing = briefMissing(cur);
   if (missing.length) {
-    return `Can't lock yet — still need: ${missing.join(", ")}.`;
+    return `Can't lock yet. still need: ${missing.join(", ")}.`;
   }
 
   const locked: Brief = { ...cur, locked: true, lockedAt: new Date().toISOString() };
   await setBrief(locked);
   const monthsOut = monthsUntilWedding(locked);
 
-  // The full cascade plan — every wave a great planner thinks through.
+  // The full cascade plan. every wave a great planner thinks through.
   // Filtered by monthsOut so we only fire what's appropriate NOW.
   const allWaves: CascadeWave[] = [
-    // ===== Wave 1 — Foundation. Always fires on first lock. =====
+    // ===== Wave 1. Foundation. Always fires on first lock. =====
     // The bones only: venue, photographer, design direction, budget.
     // Nothing that depends on a contracted venue (website, save-the-dates,
-    // rentals, transport) belongs here — those fire later, gated by a
+    // rentals, transport) belongs here. those fire later, gated by a
     // venue contract approval (see triggerVenueDependentReminders).
     {
       label: "Foundation",
@@ -148,8 +148,8 @@ async function lockAndIgnite(): Promise<string> {
       },
     },
 
-    // ===== Wave 2 — Big bookings. 9-12 months out. =====
-    // Caterer (some venues are exclusive — gets priority once venue is on shortlist),
+    // ===== Wave 2. Big bookings. 9-12 months out. =====
+    // Caterer (some venues are exclusive. gets priority once venue is on shortlist),
     // Florist (palette informed by design direction).
     {
       label: "Big bookings",
@@ -159,7 +159,7 @@ async function lockAndIgnite(): Promise<string> {
       },
     },
 
-    // ===== Wave 3 — Design + save-the-dates. 6-9 months out. =====
+    // ===== Wave 3. Design + save-the-dates. 6-9 months out. =====
     {
       label: "Design + save-the-dates",
       fireWhenMonthsOutAtMost: 9,
@@ -169,7 +169,7 @@ async function lockAndIgnite(): Promise<string> {
       },
     },
 
-    // ===== Wave 4 — Music + cake + rentals + HMU. 6 months out. =====
+    // ===== Wave 4. Music + cake + rentals + HMU. 6 months out. =====
     {
       label: "Music, cake, rentals",
       fireWhenMonthsOutAtMost: 6,
@@ -184,7 +184,7 @@ async function lockAndIgnite(): Promise<string> {
       },
     },
 
-    // ===== Wave 5 — Ceremony + invitations + registry. 4 months out. =====
+    // ===== Wave 5. Ceremony + invitations + registry. 4 months out. =====
     {
       label: "Ceremony + invitations",
       fireWhenMonthsOutAtMost: 4,
@@ -195,7 +195,7 @@ async function lockAndIgnite(): Promise<string> {
       },
     },
 
-    // ===== Wave 6 — License + welcome bag + vows. 2-3 months out. =====
+    // ===== Wave 6. License + welcome bag + vows. 2-3 months out. =====
     {
       label: "License + welcome bag",
       fireWhenMonthsOutAtMost: 3,
@@ -206,7 +206,7 @@ async function lockAndIgnite(): Promise<string> {
       },
     },
 
-    // ===== Wave 7 — Day-of details. Last 4-6 weeks. =====
+    // ===== Wave 7. Day-of details. Last 4-6 weeks. =====
     {
       label: "Day-of details",
       fireWhenMonthsOutAtMost: 1,
@@ -219,7 +219,7 @@ async function lockAndIgnite(): Promise<string> {
   ];
 
   // PACING: a great planner gives the couple a small, focused first set of
-  // decisions — not the full cascade fanned out across every category. We
+  // decisions. not the full cascade fanned out across every category. We
   // only fire WAVE 1 (Foundation) on lock, even if the wedding is closer.
   // Subsequent waves trigger on signal events (venue contracted unlocks
   // Caterer/Florist hunt; design direction locked unlocks Stationer; etc.)
@@ -229,7 +229,7 @@ async function lockAndIgnite(): Promise<string> {
   for (const w of wavesToFire) await Promise.resolve(w.run(locked));
 
   // Compose a planner-voice message describing what we're doing AND what's
-  // intentionally being deferred — so the couple feels guided, not
+  // intentionally being deferred. so the couple feels guided, not
   // overwhelmed.
   return composeLockMessage(locked, monthsOut, wavesToFire, allWaves);
 }
@@ -243,20 +243,20 @@ function composeLockMessage(
   const horizon = monthsOut <= 1
     ? "We're in the final stretch."
     : monthsOut <= 3
-    ? "We're a few months out — focused on the home stretch."
+    ? "We're a few months out. focused on the home stretch."
     : monthsOut <= 6
-    ? "We're about half a year out — ramping into the heavy work."
+    ? "We're about half a year out. ramping into the heavy work."
     : monthsOut <= 9
-    ? "We're more than half a year out — focused on the big bookings."
+    ? "We're more than half a year out. focused on the big bookings."
     : monthsOut <= 12
-    ? "We're a year out — focused on the foundation."
-    : `We have ~${monthsOut} months — plenty of time.`;
+    ? "We're a year out. focused on the foundation."
+    : `We have ~${monthsOut} months. plenty of time.`;
 
   // We only fire one wave on lock to keep the queue small. The rest unlock
   // as you make decisions (book the venue → caterer hunt opens; pick a
   // design direction → stationer drafts the suite; etc.).
   const next = all[1]?.label ?? "the next wave";
-  return `Brief locked. Welcome aboard, ${b.organizerName}. ${horizon} I'm starting with the foundation only — venue, photographer, the design directions, your envelope, and the wedding website. ${next} comes when these are settled. You can always jump to any module from the menu if you want to look ahead.`;
+  return `Brief locked. Welcome aboard, ${b.organizerName}. ${horizon} I'm starting with the foundation only. venue, photographer, the design directions, your envelope, and the wedding website. ${next} comes when these are settled. You can always jump to any module from the menu if you want to look ahead.`;
 }
 
 // Same fire-and-forget pattern for post-lock pivots.
@@ -275,7 +275,7 @@ async function refireScout(b: Brief): Promise<string> {
   return "Scout's re-shortlisting against the new brief. Fresh outreach cards will appear in your queue shortly.";
 }
 
-// Designer cascade — drops mood-board directions into Designs immediately, so
+// Designer cascade. drops mood-board directions into Designs immediately, so
 // the /design page is non-empty when the user navigates there post-lock.
 async function backgroundDesignerCascade(b: Brief) {
   try {
@@ -290,7 +290,7 @@ async function backgroundDesignerCascade(b: Brief) {
       await appendApproval({
         agent: "Designer", phase: "design",
         title: `Pick a design direction (${dirs.length} drafted)?`,
-        rationale: `Designer drafted ${dirs.length} mood directions:\n\n${dirs.map((d, i) => `${i + 1}. ${d.title} — ${d.description.slice(0, 80)}`).join("\n")}`,
+        rationale: `Designer drafted ${dirs.length} mood directions:\n\n${dirs.map((d, i) => `${i + 1}. ${d.title}. ${d.description.slice(0, 80)}`).join("\n")}`,
         risk: "low",
         action: { kind: "publish_design", assetId: dirs[0].title.toLowerCase().replace(/\s+/g, "-"), title: dirs[0].title },
       });
@@ -300,7 +300,7 @@ async function backgroundDesignerCascade(b: Brief) {
   }
 }
 
-// Treasurer cascade — proposes a starting budget allocation right after lock
+// Treasurer cascade. proposes a starting budget allocation right after lock
 // so the /budget page is populated and the envelope is visualized.
 async function backgroundTreasurerCascade(b: Brief) {
   try {
@@ -330,7 +330,7 @@ async function backgroundTreasurerCascade(b: Brief) {
   }
 }
 
-// Botanist cascade — pre-stages the floral program so /florals isn't empty.
+// Botanist cascade. pre-stages the floral program so /florals isn't empty.
 async function backgroundBotanistCascade(b: Brief) {
   try {
     const arrs = await botanistPropose({ brief: b });
@@ -347,7 +347,7 @@ async function backgroundBotanistCascade(b: Brief) {
   } catch (e) { console.error("Botanist (background) failed:", e); }
 }
 
-// Cleric cascade — drops a ceremony script into state.ceremony immediately.
+// Cleric cascade. drops a ceremony script into state.ceremony immediately.
 async function backgroundClericCascade(b: Brief) {
   try {
     const tradition = (b.cultural ?? "secular") === "secular" ? "humanist" : (b.cultural === "interfaith" ? "interfaith" : "humanist");
@@ -366,7 +366,7 @@ async function backgroundClericCascade(b: Brief) {
   } catch (e) { console.error("Cleric (background) failed:", e); }
 }
 
-// Cantor cascade — drops the music setlist into state.music.
+// Cantor cascade. drops the music setlist into state.music.
 async function backgroundCantorCascade(b: Brief) {
   try {
     const cues = await cantorPropose({ brief: b });
@@ -383,7 +383,7 @@ async function backgroundCantorCascade(b: Brief) {
   } catch (e) { console.error("Cantor (background) failed:", e); }
 }
 
-// Patissier cascade — drops the cake spec into state.cake.
+// Patissier cascade. drops the cake spec into state.cake.
 async function backgroundPatissierCascade(b: Brief) {
   try {
     const spec = await patissierPropose({ brief: b });
@@ -400,7 +400,7 @@ async function backgroundPatissierCascade(b: Brief) {
   } catch (e) { console.error("Patissier (background) failed:", e); }
 }
 
-// Sommelier cascade — drops the bar program into state.bar.
+// Sommelier cascade. drops the bar program into state.bar.
 async function backgroundSommelierCascade(b: Brief) {
   try {
     const program = await sommelierPropose({ brief: b });
@@ -410,7 +410,7 @@ async function backgroundSommelierCascade(b: Brief) {
   } catch (e) { console.error("Sommelier (background) failed:", e); }
 }
 
-// Steward cascade — drops rentals into state.rentals.
+// Steward cascade. drops rentals into state.rentals.
 async function backgroundStewardCascade(b: Brief) {
   try {
     const tableCount = Math.ceil(b.guestCount / 8);
@@ -421,7 +421,7 @@ async function backgroundStewardCascade(b: Brief) {
   } catch (e) { console.error("Steward (background) failed:", e); }
 }
 
-// Quartermaster cascade — drops welcome bag into state.welcomeBag.
+// Quartermaster cascade. drops welcome bag into state.welcomeBag.
 async function backgroundQuartermasterCascade(b: Brief) {
   try {
     const items = await quartermasterPropose(b);
@@ -431,7 +431,7 @@ async function backgroundQuartermasterCascade(b: Brief) {
   } catch (e) { console.error("Quartermaster (background) failed:", e); }
 }
 
-// Curator cascade — drops registry items into state.registry.
+// Curator cascade. drops registry items into state.registry.
 async function backgroundCuratorCascade(b: Brief) {
   try {
     const items = await curatorPropose(b);
@@ -440,10 +440,10 @@ async function backgroundCuratorCascade(b: Brief) {
 }
 
 // Phase-aware proactive reminders. Each fires at its appropriate wave
-// rather than all at once — no overwhelming the couple with marriage
+// rather than all at once. no overwhelming the couple with marriage
 // license details a year out.
 
-// Wave 1 (always) — wedding website. Foundational because save-the-dates
+// Wave 1 (always). wedding website. Foundational because save-the-dates
 // and RSVP forms link to it.
 // Personalised outreach for a Scout open-web find. Anchors on the
 // portfolioNote so it reads like a real email, not form mail.
@@ -458,8 +458,8 @@ function buildTargetedScoutEmail(args: {
   portfolioNote?: string;
 }): string {
   const opener = args.portfolioNote
-    ? `We've been looking at your work — ${args.portfolioNote} stopped us. The light, the feel, the way you held the room.`
-    : `Your work has been on our shortlist for a while — the way you handle light and editorial pacing especially.`;
+    ? `We've been looking at your work. ${args.portfolioNote} stopped us. The light, the feel, the way you held the room.`
+    : `Your work has been on our shortlist for a while. the way you handle light and editorial pacing especially.`;
   return [
     `Hello ${args.vendorName.split(" ")[0] ?? args.vendorName},`,
     "",
@@ -469,7 +469,7 @@ function buildTargetedScoutEmail(args: {
     "",
     "We'd love to know if you have the date open, what a wedding with you typically looks like at our size, and rough pricing so we can plan honestly.",
     "",
-    `Either way — thank you. Big admirer of the work.`,
+    `Either way. thank you. Big admirer of the work.`,
     "",
     `${args.organizerName} & ${args.partnerName}`,
   ].join("\n");
@@ -477,7 +477,7 @@ function buildTargetedScoutEmail(args: {
 
 // Note: the website reminder used to fire here at lock time, but a
 // website without a venue/date is illogical. It now fires from
-// store.ts when the Venue contract is signed — see the sign_contract
+// store.ts when the Venue contract is signed. see the sign_contract
 // branch of resolveApproval. The handler below is kept off the
 // cascade so nothing in Wave 1 nags about it.
 
@@ -541,46 +541,46 @@ async function backgroundHeroImage(b: Brief) {
   }
 }
 
-// Wave 3 (~9 months out) — save-the-dates.
+// Wave 3 (~9 months out). save-the-dates.
 async function backgroundSaveTheDateReminder(b: Brief) {
   try {
     await appendApproval({
       agent: "Stationer", phase: "guest_management",
       title: "Send save-the-dates?",
-      rationale: `Save-the-dates typically go out 6-8 months before the wedding so guests can hold the date and book travel. We're at the right window now — Stationer drafts the suite once you pick a design direction.`,
+      rationale: `Save-the-dates typically go out 6-8 months before the wedding so guests can hold the date and book travel. We're at the right window now. Stationer drafts the suite once you pick a design direction.`,
       risk: "medium",
       action: { kind: "send_save_the_date", suiteId: "draft", recipients: b.guestCount, format: "hybrid" },
     });
   } catch (e) { console.error("Save-the-date reminder failed:", e); }
 }
 
-// Wave 4 (~6 months out) — rehearsal dinner.
+// Wave 4 (~6 months out). rehearsal dinner.
 async function backgroundRehearsalDinnerReminder(b: Brief) {
   try {
     await appendApproval({
       agent: "Concierge", phase: "logistics",
       title: "Add rehearsal dinner planning to the timeline?",
-      rationale: `Most weddings include a rehearsal dinner the night before — typically 20-40 people (immediate family + wedding party + out-of-town guests). Booking a venue near the ceremony 4-6 months out keeps options open.`,
+      rationale: `Most weddings include a rehearsal dinner the night before. typically 20-40 people (immediate family + wedding party + out-of-town guests). Booking a venue near the ceremony 4-6 months out keeps options open.`,
       risk: "low",
       action: { kind: "lock_brief", summary: "Add rehearsal dinner" },
     });
   } catch (e) { console.error("Rehearsal dinner reminder failed:", e); }
 }
 
-// Wave 5 (~4 months out) — invitations + registry are part of this wave.
+// Wave 5 (~4 months out). invitations + registry are part of this wave.
 async function backgroundInvitationsReminder(b: Brief) {
   try {
     await appendApproval({
       agent: "Stationer", phase: "guest_management",
       title: "Send invitations?",
-      rationale: `Invitations go out 8-10 weeks before the wedding. RSVPs come back 4-6 weeks before — that timing locks the seating chart and the dietary brief. Stationer drafts the suite once you've picked a design direction.`,
+      rationale: `Invitations go out 8-10 weeks before the wedding. RSVPs come back 4-6 weeks before. that timing locks the seating chart and the dietary brief. Stationer drafts the suite once you've picked a design direction.`,
       risk: "medium",
       action: { kind: "send_invitations", recipients: b.guestCount, format: "hybrid" },
     });
   } catch (e) { console.error("Invitations reminder failed:", e); }
 }
 
-// Wave 6 (~3 months out) — marriage license.
+// Wave 6 (~3 months out). marriage license.
 async function backgroundLicenseReminder(b: Brief) {
   try {
     await appendApproval({
@@ -588,12 +588,12 @@ async function backgroundLicenseReminder(b: Brief) {
       title: "Research marriage license requirements for your county?",
       rationale: `Marriage licenses are state-specific. Most states require both partners to appear in person 24-90 days before the wedding. Some require waiting periods, blood tests, or witnesses. Your wedding is in ${b.region}; let me pull the exact filing window and required documents so we don't miss the deadline.`,
       risk: "low",
-      action: { kind: "lock_brief", summary: `License lookup — ${b.region}` },
+      action: { kind: "lock_brief", summary: `License lookup. ${b.region}` },
     });
   } catch (e) { console.error("License reminder failed:", e); }
 }
 
-// Wave 6 (~2-3 months out) — vows nudge.
+// Wave 6 (~2-3 months out). vows nudge.
 async function backgroundVowsReminder(b: Brief) {
   try {
     await appendApproval({
@@ -606,7 +606,7 @@ async function backgroundVowsReminder(b: Brief) {
   } catch (e) { console.error("Vows reminder failed:", e); }
 }
 
-// Wave 7 (~1 month out) — contingency plan.
+// Wave 7 (~1 month out). contingency plan.
 async function backgroundContingencyReminder(b: Brief) {
   try {
     await appendApproval({
@@ -619,7 +619,7 @@ async function backgroundContingencyReminder(b: Brief) {
   } catch (e) { console.error("Contingency reminder failed:", e); }
 }
 
-// Wave 7 (~1 month out) — seating chart.
+// Wave 7 (~1 month out). seating chart.
 async function backgroundSeatingReminder(b: Brief) {
   try {
     await appendApproval({
@@ -632,7 +632,7 @@ async function backgroundSeatingReminder(b: Brief) {
   } catch (e) { console.error("Seating reminder failed:", e); }
 }
 
-// Wave 7 (~1 month out) — dietary brief to caterer.
+// Wave 7 (~1 month out). dietary brief to caterer.
 async function backgroundDietaryReminder(b: Brief) {
   try {
     await appendApproval({
@@ -645,7 +645,7 @@ async function backgroundDietaryReminder(b: Brief) {
   } catch (e) { console.error("Dietary reminder failed:", e); }
 }
 
-// Long-running Scout work. Errors are logged, never thrown — this runs after
+// Long-running Scout work. Errors are logged, never thrown. this runs after
 // the route has already responded to the client.
 async function backgroundFireScout(
   b: Brief,
@@ -671,12 +671,12 @@ async function backgroundFireScout(
           agent: "Scout",
           phase: cat === "Venue" ? "foundation" : "discovery",
           title: `${titlePrefix}Open outreach to ${top.name} for ${cat}?`,
-          rationale: `${source === "refire" ? "Brief pivoted — " : ""}Scout shortlisted ${items.length} ${cat.toLowerCase()}s for ${b.region}, ${b.dateWindow}, ${b.guestCount} guests.\n\n${items.map((it, i) => `${i + 1}. ${it.name} — ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100`).join("\n")}`,
+          rationale: `${source === "refire" ? "Brief pivoted. " : ""}Scout shortlisted ${items.length} ${cat.toLowerCase()}s for ${b.region}, ${b.dateWindow}, ${b.guestCount} guests.\n\n${items.map((it, i) => `${i + 1}. ${it.name}. ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100`).join("\n")}`,
           risk: "low",
           action: {
             kind: "send_email",
             to: `${top.name} (via Corsia alias)`,
-            subject: `Inquiry for ${cat} — ${b.dateWindow}`,
+            subject: `Inquiry for ${cat}. ${b.dateWindow}`,
             body: `Hello ${top.name},\n\nWe're reaching out from ${b.organizerName} & ${b.partnerName}'s wedding planning team. They're looking at ${b.dateWindow} in ${b.region} for roughly ${b.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nCorsia on behalf of ${b.organizerName} & ${b.partnerName}`,
           },
         });
@@ -696,7 +696,7 @@ function nextFieldPrompt(field: keyof Brief): string {
     case "region":        return "Where? A city or region is plenty.";
     case "guestCount":    return "Roughly how many guests?";
     case "budgetUsd":     return "What's the budget envelope, ballpark?";
-    case "vibe":          return "Tell me the feel — one or two sentences on the look and the room.";
+    case "vibe":          return "Tell me the feel. one or two sentences on the look and the room.";
     default:              return "What else should I know?";
   }
 }
@@ -714,7 +714,7 @@ function briefMissing(b: Brief): (keyof Brief)[] {
 }
 
 // Some model outputs serialize array fields as JSON-stringified strings even
-// when the schema says array. Be forgiving — accept both shapes.
+// when the schema says array. Be forgiving. accept both shapes.
 function coerceArray(v: unknown): unknown[] {
   if (Array.isArray(v)) return v;
   if (typeof v === "string") {
@@ -741,7 +741,7 @@ export const maxDuration = 90;
 
 const Body = z.object({
   message: z.string().min(1).max(4000),
-  // Page context — what surface the message originated from. Lets short
+  // Page context. what surface the message originated from. Lets short
   // imperatives ("find cheaper ones") resolve against the active vendor
   // category / topic.
   pageContext: z.object({
@@ -783,7 +783,7 @@ export async function POST(req: NextRequest) {
   }
   if (before.dayOfMode) {
     return NextResponse.json(
-      { error: "Day-of mode engaged — chat is read-only. Maestro Jr. handles in-band decisions." },
+      { error: "Day-of mode engaged. chat is read-only. Maestro Jr. handles in-band decisions." },
       { status: 423 },
     );
   }
@@ -801,7 +801,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Unknown error";
-    result = { text: `Apologies — something on my end glitched. Mind asking again? (${msg})`, toolUses: [] };
+    result = { text: `Apologies. something on my end glitched. Mind asking again? (${msg})`, toolUses: [] };
   }
 
   const dispatchSummaries: string[] = [];
@@ -821,7 +821,7 @@ export async function POST(req: NextRequest) {
       }
     } catch (e) {
       console.error(`Tool ${tool.name} failed:`, e);
-      dispatchSummaries.push(`(${tool.name} failed — ${e instanceof Error ? e.message : "unknown"})`);
+      dispatchSummaries.push(`(${tool.name} failed. ${e instanceof Error ? e.message : "unknown"})`);
     }
   }
 
@@ -858,9 +858,9 @@ export async function POST(req: NextRequest) {
   if (dispatchSummaries.length) {
     const queueable = dispatchSummaries.filter((s) => /Card$|approval|queued|outreach|in your queue/i.test(s) || /shortlisted/i.test(s));
     if (queueable.length) {
-      replyText += `\n\n— ${dispatchSummaries.join(" ")}`;
+      replyText += `\n\n,  ${dispatchSummaries.join(" ")}`;
     }
-    // Otherwise the summaries are silent acknowledgements (Saved: …) — don't pollute prose.
+    // Otherwise the summaries are silent acknowledgements (Saved: …). don't pollute prose.
   }
 
   // --- After update_brief, two paths:
@@ -878,7 +878,7 @@ export async function POST(req: NextRequest) {
       if (wasIncompleteBefore && isCompleteNow) {
         // A) First lock.
         const lockSummary = await lockAndIgnite();
-        replyText = `${b.organizerName} & ${b.partnerName} — locking it in. Welcome aboard.\n\n— ${lockSummary}`;
+        replyText = `${b.organizerName} & ${b.partnerName}. locking it in. Welcome aboard.\n\n,  ${lockSummary}`;
         pendingUI = undefined;
       } else if (before.brief?.locked && b.locked) {
         // B) Material pivot post-lock?
@@ -1061,13 +1061,13 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
       ];
       const summaryUI: import("@/lib/types").ChatUI = {
         kind: "summary",
-        title: `${existing ? "Updated" : "Logged"} — ${parsed.vendorName}`,
+        title: `${existing ? "Updated" : "Logged"}. ${parsed.vendorName}`,
         rows,
       };
       return {
         summary: existing
           ? `Updated ${parsed.vendorName} with the new $${parsed.totalUsd.toLocaleString()} estimate.`
-          : `Added ${parsed.vendorName} to vendors and ${category} to budget — $${parsed.totalUsd.toLocaleString()}.`,
+          : `Added ${parsed.vendorName} to vendors and ${category} to budget. $${parsed.totalUsd.toLocaleString()}.`,
         ui: summaryUI,
       };
     }
@@ -1166,8 +1166,8 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
       const phase = PHASE_BY_CATEGORY[category] ?? "discovery";
       if (top) {
         const subject = targeted
-          ? `${brief.organizerName} & ${brief.partnerName} — ${category} for ${brief.dateWindow}`
-          : `Inquiry for ${category} — ${brief.dateWindow}`;
+          ? `${brief.organizerName} & ${brief.partnerName}. ${category} for ${brief.dateWindow}`
+          : `Inquiry for ${category}. ${brief.dateWindow}`;
         const body = targeted
           ? buildTargetedScoutEmail({
               vendorName: top.name,
@@ -1181,14 +1181,14 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
             })
           : `Hello ${top.name},\n\nWe're reaching out from ${brief.organizerName} & ${brief.partnerName}'s wedding planning team. They're looking at ${brief.dateWindow} in ${brief.region} for roughly ${brief.guestCount} guests.\n\nWould you have availability in that window?\n\nThank you,\nCorsia on behalf of ${brief.organizerName} & ${brief.partnerName}`;
         const rationaleHead = targeted
-          ? `${top.name} — found via open-web search at the couple's request.${top.sourceUrl ? `\nSource: ${top.sourceUrl}` : ""}${top.contactPath ? `\nContact path: ${top.contactPath}` : ""}${top.unverified && top.unverified.length > 0 ? `\nUnverified: ${top.unverified.join("; ")}` : ""}`
+          ? `${top.name}. found via open-web search at the couple's request.${top.sourceUrl ? `\nSource: ${top.sourceUrl}` : ""}${top.contactPath ? `\nContact path: ${top.contactPath}` : ""}${top.unverified && top.unverified.length > 0 ? `\nUnverified: ${top.unverified.join("; ")}` : ""}`
           : `Maestro dispatched Scout from chat. Shortlist of ${items.length} produced.`;
         await appendApproval({
           agent: "Scout", phase,
           title: targeted
             ? `Open outreach to ${top.name} (you asked Scout to find them)?`
             : `Open outreach to ${top.name} for ${category}?`,
-          rationale: `${rationaleHead}\n\n${items.map((it, i) => `${i + 1}. ${it.name} — ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100`).join("\n")}`,
+          rationale: `${rationaleHead}\n\n${items.map((it, i) => `${i + 1}. ${it.name}. ${it.city} · ${it.priceBracket} · fit ${it.fitScore}/100`).join("\n")}`,
           risk: "low",
           action: {
             kind: "send_email",
@@ -1213,7 +1213,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
         checks.push(`fit ${top.fitScore}/100`);
         if (top.unverified && top.unverified.length > 0)
           checks.push(`unverified: ${top.unverified.join("; ")}`);
-        return `Found ${firstName}. ${top.name} — ${top.city}. ${checks.join(" · ")}. On the shortlist now with a "via web" tag. A first-contact email is in your Approval Cards — references ${top.signaturePortfolioNote ?? "their portfolio specifically"}.`;
+        return `Found ${firstName}. ${top.name}. ${top.city}. ${checks.join(" · ")}. On the shortlist now with a "via web" tag. A first-contact email is in your Approval Cards. references ${top.signaturePortfolioNote ?? "their portfolio specifically"}.`;
       }
       return `Scout shortlisted ${items.length} ${category}.`;
     }
@@ -1225,7 +1225,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
       const v = before.vendors.find((x) => x.name.toLowerCase() === vendorName.toLowerCase());
       if (!v) return `Outreach: no vendor named "${vendorName}" in the marketplace.`;
       const body = await outreachDraft({ brief, vendor: v, noteFromCouple: note });
-      const subject = `Inquiry — ${v.category} for ${brief.dateWindow}`;
+      const subject = `Inquiry. ${v.category} for ${brief.dateWindow}`;
       await appendApproval({
         agent: "Outreach", phase: PHASE_BY_CATEGORY[v.category] ?? "discovery",
         title: `Send first-contact email to ${v.name}?`,
@@ -1268,7 +1268,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
         action: {
           kind: "send_email",
           to: `${v.name} (via Corsia alias)`,
-          subject: `Re: Quote — ${v.category}`,
+          subject: `Re: Quote. ${v.category}`,
           body,
         },
       });
@@ -1282,9 +1282,9 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
       const note = tool.input.note ? String(tool.input.note) : undefined;
       if (!vendorRef || !topic) return "Need a vendor and a topic.";
       const v = resolveVendor(before.vendors, vendorRef);
-      if (!v) return `I couldn't find a vendor matching "${vendorRef}" — pull up /vendors and tell me which one.`;
+      if (!v) return `I couldn't find a vendor matching "${vendorRef}". pull up /vendors and tell me which one.`;
       const body = await outreachQuestion({ brief, vendor: v, topic, note });
-      const subject = `Re: ${v.category} — ${topic.length > 50 ? topic.slice(0, 50) + "…" : topic}`;
+      const subject = `Re: ${v.category}. ${topic.length > 50 ? topic.slice(0, 50) + "…" : topic}`;
       await appendApproval({
         agent: "Outreach",
         phase: PHASE_BY_CATEGORY[v.category] ?? "logistics",
@@ -1304,7 +1304,7 @@ async function runTool(tool: ToolUse, before: ProjectState): Promise<ToolResult>
       await appendApproval({
         agent: "Counsel", phase: "logistics",
         title: `Counter-redline ${v.name}'s contract?`,
-        rationale: `Counsel reviewed the standard ${v.category} contract template.\n\nOverall risk: ${review.overallRisk.toUpperCase()}\n\n${review.concerns.map((c, i) => `${i + 1}. ${c.topic} — ${c.rationale}`).join("\n")}`,
+        rationale: `Counsel reviewed the standard ${v.category} contract template.\n\nOverall risk: ${review.overallRisk.toUpperCase()}\n\n${review.concerns.map((c, i) => `${i + 1}. ${c.topic}. ${c.rationale}`).join("\n")}`,
         risk: review.overallRisk,
         action: {
           kind: "sign_contract",
@@ -1588,7 +1588,7 @@ function rid(): string {
   return Math.random().toString(36).slice(2, 12);
 }
 
-// Resolve a vendor from natural-language input — couples say "the venue",
+// Resolve a vendor from natural-language input. couples say "the venue",
 // "our photographer", "Hudson Valley Barn". We accept:
 //   1. Exact / case-insensitive name match.
 //   2. Substring name match.

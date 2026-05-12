@@ -1,4 +1,4 @@
-// POST — pull new vendor-relevant messages from Gmail (or simulated inbox),
+// POST. pull new vendor-relevant messages from Gmail (or simulated inbox),
 // triage each, match to vendors, draft follow-up Approval Cards where useful.
 
 import { NextRequest, NextResponse } from "next/server";

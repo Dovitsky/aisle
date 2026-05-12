@@ -1,5 +1,5 @@
 // Refresh the Supabase session cookie on every request.
-// Required by @supabase/ssr — without this, sessions silently expire.
+// Required by @supabase/ssr. without this, sessions silently expire.
 
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";

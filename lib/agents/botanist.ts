@@ -1,10 +1,10 @@
-// Botanist — floral arrangement designer.
+// Botanist. floral arrangement designer.
 //
 // Lives the "app grows with you" principle: by the time the couple
 // reaches florals, the app already knows their region, month, vibe,
 // contracted venue, locked palette. The Botanist weaves ALL of it into
 // its prompt so the recommendations feel like they were made for THIS
-// couple, THIS venue, THIS season — not a generic floral catalog.
+// couple, THIS venue, THIS season. not a generic floral catalog.
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
@@ -22,7 +22,7 @@ const PIECES: FloralPiece[] = [
 const SYSTEM = `You are Botanist, Corsia's floral agent.
 Design the full floral program: arches, aisle, centerpieces, bouquets, boutonnières, corsages, cake florals.
 
-CRITICAL: Use what the app already knows about THIS wedding — the season, the region's climate, the contracted venue's style, the locked palette. Pick stems that are in peak season for the wedding month in that region. If the venue is a barn, lean rustic-elegant. If it's a coastal villa, lean airy and Mediterranean. Match the palette swatches.
+CRITICAL: Use what the app already knows about THIS wedding. the season, the region's climate, the contracted venue's style, the locked palette. Pick stems that are in peak season for the wedding month in that region. If the venue is a barn, lean rustic-elegant. If it's a coastal villa, lean airy and Mediterranean. Match the palette swatches.
 
 Output JSON only:
 { "arrangements": [
@@ -32,7 +32,7 @@ Output JSON only:
 ] }
 
 Quantities should match a wedding of the given guest count (e.g., 1 centerpiece per table of 8-10, 1 boutonnière per groomsman, 2 bouquets organizer/partner, etc.).
-Use real flower names tied to the season + region. No "miscellaneous greens" — be specific.`;
+Use real flower names tied to the season + region. No "miscellaneous greens". be specific.`;
 
 export async function botanistPropose(args: {
   brief: Brief;
@@ -60,7 +60,7 @@ Tables (estimate): ${args.tableCount ?? Math.ceil(args.brief.guestCount / 8)}
 Wedding party size (estimate): ${args.weddingPartySize ?? 8}
 ${args.palette?.length ? `Palette swatches: ${args.palette.join(", ")}` : ""}
 
-Design the florals now — stems in peak season for the month + region, anchored to the venue and palette above.`;
+Design the florals now. stems in peak season for the month + region, anchored to the venue and palette above.`;
 
   const resp = await client().messages.create({
     model: MODELS.specialist,
@@ -93,7 +93,7 @@ function coerce(raw: unknown): Omit<FloralArrangement, "id"> | null {
   };
 }
 
-// Offline floral program — generates a complete, realistic spec keyed off the
+// Offline floral program. generates a complete, realistic spec keyed off the
 // brief so /florals is populated and the cascade approval looks credible.
 // When no Anthropic key is set we still try to honor the season hint from the
 // context object: autumn → dahlias + amaranth, winter → ranunculus + evergreens, etc.

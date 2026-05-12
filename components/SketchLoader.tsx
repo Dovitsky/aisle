@@ -39,7 +39,7 @@ export function SketchLoader({ caption }: { caption?: string }) {
         {/* Faint paper grain underneath the sketch */}
         <rect x={0} y={0} width={240} height={220} fill="transparent" />
 
-        {/* 1. Ground line — short wobble, drawn first */}
+        {/* 1. Ground line. short wobble, drawn first */}
         <path
           className="s s-1"
           d="M28,192 q26,-2 52,-1 q40,2 80,0 q34,-1 52,2"
@@ -60,7 +60,7 @@ export function SketchLoader({ caption }: { caption?: string }) {
           style={{ ["--d" as string]: 140, ["--o" as string]: "460ms" } as React.CSSProperties}
         />
 
-        {/* 4. Arch crown — soft arc from one column to the other */}
+        {/* 4. Arch crown. soft arc from one column to the other */}
         <path
           className="s s-4"
           d="M64,68 C 80,32 160,32 176,68"
@@ -74,7 +74,7 @@ export function SketchLoader({ caption }: { caption?: string }) {
           style={{ ["--d" as string]: 150, ["--o" as string]: "860ms" } as React.CSSProperties}
         />
 
-        {/* 6. Left figure — bride. Head + neck + dress (triangle skirt) + arm */}
+        {/* 6. Left figure. bride. Head + neck + dress (triangle skirt) + arm */}
         <path
           className="s s-6"
           d="M104,100 a8,8 0 1,0 0.1,0 Z"
@@ -86,7 +86,7 @@ export function SketchLoader({ caption }: { caption?: string }) {
           style={{ ["--d" as string]: 130, ["--o" as string]: "1240ms" } as React.CSSProperties}
         />
 
-        {/* 7. Right figure — partner. Head + body + legs */}
+        {/* 7. Right figure. partner. Head + body + legs */}
         <path
           className="s s-8"
           d="M140,100 a8,8 0 1,0 0.1,0 Z"
@@ -112,7 +112,7 @@ export function SketchLoader({ caption }: { caption?: string }) {
           style={{ ["--d" as string]: 90, ["--o" as string]: "1860ms" } as React.CSSProperties}
         />
 
-        {/* 10. A few drifting petals at the top — the joyful finish */}
+        {/* 10. A few drifting petals at the top. the joyful finish */}
         <path
           className="s s-12"
           d="M42,42 q3,-4 6,0 q-3,4 -6,0 M198,46 q3,-4 6,0 q-3,4 -6,0 M120,18 q3,-4 6,0 q-3,4 -6,0"

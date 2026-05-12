@@ -5,7 +5,7 @@
 // (the most recently created one they belong to).
 //
 // In offline JSON mode (no Supabase), every operation uses the literal string
-// "demo" as the project id — single-tenant.
+// "demo" as the project id. single-tenant.
 
 import { adminClient, hasSupabase } from "../db/supabase";
 import { getSessionUser } from "./clients";
@@ -27,7 +27,7 @@ export async function currentProjectId(): Promise<string> {
   return data?.project_id ?? DEMO_PROJECT_ID;
 }
 
-// Called once after first sign-in — creates an empty project + organizer membership
+// Called once after first sign-in. creates an empty project + organizer membership
 // if the user has none yet. Idempotent.
 export async function ensureUserHasProject(userId: string, displayName: string | null): Promise<string> {
   const supa = adminClient();

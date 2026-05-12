@@ -1,5 +1,5 @@
 // Six vibes. Each one is a complete, single-prop-deep theme that
-// re-skins the public site — palette, typography, hero composition,
+// re-skins the public site. palette, typography, hero composition,
 // card shape, button shape, gallery layout, copy tone.
 
 export type VibeId =
@@ -17,7 +17,7 @@ export interface Vibe {
   palette: {
     /** Page background */
     bg: string;
-    /** Secondary surface — cards, accordion bodies */
+    /** Secondary surface. cards, accordion bodies */
     surface: string;
     /** Primary type colour */
     ink: string;
@@ -25,7 +25,7 @@ export interface Vibe {
     inkSoft: string;
     /** Faded type */
     inkFaint: string;
-    /** Brand accent — used sparingly on CTAs, dots, dividers */
+    /** Brand accent. used sparingly on CTAs, dots, dividers */
     accent: string;
     /** Accent at lower alpha for halos */
     accentSoft: string;
@@ -40,13 +40,13 @@ export interface Vibe {
     mono: string;
   };
   hero: {
-    /** Full CSS background value — gradient meshes welcomed */
+    /** Full CSS background value. gradient meshes welcomed */
     background: string;
     /** Text colour for hero copy */
     foreground: string;
     /** Whether the date typography is set in roman numerals */
     romanDate: boolean;
-    /** Tagline layout — center stacked, left aligned, justified */
+    /** Tagline layout. center stacked, left aligned, justified */
     layout: "centered" | "left" | "justified";
   };
   card: {
@@ -119,7 +119,7 @@ export const VIBES: Record<VibeId, Vibe> = {
     voice: {
       descriptors: ["sun-drenched", "warm", "lemon-bright", "old-world"],
       conciergeGreeting:
-        "Buongiorno. I'm the wedding concierge — ask me anything about the weekend in {region}.",
+        "Buongiorno. I'm the wedding concierge. ask me anything about the weekend in {region}.",
     },
   },
 
@@ -168,7 +168,7 @@ export const VIBES: Record<VibeId, Vibe> = {
     voice: {
       descriptors: ["refined", "after-hours", "moody", "cinematic"],
       conciergeGreeting:
-        "Good evening. The concierge desk is open — any question about the weekend.",
+        "Good evening. The concierge desk is open. any question about the weekend.",
     },
   },
 
@@ -216,7 +216,7 @@ export const VIBES: Record<VibeId, Vibe> = {
     voice: {
       descriptors: ["quiet", "considered", "modern", "warm"],
       conciergeGreeting:
-        "Hi there. I know the weekend down to the small details — ask away.",
+        "Hi there. I know the weekend down to the small details. ask away.",
     },
   },
 
@@ -265,7 +265,7 @@ export const VIBES: Record<VibeId, Vibe> = {
     voice: {
       descriptors: ["soft", "warm", "garden-pressed", "tender"],
       conciergeGreeting:
-        "Hello — so glad you're here. Ask me anything about the weekend.",
+        "Hello. so glad you're here. Ask me anything about the weekend.",
     },
   },
 
@@ -312,7 +312,7 @@ export const VIBES: Record<VibeId, Vibe> = {
     voice: {
       descriptors: ["spacious", "salt-air", "restrained", "considered"],
       conciergeGreeting:
-        "Hello. I'm the wedding concierge — drop a question, I'll have an answer.",
+        "Hello. I'm the wedding concierge. drop a question, I'll have an answer.",
     },
   },
 

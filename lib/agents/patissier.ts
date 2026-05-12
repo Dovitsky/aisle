@@ -1,8 +1,8 @@
-// Patissier — cake & dessert agent.
+// Patissier. cake & dessert agent.
 //
 // Lives the "app grows with you" principle: by the time the couple
 // reaches cake, the app knows the venue, palette, season, design
-// direction. The cake should reflect THAT specific wedding — fall
+// direction. The cake should reflect THAT specific wedding. fall
 // flavors for an October Hudson Valley barn, citrus + olive oil for
 // an Amalfi May, etc.
 
@@ -15,7 +15,7 @@ import { contextSummaryForPrompt } from "./context";
 const SYSTEM = `You are Patissier, Corsia's cake & dessert agent.
 Design a wedding cake spec.
 
-CRITICAL: Use what the app already knows about THIS wedding — the season, the region's climate, the contracted venue's style, the locked palette and design direction. Pick flavors and frostings that resonate with the season (stone fruit + elderflower in summer, spiced pear + brown butter in autumn, citrus + olive oil in Mediterranean spring). Match decoration to the moodboard palette.
+CRITICAL: Use what the app already knows about THIS wedding. the season, the region's climate, the contracted venue's style, the locked palette and design direction. Pick flavors and frostings that resonate with the season (stone fruit + elderflower in summer, spiced pear + brown butter in autumn, citrus + olive oil in Mediterranean spring). Match decoration to the moodboard palette.
 
 Output JSON only:
 { "tiers": int 2-5, "flavors": ["per-tier flavor"], "fillings": ["per-tier filling"],
@@ -25,7 +25,7 @@ Output JSON only:
   "allergenNotes": "free-text notes for the baker (cross-contamination, optional substitutions, etc.)" }
 
 Match the brief's vibe and formality. Real flavors and frostings, not placeholders.
-Every wedding cake almost certainly contains dairy, gluten, and egg unless explicitly substituted — include those in the allergens array unless the spec is vegan/GF.
+Every wedding cake almost certainly contains dairy, gluten, and egg unless explicitly substituted. include those in the allergens array unless the spec is vegan/GF.
 If a flavor name implies an allergen (almond, hazelnut, pistachio → tree_nut; peanut → peanut), include it.`;
 
 export async function patissierPropose(args: {
@@ -45,7 +45,7 @@ export async function patissierPropose(args: {
 
   const userPrompt = `${header}
 
-Design the cake now — flavors in season for the month + region, decoration that resonates with the palette and venue above.`;
+Design the cake now. flavors in season for the month + region, decoration that resonates with the palette and venue above.`;
 
   const resp = await client().messages.create({
     model: MODELS.specialist,
@@ -82,7 +82,7 @@ Design the cake now — flavors in season for the month + region, decoration tha
 }
 
 // Infer allergens from free-text flavor / filling / frosting strings.
-// Conservative — adds dairy + gluten + egg by default unless words exclude them.
+// Conservative. adds dairy + gluten + egg by default unless words exclude them.
 export function inferAllergens(parts: string[]): AllergenCode[] {
   const text = parts.join(" ").toLowerCase();
   const out = new Set<AllergenCode>();

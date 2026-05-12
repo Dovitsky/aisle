@@ -1,5 +1,5 @@
 // File-backed JSON store. v0 only. Replace with Drizzle/Postgres per build brief §6.
-// Every mutation appends a LedgerEvent — every action is recorded (PRD §6.2).
+// Every mutation appends a LedgerEvent. every action is recorded (PRD §6.2).
 
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -22,7 +22,7 @@ import {
 // AISLE_STORE_FILE lets tests + the autonomous loop point at an isolated store
 // without touching the developer's persistent data/store.json.
 // On serverless hosts (Vercel, Netlify Functions, AWS Lambda) the working
-// directory is read-only — only /tmp is writable. Detect that and fall
+// directory is read-only. only /tmp is writable. Detect that and fall
 // back to /tmp so the JSON store still works for demos. State persists
 // only within a warm container in that mode; cold starts reset.
 const SERVERLESS =
@@ -284,7 +284,7 @@ export async function resolveApproval(
       makeLedger({
         actor: "user",
         kind: `approval.${decision}`,
-        summary: `${decision} — ${card.title}`,
+        summary: `${decision}. ${card.title}`,
         meta: { approvalId, agent: card.agent },
         gateScope: card.gateScope ?? null,
       }),
@@ -343,7 +343,7 @@ export async function resolveApproval(
                     agent: "Stationer",
                     phase: "guest_management",
                     title: "Stand up the wedding website?",
-                    rationale: `Now that ${v.name} is contracted, you have a venue and a date. Time to stand up the guest-facing site — travel info, hotel block (we'll add it once you pick one), RSVP form, FAQs, and dietary form. Save-the-dates link here.`,
+                    rationale: `Now that ${v.name} is contracted, you have a venue and a date. Time to stand up the guest-facing site. travel info, hotel block (we'll add it once you pick one), RSVP form, FAQs, and dietary form. Save-the-dates link here.`,
                     risk: "low",
                     action: {
                       kind: "publish_website",
@@ -443,7 +443,7 @@ export async function resolveApproval(
     return s;
   });
 
-  // Run the cascade — additional auto-actions triggered by this resolution.
+  // Run the cascade. additional auto-actions triggered by this resolution.
   // Imported lazily to avoid circular import (cascade.ts → store.ts).
   if (decision === "approved") {
     try {

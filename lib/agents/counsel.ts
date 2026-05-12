@@ -1,4 +1,4 @@
-// Counsel — produces a plain-English contract redline summary (PRD §5.2 step 6).
+// Counsel. produces a plain-English contract redline summary (PRD §5.2 step 6).
 // Highlights cancellation, image rights, overtime billing, force majeure.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -22,7 +22,7 @@ Output JSON only:
 }
 
 At least include cancellation, image/usage rights, and overtime/extension. Limit to 5 concerns total.
-Use real wedding-industry contract language. No legalese in rationale — speak to the couple.`;
+Use real wedding-industry contract language. No legalese in rationale. speak to the couple.`;
 
 export async function counselReview(args: {
   vendorName: string;
@@ -32,7 +32,7 @@ export async function counselReview(args: {
   if (!hasApiKey()) return offline(args);
 
   const userPrompt = `Vendor: ${args.vendorName} (${args.category})
-${args.contractText ? `Contract:\n${args.contractText}` : "No contract text supplied — synthesize a typical contract for this category and produce concerns against it."}`;
+${args.contractText ? `Contract:\n${args.contractText}` : "No contract text supplied. synthesize a typical contract for this category and produce concerns against it."}`;
 
   const resp = await client().messages.create({
     model: MODELS.specialist,
@@ -75,7 +75,7 @@ function coerce(raw: unknown): CounselSummary {
 
 function offline(args: { vendorName: string; category: string }): CounselSummary {
   // A realistic baseline of concerns the legal industry actually flags on
-  // wedding vendor contracts — couple-friendly counters drafted plainly.
+  // wedding vendor contracts. couple-friendly counters drafted plainly.
   return {
     overallRisk: "medium",
     concerns: [

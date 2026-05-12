@@ -1,4 +1,4 @@
-// Scout — discovery & shortlisting specialist (PRD §4.2).
+// Scout. discovery & shortlisting specialist (PRD §4.2).
 // Produces a ranked shortlist for a vendor category against the brief.
 // Output is surfaced as Approval Cards via Maestro.
 //
@@ -20,35 +20,35 @@ How you work:
 
 Constraints:
 - Only include vendors whose websites you actually saw in search results. No invented names.
-- Never copy contact details (no phone numbers, no email addresses, no street addresses) — Outreach handles contacting later.
+- Never copy contact details (no phone numbers, no email addresses, no street addresses). Outreach handles contacting later.
 - Each item gets a fitScore (0-100) and one short paragraph of notes citing specific reasons grounded in the brief.
 - Honor the budget bracket: if the budget is modest, do not propose top-of-market vendors.
 
 OUTPUT RULES (CRITICAL):
-- After your searches, your final assistant message must END with a single JSON array — no trailing prose.
+- After your searches, your final assistant message must END with a single JSON array. no trailing prose.
 - The JSON array is the LAST thing in your output. Wrap it in a \`\`\`json fenced block.
 - No commentary AFTER the JSON. Citations BEFORE the JSON are fine.`;
 
 const TARGETED_SYSTEM = `You are Scout, the discovery agent inside Corsia.
-The couple just named a SPECIFIC person — by name, by a press credit, or by a friend-of-a-friend description.
+The couple just named a SPECIFIC person. by name, by a press credit, or by a friend-of-a-friend description.
 Your job is to find that one person, verify they're real and active, and stage them as an Corsia vendor.
 
-This is a focused open-web hunt, not a marketplace lookup. NEVER refuse with "I can only search the marketplace" — you have web_search and you use it.
+This is a focused open-web hunt, not a marketplace lookup. NEVER refuse with "I can only search the marketplace". you have web_search and you use it.
 
 How you work:
 1. Run targeted web_search queries that combine the name/description with the vendor category and the couple's region (e.g. "Karen Wong NYC wedding photographer NYT", "Brooklyn wedding photographer East Village brownstone").
-2. Visit the most promising hits — their personal site, Instagram, recent press, portfolio pages.
+2. Visit the most promising hits. their personal site, Instagram, recent press, portfolio pages.
 3. For each candidate, verify the following from public sources:
    - Active within the past 12 months (recent portfolio post, recent press, current site)
    - Serves the couple's region OR explicitly travels there
    - Style/specialty matches the couple's brief and stated vibe
    - Has a public contact path (site contact form URL, public booking URL, public IG)
-   - Pricing tier — if visible on FAQ/site, note it; if not, mark unverified
+   - Pricing tier. if visible on FAQ/site, note it; if not, mark unverified
 4. Find ONE concrete detail from their portfolio you can reference in outreach (e.g. "the East Village brownstone session last fall", "the Italian-style ceremony at Cipriani"). This anchors a real first email later.
 
 Vague briefs:
 - If the couple's description is vague ("the photographer my friend used in Brooklyn last fall"), return 3-5 best candidates ranked by closest match.
-- If the description is specific by name, return just that one person (or two if there's a clear ambiguity — e.g. two photographers named Karen).
+- If the description is specific by name, return just that one person (or two if there's a clear ambiguity. e.g. two photographers named Karen).
 
 Honest limits:
 - If a fact isn't visible publicly, add it to the "unverified" list rather than guess. Better to say "pricing not on site" than invent a tier.
@@ -56,10 +56,10 @@ Honest limits:
 
 Constraints:
 - Only include people whose web presence you actually saw in search results. No invented names, no made-up portfolios, no fake press.
-- Never copy private contact details (phone, email, street address). The "contactPath" field carries a public URL only — site form, IG handle, booking page.
+- Never copy private contact details (phone, email, street address). The "contactPath" field carries a public URL only. site form, IG handle, booking page.
 
 OUTPUT RULES (CRITICAL):
-- After your searches, your final assistant message must END with a single JSON array — no trailing prose.
+- After your searches, your final assistant message must END with a single JSON array. no trailing prose.
 - The JSON array is the LAST thing in your output. Wrap it in a \`\`\`json fenced block.
 - Citations BEFORE the JSON are fine. No commentary AFTER the JSON.
 
@@ -71,7 +71,7 @@ Each item has this shape:
   "priceBracket": "$" | "$$" | "$$$" | "$$$$",
   "notes": "1-2 sentence rationale tied to the brief + the verifiable facts",
   "sourceUrl": "the canonical site / IG you verified them at",
-  "contactPath": "public contact URL — site form, booking page, IG handle",
+  "contactPath": "public contact URL. site form, booking page, IG handle",
   "signaturePortfolioNote": "one concrete portfolio detail to anchor outreach",
   "unverified": ["pricing not on site", "travel willingness not stated"]
 }`;
@@ -188,7 +188,7 @@ function coerceItem(raw: unknown): VendorShortlistItem {
     : undefined;
   const out: VendorShortlistItem = {
     name: String(r.name ?? "Unnamed vendor"),
-    city: String(r.city ?? "—"),
+    city: String(r.city ?? ", "),
     fitScore: Math.max(0, Math.min(100, Math.round(Number(r.fitScore) || 0))),
     priceBracket: validBracket,
     notes: String(r.notes ?? ""),
@@ -212,7 +212,7 @@ function offlineTargetedFallback(
 ): VendorShortlistItem[] {
   return [
     {
-      name: `Couple's named ${category.toLowerCase()} — pending verification`,
+      name: `Couple's named ${category.toLowerCase()}. pending verification`,
       city: brief.region,
       fitScore: 70,
       priceBracket: "$$$",
@@ -228,13 +228,13 @@ function offlineTargetedFallback(
 }
 
 // ----------------------------------------------------------------------
-// Offline shortlist — when ANTHROPIC_API_KEY is absent, return a curated,
+// Offline shortlist. when ANTHROPIC_API_KEY is absent, return a curated,
 // region-aware seed list so the entire chat → lock → Scout → Approval Card
 // pipeline is demonstrable end-to-end without keys. Items are clearly
 // region-relevant; rationale strings reference the brief; fitScores vary so
 // the ranking UI has signal.
 //
-// This intentionally restores fixtures that were stripped earlier — for the
+// This intentionally restores fixtures that were stripped earlier. for the
 // investor-demo path, populated cards beat an honest empty.
 // ----------------------------------------------------------------------
 
@@ -312,13 +312,13 @@ const VENUE_POOL: SeedItem[] = [
   { name: (s) => `The ${s.hub} Vineyard`, city: (s) => s.cityA,
     notes: (c) => `Tasting-room ceremony, terrace dinner, indoor backup. Strong fit for ${c.flavor} weddings.` },
   { name: (s) => `Atelier Maison`,        city: (s) => s.cityA,
-    notes: (c) => `Restored carriage house — editorial photography light, ${c.brief.guestCount}-cap seated dinner.` },
+    notes: (c) => `Restored carriage house. editorial photography light, ${c.brief.guestCount}-cap seated dinner.` },
   { name: (s) => `Wildflower Field & Hall`, city: (s) => s.cityB,
     notes: (c) => `Outdoor ceremony into a converted hall. Mature grounds, rain plan included.` },
   { name: (s) => `${s.hub} Greenhouse`, city: (s) => s.cityA,
     notes: (c) => `Restored Victorian glasshouse, all-weather. Pendant candles, dramatic ceiling. Holds ${c.brief.guestCount}.` },
   { name: (s) => `The ${s.hub} Library`, city: (s) => s.cityB,
-    notes: (c) => `Heritage library hall — book-lined dinner, courtyard ceremony. Sophisticated ${c.flavor} setting.` },
+    notes: (c) => `Heritage library hall. book-lined dinner, courtyard ceremony. Sophisticated ${c.flavor} setting.` },
   { name: (s) => `Linden Hollow`, city: (s) => s.cityA,
     notes: (c) => `Forested glade for ceremony, riverside reception tent. Built-in catering kitchen.` },
   { name: (s) => `${s.hub} Yacht Club`, city: (s) => s.cityB,
@@ -326,7 +326,7 @@ const VENUE_POOL: SeedItem[] = [
   { name: (s) => `Hawthorne Manor`, city: (s) => s.cityA,
     notes: (c) => `Late-19th-century manor, formal gardens, ballroom for ${c.brief.guestCount}. Vendor-flexible.` },
   { name: (s) => `Olive & Linen Farm`, city: (s) => s.cityB,
-    notes: (c) => `Working olive farm — alfresco dinner under string lights, ${c.flavor} food program.` },
+    notes: (c) => `Working olive farm. alfresco dinner under string lights, ${c.flavor} food program.` },
   { name: (s) => `The Loft at ${s.hub}`, city: (s) => s.cityA,
     notes: (c) => `Industrial-modern loft, exposed brick, freight elevator. Right for a downtown ${c.flavor} feel.` },
   { name: (s) => `Stillwater Lake House`, city: (s) => s.cityB,
@@ -334,13 +334,13 @@ const VENUE_POOL: SeedItem[] = [
   { name: (s) => `${s.hub} Chapel & Hall`, city: (s) => s.cityA,
     notes: (c) => `Historic chapel for the ceremony, attached banquet hall, all-in-one. Holds ${c.brief.guestCount}.` },
   { name: (s) => `Ravenwood Hotel`, city: (s) => s.cityB,
-    notes: (c) => `Boutique hotel buyout — guest rooms, ballroom, courtyard ceremony all on-site. ${c.flavor} aesthetic.` },
+    notes: (c) => `Boutique hotel buyout. guest rooms, ballroom, courtyard ceremony all on-site. ${c.flavor} aesthetic.` },
   { name: (s) => `The Orchard at ${s.hub}`, city: (s) => s.cityA,
     notes: (c) => `Working apple orchard, white-tent reception. Best in late summer / early fall.` },
   { name: (s) => `Saltwater Pavilion`, city: (s) => s.cityB,
     notes: (c) => `Open-air pavilion overlooking the harbor; weather-tight roof, retractable walls.` },
   { name: (s) => `${s.hub} Distillery`, city: (s) => s.cityA,
-    notes: (c) => `Working distillery — copper-stilled cocktail hour, barrel room dinner. Bar program built in.` },
+    notes: (c) => `Working distillery. copper-stilled cocktail hour, barrel room dinner. Bar program built in.` },
 ];
 
 const PHOTOGRAPHER_POOL: SeedItem[] = [
@@ -357,7 +357,7 @@ const PHOTOGRAPHER_POOL: SeedItem[] = [
   { name: (s) => `Slate & Sun`,           city: (s) => s.cityB,
     notes: () => `Hybrid digital + medium-format film. Strong with golden-hour portraiture.` },
   { name: (s) => `Honest Hour`,           city: (s) => s.cityA,
-    notes: () => `Quiet documentary approach — minimal direction, no wedding-cliche. Good with introvert couples.` },
+    notes: () => `Quiet documentary approach. minimal direction, no wedding-cliche. Good with introvert couples.` },
   { name: (s) => `${s.hub} Cinema House`, city: (s) => s.cityB,
     notes: () => `Photography + 4K cinema package, single team. Useful when you don't want two crews underfoot.` },
   { name: (s) => `Wren & Story`,          city: (s) => s.cityA,

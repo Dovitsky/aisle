@@ -196,7 +196,7 @@ export const guestFromRow = (r: Record<string, unknown>): Guest => ({
   notes: r.notes as string | undefined,
   accessibility: r.accessibility as string | undefined,
   songRequest: r.song_request as string | undefined,
-  // Structured dietary fields are NOT in the schema yet — we store them in `dietary` as JSON
+  // Structured dietary fields are NOT in the schema yet. we store them in `dietary` as JSON
   // and parse on read. See note in initial migration.
 });
 export const guestToRow = (g: Guest, projectId: string) => ({

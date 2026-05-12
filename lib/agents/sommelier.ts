@@ -1,8 +1,8 @@
-// Sommelier — bar program agent.
+// Sommelier. bar program agent.
 //
 // "App grows with you" principle: by the time the couple reaches the
 // bar, the app already knows their venue, season, palette, and design
-// direction. Pick signature cocktails that match — an October Hudson
+// direction. Pick signature cocktails that match. an October Hudson
 // Valley barn deserves spiced cider and bourbon-pear, not a beachside
 // piña colada.
 
@@ -15,7 +15,7 @@ import { contextSummaryForPrompt } from "./context";
 const SYSTEM = `You are Sommelier, Corsia's bar agent.
 Design a bar program for the wedding.
 
-CRITICAL: Use what the app already knows about THIS wedding — the season, the region (climate + local distilleries / vineyards), the venue's setting (rustic barn vs coastal villa changes the cocktail register), and the formality. Signature cocktails should taste like the season and place.
+CRITICAL: Use what the app already knows about THIS wedding. the season, the region (climate + local distilleries / vineyards), the venue's setting (rustic barn vs coastal villa changes the cocktail register), and the formality. Signature cocktails should taste like the season and place.
 
 Output JSON only:
 {
@@ -51,7 +51,7 @@ export async function sommelierPropose(args: {
 Total wedding budget: $${args.brief.budgetUsd.toLocaleString()}
 ${args.alcoholBudget ? `\nAllocated alcohol line: $${args.alcoholBudget}` : ""}
 
-Design the bar now — signature cocktails that taste like the season + region + venue setting above.`;
+Design the bar now. signature cocktails that taste like the season + region + venue setting above.`;
 
   const resp = await client().messages.create({
     model: MODELS.specialist,
@@ -99,14 +99,14 @@ function offline(args: { brief: Brief; alcoholBudget?: number }): BarProgram {
     style: "open",
     signatureCount: 2,
     itemMenu: [
-      { id: id(), kind: "wine",          name: "Sparkling — Crémant de Loire",                                                                      description: "Toast service + cocktail hour. Drier than Prosecco." },
-      { id: id(), kind: "wine",          name: "White — Sancerre or Albariño",                                                                       description: `Crisp food-friendly white for ${guests} guests.` },
-      { id: id(), kind: "wine",          name: "Red — Pinot Noir, Sonoma Coast",                                                                     description: "Light-medium body; pairs across the menu." },
-      { id: id(), kind: "wine",          name: "Dessert — Sauternes (half bottles)",                                                                description: "Optional cake pour. Budget for 1 half-bottle / 10 guests." },
+      { id: id(), kind: "wine",          name: "Sparkling. Crémant de Loire",                                                                      description: "Toast service + cocktail hour. Drier than Prosecco." },
+      { id: id(), kind: "wine",          name: "White. Sancerre or Albariño",                                                                       description: `Crisp food-friendly white for ${guests} guests.` },
+      { id: id(), kind: "wine",          name: "Red. Pinot Noir, Sonoma Coast",                                                                     description: "Light-medium body; pairs across the menu." },
+      { id: id(), kind: "wine",          name: "Dessert. Sauternes (half bottles)",                                                                description: "Optional cake pour. Budget for 1 half-bottle / 10 guests." },
       { id: id(), kind: "beer",          name: "Local IPA + Pilsner (kegs)",                                                                          description: "Two-tap mobile setup; reduces glassware load." },
-      { id: id(), kind: "spirit",        name: "Vodka — Grey Goose",                                                                                  description: "Workhorse for both signature cocktails." },
-      { id: id(), kind: "spirit",        name: "Gin — Hendrick's",                                                                                    description: "For cucumber G&T on the rotation." },
-      { id: id(), kind: "spirit",        name: "Bourbon — Buffalo Trace",                                                                             description: "Old-fashioneds + whiskey-Coke for the late set." },
+      { id: id(), kind: "spirit",        name: "Vodka. Grey Goose",                                                                                  description: "Workhorse for both signature cocktails." },
+      { id: id(), kind: "spirit",        name: "Gin. Hendrick's",                                                                                    description: "For cucumber G&T on the rotation." },
+      { id: id(), kind: "spirit",        name: "Bourbon. Buffalo Trace",                                                                             description: "Old-fashioneds + whiskey-Coke for the late set." },
       { id: id(), kind: "signature",     name: moody ? "Smoked Old Fashioned"           : "French 75 with Elderflower",                              description: moody ? "Set the tone; smoked at the bar with applewood." : "Bright and easy; pairs with first hour of dancing." },
       { id: id(), kind: "signature",     name: moody ? "Boulevardier"                  : "Cucumber Spritz",                                          description: moody ? "Bittersweet alternative for the second hour."   : "Lower-ABV option; popular with non-spirit drinkers." },
       { id: id(), kind: "non_alcoholic", name: "Sparkling water + still water",                                                                       description: "Always free, always cold, always visible." },

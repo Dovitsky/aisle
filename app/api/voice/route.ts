@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       const after = await appendApproval({
         agent: "Voice", phase: "personal_prep",
         title: `Lock the ${data.whose}'s vows (${v?.wordCount ?? 0} words)?`,
-        rationale: `Locking freezes the wording for the ceremony program. You can always read different lines aloud — this just stops the working draft.`,
+        rationale: `Locking freezes the wording for the ceremony program. You can always read different lines aloud. this just stops the working draft.`,
         risk: "low",
         action: { kind: "lock_vows", whose: data.whose, wordCount: v?.wordCount ?? 0 },
         gateScope: data.whose === "organizer" ? "vows_organizer" : "vows_partner",

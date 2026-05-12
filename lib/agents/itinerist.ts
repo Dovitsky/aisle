@@ -1,4 +1,4 @@
-// Itinerist — honeymoon planning agent (gateScope: "honeymoon" when surprise segments exist).
+// Itinerist. honeymoon planning agent (gateScope: "honeymoon" when surprise segments exist).
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { MODELS, hasApiKey, createWithWebSearch } from "../anthropic";
@@ -10,7 +10,7 @@ Propose a 2-4 segment honeymoon itinerary for a couple.
 How you work:
 - Use the web_search tool to verify hotels are currently operating, check seasonal weather, and find recent travel notes.
 - Search for things like "best hotels Lisbon Alfama 2026" or "Comporta beach hotels honeymoon".
-- Only suggest hotels you saw on real travel sites or hotel websites — no invented properties.
+- Only suggest hotels you saw on real travel sites or hotel websites. no invented properties.
 
 Output JSON only (after your searches, no prose):
 { "segments": [

@@ -333,7 +333,7 @@ export function SeatingView() {
           <div className="rounded-card border hairline bg-white/55 px-7 py-12 max-w-xl">
             <p className="display text-[26px] text-ink leading-tight">No room laid out yet.</p>
             <p className="text-[14px] text-ink-300 mt-3 leading-relaxed">
-              Pick how many seats per table and click <span className="text-ink not-italic">Init</span> above —
+              Pick how many seats per table and click <span className="text-ink not-italic">Init</span> above.
               Quartermaster will lay out enough tables for everyone who&rsquo;s said yes.
             </p>
           </div>

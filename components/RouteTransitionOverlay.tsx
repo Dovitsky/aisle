@@ -57,7 +57,7 @@ export function RouteTransitionOverlay() {
     return () => document.removeEventListener("click", onClick);
   }, [pathname]);
 
-  // Listen for browser back / forward — the same pathname-change effect
+  // Listen for browser back / forward. the same pathname-change effect
   // above handles the end of those too once the URL updates.
   useEffect(() => {
     const onPop = () => {

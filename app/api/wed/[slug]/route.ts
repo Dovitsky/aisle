@@ -1,5 +1,5 @@
 // Public read-only endpoint for the wedding website. Exposes only the
-// fields a guest should see — no internal state, no vendor data, no chat.
+// fields a guest should see. no internal state, no vendor data, no chat.
 
 import { NextRequest, NextResponse } from "next/server";
 import { readState } from "@/lib/store";
@@ -18,7 +18,7 @@ export async function GET(
   if (!state.brief) {
     return NextResponse.json({ error: "Not ready" }, { status: 404 });
   }
-  // Public projection — never leak internal state.
+  // Public projection. never leak internal state.
   return NextResponse.json({
     site: {
       slug: state.site.slug,

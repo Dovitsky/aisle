@@ -1,6 +1,6 @@
 // PATCH /api/atelier/concepts
 //
-// Update a concept — typically the status (in_consideration → shortlist
+// Update a concept. typically the status (in_consideration → shortlist
 // → the_one). Promoting a new concept to "the_one" demotes the current
 // one to "shortlist".
 

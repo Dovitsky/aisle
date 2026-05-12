@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       const palette = state.designs.find((d) => d.kind === "moodboard" && d.approved)?.swatches;
       const tableCount = state.seating.tables.length || Math.ceil(state.brief.guestCount / 8);
       // Pass the full WeddingContext so Botanist sees region+season+
-      // venue+palette+design direction — not just the brief in isolation.
+      // venue+palette+design direction. not just the brief in isolation.
       const ctx = weddingContext(state) ?? undefined;
       const arr = await botanistPropose({
         brief: state.brief,

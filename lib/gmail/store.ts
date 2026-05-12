@@ -1,6 +1,6 @@
 // Gmail connection storage. Two modes:
-//  1. Supabase (when configured) — gmail_connections + inbox_messages tables.
-//  2. JSON store (offline mode) — appended to data/gmail.json.
+//  1. Supabase (when configured). gmail_connections + inbox_messages tables.
+//  2. JSON store (offline mode). appended to data/gmail.json.
 //
 // Both expose the same API.
 

@@ -2,7 +2,7 @@
 
 The autonomous wedding platform. Built against `AISLE_PRD.docx` and `AISLE_BUILD_BRIEF.docx`.
 
-Mobile-first responsive — sidebar nav on desktop, bottom tabs on mobile.
+Mobile-first responsive. sidebar nav on desktop, bottom tabs on mobile.
 
 ## Quick start
 
@@ -88,23 +88,23 @@ Verified end-to-end: scan of 5 simulated messages →
 
 ## Specialist agents
 
-`Maestro` (orchestrator, tool-use), `Maestro Jr.` (day-of), `Scout` (vendor shortlists), `Outreach`, `Triage` (Haiku — email parsing), `Negotiator` (counter-proposals), `Counsel` (contract redlines), `Treasurer` (budget allocation + invariant), `Designer`, `Stationer`, `Couturier`, `Cartographer` (annealing solver), `Watcher` (continuous risk scan + stale-vendor cadence), `Concierge` (engagement), `Voice` (vows + speeches), `Curator` (registry), `Itinerist` (honeymoon), `Quartermaster` (welcome bags), `Cantor` (music), `Cleric` (ceremony), `Patissier` (cake), `Sommelier` (bar), `Botanist` (florals), `Steward` (rentals), `Atelier` (hair & makeup), `Clerk` (marriage license).
+`Maestro` (orchestrator, tool-use), `Maestro Jr.` (day-of), `Scout` (vendor shortlists), `Outreach`, `Triage` (Haiku. email parsing), `Negotiator` (counter-proposals), `Counsel` (contract redlines), `Treasurer` (budget allocation + invariant), `Designer`, `Stationer`, `Couturier`, `Cartographer` (annealing solver), `Watcher` (continuous risk scan + stale-vendor cadence), `Concierge` (engagement), `Voice` (vows + speeches), `Curator` (registry), `Itinerist` (honeymoon), `Quartermaster` (welcome bags), `Cantor` (music), `Cleric` (ceremony), `Patissier` (cake), `Sommelier` (bar), `Botanist` (florals), `Steward` (rentals), `Atelier` (hair & makeup), `Clerk` (marriage license).
 
-## The dress firewall — for real
+## The dress firewall. for real
 
 PRD §2.3 / build brief §8.2. Implemented at three layers:
 
 1. **`gateScope` column** on every gateable table (approvals, chat, vendors, budget, designs, ledger, vows). When the project's matching gate is enabled and the viewer is `partner`, the row is invisible.
 2. **JSON-store mode**: `filterForViewer` strips matching rows from API responses.
-3. **Supabase mode**: `row_visible(project_id, scope)` SQL function combined with RLS policies enforces it at the database level — the partner literally can't SELECT it.
+3. **Supabase mode**: `row_visible(project_id, scope)` SQL function combined with RLS policies enforces it at the database level. the partner literally can't SELECT it.
 
 Verified by `npm test` exfiltration test: with the gate on, the partner viewer's full state JSON contains zero references to dress-scoped vendor names, design titles, or `dress_concept` kind labels.
 
 ## Approval Card primitive
 
-Every consequential action — send email, sign contract, schedule payment, lock seating, send invitations, file marriage license, publish website, lock vows — routes through the same card primitive. Same anatomy: agent + phase eyebrow, risk dot + risk pill, one-line title, expandable full content (action-typed preview), expandable rationale, three primary actions (Reject / Edit / Approve). Approving issues an `approval_token` atomically; side-effecting agent calls require a valid token (build brief §8.3).
+Every consequential action. send email, sign contract, schedule payment, lock seating, send invitations, file marriage license, publish website, lock vows. routes through the same card primitive. Same anatomy: agent + phase eyebrow, risk dot + risk pill, one-line title, expandable full content (action-typed preview), expandable rationale, three primary actions (Reject / Edit / Approve). Approving issues an `approval_token` atomically; side-effecting agent calls require a valid token (build brief §8.3).
 
-## Agent network — how the cascade chains
+## Agent network. how the cascade chains
 
 Maestro is the only agent that talks to the couple in chat. Specialists are dispatched
 through Maestro's tool-use; their outputs land as Approval Cards. When a card is
@@ -150,7 +150,7 @@ a nudge that's already pending.
 
 - Next.js 15 App Router + React 19
 - TypeScript strict
-- Tailwind CSS 3.4 — paper-cream + ink palette, Cormorant Garamond display + Inter body
+- Tailwind CSS 3.4. paper-cream + ink palette, Cormorant Garamond display + Inter body
 - `@anthropic-ai/sdk` 0.32 with tool use
 - `@supabase/supabase-js` 2.x
 - `googleapis` for Gmail OAuth + API

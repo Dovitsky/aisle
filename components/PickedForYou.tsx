@@ -1,6 +1,6 @@
 "use client";
 
-// PickedForYou — a small ribbon that surfaces the reasoning behind
+// PickedForYou. a small ribbon that surfaces the reasoning behind
 // specialist recommendations. Lives on Florals / Cake / Bar / Music /
 // any module where the AI picked something based on accumulated state.
 //

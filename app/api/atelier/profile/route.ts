@@ -1,4 +1,4 @@
-// PATCH /api/atelier/profile — update the DressProfile (the private
+// PATCH /api/atelier/profile. update the DressProfile (the private
 // Couturier Interview output). Used by the atelier home setup flow.
 
 import { NextResponse } from "next/server";

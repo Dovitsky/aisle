@@ -1,4 +1,4 @@
-// Demo Mode — generate a complete, realistic ProjectState that exercises
+// Demo Mode. generate a complete, realistic ProjectState that exercises
 // every module of Corsia. Used by /api/settings op:"load-demo" so a single
 // button in Settings populates the entire app for an investor demo.
 //
@@ -272,13 +272,13 @@ export async function buildDemoState(): Promise<ProjectState> {
   // The demo state is meant to feel like a couple who's mid-journey:
   // Lanes 1-3 (Foundation, Food & Drink, Capture) are SEALED behind them.
   // Lane 4 (Aesthetics) is the active one with 2-3 pending decisions.
-  // Lanes 5-8 are queued — Maestro will surface them when 4 wraps.
+  // Lanes 5-8 are queued. Maestro will surface them when 4 wraps.
   //
   // This mirrors the paced concierge experience the user lives in: one
   // small set of choices at a time, breathing room between phases.
 
   const approvals: ApprovalCard[] = [
-    // ===== ACTIVE LANE — Aesthetics (Lane 4) =====
+    // ===== ACTIVE LANE. Aesthetics (Lane 4) =====
     // 2-3 cards visible on the dashboard. Designer's mood-direction lock,
     // Botanist's florist counter, Couturier dress reveal.
     {
@@ -287,7 +287,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       agent: "Designer",
       phase: "design",
       title: `Lock "${designs[0]?.title}" as the design direction?`,
-      rationale: `Designer drafted ${designs.length} mood directions. Heirloom Garden is the strongest fit — palette of cream and sage, beeswax tapers, garden-style florals. Locking it lets Stationer start the suite and Botanist refine the floral spec.`,
+      rationale: `Designer drafted ${designs.length} mood directions. Heirloom Garden is the strongest fit. palette of cream and sage, beeswax tapers, garden-style florals. Locking it lets Stationer start the suite and Botanist refine the floral spec.`,
       risk: "low",
       status: "pending",
       action: { kind: "publish_design", assetId: designs[0]?.id ?? "", title: designs[0]?.title ?? "" },
@@ -304,8 +304,8 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: {
         kind: "send_email",
         to: `${vendors.find((v) => v.category === "Florist" && v.status === "quoting")?.name ?? "Florist"} (via Corsia alias)`,
-        subject: `Re: Quote — Florals`,
-        body: `Hi,\n\nThank you for the proposal — Maya & Sam loved your portfolio. They wanted to come back with one small ask: would you be open to honoring the $9,000 line if we agree on foam-free centerpieces and a single cascading arch instead of two?\n\nLooking forward.\n\nWarmly,\nCorsia on behalf of Maya & Sam`,
+        subject: `Re: Quote. Florals`,
+        body: `Hi,\n\nThank you for the proposal. Maya & Sam loved your portfolio. They wanted to come back with one small ask: would you be open to honoring the $9,000 line if we agree on foam-free centerpieces and a single cascading arch instead of two?\n\nLooking forward.\n\nWarmly,\nCorsia on behalf of Maya & Sam`,
       },
     },
     {
@@ -321,7 +321,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: { kind: "publish_design", assetId: dressDesigns[0]?.id ?? "", title: dressDesigns[0]?.title ?? "" },
     },
 
-    // ===== QUEUED — Lane 5 Music & Entertainment =====
+    // ===== QUEUED. Lane 5 Music & Entertainment =====
     {
       id: id("ap"),
       createdAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
@@ -334,7 +334,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: { kind: "lock_setlist", cueCount: music.length },
     },
 
-    // ===== QUEUED — Lane 7 Stationery =====
+    // ===== QUEUED. Lane 7 Stationery =====
     {
       id: id("ap"),
       createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
@@ -347,7 +347,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: { kind: "send_save_the_date", suiteId: stationery[0].id, recipients: guests.length, format: "hybrid" },
     },
 
-    // ===== QUEUED — Lane 8 Day-of =====
+    // ===== QUEUED. Lane 8 Day-of =====
     {
       id: id("ap"),
       createdAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
@@ -371,7 +371,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: { kind: "file_marriage_license", state: "NY", county: "Dutchess" },
     },
 
-    // ===== SEALED — Lane 1 Foundation =====
+    // ===== SEALED. Lane 1 Foundation =====
     {
       id: id("ap"),
       createdAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000).toISOString(),
@@ -380,7 +380,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       title: `Open outreach to ${vendors[0]?.name} for Venue?`,
       rationale: "Top-fit venue from the Hudson Valley shortlist.",
       risk: "low", status: "approved",
-      action: { kind: "send_email", to: vendors[0]?.name ?? "", subject: "Inquiry — Venue", body: "..." },
+      action: { kind: "send_email", to: vendors[0]?.name ?? "", subject: "Inquiry. Venue", body: "..." },
     },
     {
       id: id("ap"),
@@ -388,7 +388,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       resolvedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000).toISOString(),
       agent: "Counsel", phase: "foundation",
       title: `Counter-redline ${vendors[0]?.name}'s contract?`,
-      rationale: "Counsel reviewed the standard Venue contract — 5 concerns counter-proposed.",
+      rationale: "Counsel reviewed the standard Venue contract. 5 concerns counter-proposed.",
       risk: "high", status: "approved",
       action: { kind: "sign_contract", vendor: vendors[0]?.name ?? "", redlines: ["Cancellation", "Image rights", "Overtime", "Force majeure", "Liability cap"], estimate: vendors[0]?.estimateUsd ?? 0 },
     },
@@ -403,7 +403,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: { kind: "schedule_payment", vendor: vendors[0]?.name ?? "", amountUsd: Math.round((vendors[0]?.estimateUsd ?? 0) * 0.5), dueDate: priorDayISO(brief.dateWindow, 200) },
     },
 
-    // ===== SEALED — Lane 2 Food & Drink =====
+    // ===== SEALED. Lane 2 Food & Drink =====
     {
       id: id("ap"),
       createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
@@ -412,7 +412,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       title: `Open outreach to ${vendors.find((v) => v.category === "Caterer" && v.status === "contracted")?.name ?? "the caterer"}?`,
       rationale: "Top-fit caterer from the shortlist.",
       risk: "low", status: "approved",
-      action: { kind: "send_email", to: vendors.find((v) => v.category === "Caterer" && v.status === "contracted")?.name ?? "", subject: "Inquiry — Catering", body: "..." },
+      action: { kind: "send_email", to: vendors.find((v) => v.category === "Caterer" && v.status === "contracted")?.name ?? "", subject: "Inquiry. Catering", body: "..." },
     },
     {
       id: id("ap"),
@@ -425,7 +425,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: { kind: "sign_contract", vendor: vendors.find((v) => v.category === "Caterer" && v.status === "contracted")?.name ?? "", redlines: ["Service window", "Allergen protocol", "Cancellation"], estimate: vendors.find((v) => v.category === "Caterer" && v.status === "contracted")?.estimateUsd ?? 0 },
     },
 
-    // ===== SEALED — Lane 3 Capture =====
+    // ===== SEALED. Lane 3 Capture =====
     {
       id: id("ap"),
       createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
@@ -434,7 +434,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       title: `Send first-contact email to ${vendors[5]?.name ?? "Iris & Oak Studio"}?`,
       rationale: "Personalized first-contact draft.",
       risk: "low", status: "approved",
-      action: { kind: "send_email", to: vendors[5]?.name ?? "Iris & Oak Studio", subject: "Inquiry — Photographer", body: "..." },
+      action: { kind: "send_email", to: vendors[5]?.name ?? "Iris & Oak Studio", subject: "Inquiry. Photographer", body: "..." },
     },
     {
       id: id("ap"),
@@ -447,7 +447,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       action: { kind: "sign_contract", vendor: vendors[5]?.name ?? "Iris & Oak Studio", redlines: ["Image rights", "Overtime", "Cancellation"], estimate: 7500 },
     },
 
-    // ===== Recently rejected — for activity feed signal =====
+    // ===== Recently rejected. for activity feed signal =====
     {
       id: id("ap"),
       createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
@@ -457,7 +457,7 @@ export async function buildDemoState(): Promise<ProjectState> {
       rationale: "Recommended pick for a 4-tier cake at the contracted scale.",
       risk: "low", status: "rejected",
       rejectionNote: "Going with Patissier's spec through the caterer instead.",
-      action: { kind: "send_email", to: "The Cake Loft", subject: "Inquiry — Cake", body: "..." },
+      action: { kind: "send_email", to: "The Cake Loft", subject: "Inquiry. Cake", body: "..." },
     },
   ];
 
@@ -474,20 +474,20 @@ export async function buildDemoState(): Promise<ProjectState> {
       id: id("chat"),
       role: "agent",
       agent: "Maestro",
-      content: "Wonderful — congratulations Maya and Sam. Hudson Valley is right at the peak of foliage that weekend; we'll lean into that. What's your guest count looking like, roughly?",
+      content: "Wonderful. congratulations Maya and Sam. Hudson Valley is right at the peak of foliage that weekend; we'll lean into that. What's your guest count looking like, roughly?",
       createdAt: new Date(Date.now() - 32 * 24 * 60 * 60 * 1000 + 20_000).toISOString(),
     },
     {
       id: id("chat"),
       role: "user",
-      content: "Around 120 guests. Budget envelope is $110k. The vibe we keep coming back to is candlelit barn — editorial film photography, no DJ banter, loose wildflowers.",
+      content: "Around 120 guests. Budget envelope is $110k. The vibe we keep coming back to is candlelit barn. editorial film photography, no DJ banter, loose wildflowers.",
       createdAt: new Date(Date.now() - 32 * 24 * 60 * 60 * 1000 + 60_000).toISOString(),
     },
     {
       id: id("chat"),
       role: "agent",
       agent: "Maestro",
-      content: "Got it. That's a brief I can work with. I have everything I need: Maya & Sam, September 19, 2026, Hudson Valley, NY, 120 guests, $110k envelope, candlelit barn vibe with film photography. Say 'lock it' and I'll release the team — Scout will start on venues + photographers in the next minute, Designer will draft three direction directions, Treasurer will allocate the envelope.",
+      content: "Got it. That's a brief I can work with. I have everything I need: Maya & Sam, September 19, 2026, Hudson Valley, NY, 120 guests, $110k envelope, candlelit barn vibe with film photography. Say 'lock it' and I'll release the team. Scout will start on venues + photographers in the next minute, Designer will draft three direction directions, Treasurer will allocate the envelope.",
       createdAt: new Date(Date.now() - 32 * 24 * 60 * 60 * 1000 + 90_000).toISOString(),
     },
     {
@@ -507,16 +507,16 @@ export async function buildDemoState(): Promise<ProjectState> {
 
   // ---- Day-of timeline ---------------------------------------------------
   const dayOf = [
-    { id: id("d"), time: "08:00", title: "Coffee + breakfast — bridal suite",       owner: "Maya + party",       status: "pending" as const },
+    { id: id("d"), time: "08:00", title: "Coffee + breakfast. bridal suite",       owner: "Maya + party",       status: "pending" as const },
     { id: id("d"), time: "09:00", title: "Hair + makeup begin",                     owner: "Atelier team",       status: "pending" as const },
     { id: id("d"), time: "12:30", title: "Maya gets dressed",                       owner: "MOH + photographer", status: "pending" as const },
     { id: id("d"), time: "13:00", title: "First look + couple portraits",           owner: "Iris & Oak Studio",  status: "pending" as const },
     { id: id("d"), time: "13:45", title: "Family + wedding party portraits",        owner: "All",                status: "pending" as const },
-    { id: id("d"), time: "15:00", title: "Guests arrive — pre-ceremony bar",        owner: "Bartending team",    status: "pending" as const },
-    { id: id("d"), time: "16:00", title: "Ceremony — humanist",                     owner: "Officiant + couple", status: "pending" as const, critical: true, toleranceMinutes: 5 },
-    { id: id("d"), time: "16:30", title: "Cocktail hour — venue terrace",           owner: "Velvet Hour Trio",   status: "pending" as const },
+    { id: id("d"), time: "15:00", title: "Guests arrive. pre-ceremony bar",        owner: "Bartending team",    status: "pending" as const },
+    { id: id("d"), time: "16:00", title: "Ceremony. humanist",                     owner: "Officiant + couple", status: "pending" as const, critical: true, toleranceMinutes: 5 },
+    { id: id("d"), time: "16:30", title: "Cocktail hour. venue terrace",           owner: "Velvet Hour Trio",   status: "pending" as const },
     { id: id("d"), time: "17:30", title: "Dinner seating + welcome toast",          owner: "Couple + Caterer",   status: "pending" as const },
-    { id: id("d"), time: "19:00", title: "Toasts — MOH, Best Man, parents",         owner: "Wedding party",      status: "pending" as const },
+    { id: id("d"), time: "19:00", title: "Toasts. MOH, Best Man, parents",         owner: "Wedding party",      status: "pending" as const },
     { id: id("d"), time: "19:30", title: "First dance + parent dances",             owner: "Couple",             status: "pending" as const, critical: true },
     { id: id("d"), time: "19:50", title: "Open dancing + cake cutting",             owner: "All + Cantor",       status: "pending" as const },
     { id: id("d"), time: "23:00", title: "Last dance + sparkler exit",              owner: "All",                status: "pending" as const },
@@ -527,7 +527,7 @@ export async function buildDemoState(): Promise<ProjectState> {
     { id: id("ct"), topic: "weather" as const,        preApproved: "Move ceremony into the barn under the cathedral beams. Add 8 patio heaters at the cocktail tent. Reroute portrait sessions to the covered porch.",                                    escalation: "planner" as const },
     { id: id("ct"), topic: "timeline_slip" as const,  preApproved: "If hair & makeup runs > 20 min late, compress portrait window from 60 to 35 min and shift first-look forward.",                                                                       escalation: "planner" as const },
     { id: id("ct"), topic: "vendor_no_show" as const, preApproved: "Day-of coordinator activates backup vendor list (HMU on retainer, officiant via network, cake replacement guarantee). Sam approved all backups in advance.",                          escalation: "planner" as const },
-    { id: id("ct"), topic: "guest_medical" as const,  preApproved: "EMS contact at venue. Mark Wong (anaphylactic peanut) — epi-pen with Maestro Jr. + nearest hospital is Hudson Memorial 8 min away. Notify caterer to flag every plate.",              escalation: "couple" as const },
+    { id: id("ct"), topic: "guest_medical" as const,  preApproved: "EMS contact at venue. Mark Wong (anaphylactic peanut). epi-pen with Maestro Jr. + nearest hospital is Hudson Memorial 8 min away. Notify caterer to flag every plate.",              escalation: "couple" as const },
     { id: id("ct"), topic: "intoxication" as const,   preApproved: "Bartending team trained in pour-cap. Last call 30 min before scheduled exit. Shuttles run every 45 min back to the hotel block.",                                                     escalation: "planner" as const },
   ];
 
@@ -539,7 +539,7 @@ export async function buildDemoState(): Promise<ProjectState> {
     { id: id("tip"), recipient: "Atelier (HMU lead)",         amountUsd: 150, cashDelivered: false, handedToOnDay: "MOH" },
     { id: id("tip"), recipient: "Velvet Hour Trio (band)",    amountUsd: 400, cashDelivered: false, handedToOnDay: "Day-of coordinator" },
     { id: id("tip"), recipient: "Officiant",                  amountUsd: 100, cashDelivered: false, handedToOnDay: "Father of bride" },
-    { id: id("tip"), recipient: "Day-of coordinator",         amountUsd: 250, cashDelivered: false, handedToOnDay: "Couple — direct" },
+    { id: id("tip"), recipient: "Day-of coordinator",         amountUsd: 250, cashDelivered: false, handedToOnDay: "Couple. direct" },
     { id: id("tip"), recipient: "Florist (delivery + setup)", amountUsd: 100, cashDelivered: false, handedToOnDay: "Day-of coordinator" },
   ];
 
@@ -568,10 +568,10 @@ export async function buildDemoState(): Promise<ProjectState> {
     registryLinked: true,
     travelGuide: "Closest airports: ALB (Albany) or HVN (Hudson Valley). Hotel block at The Inn at Hudson, code MAYA-SAM, $189/night. Shuttles run from the hotel block to the venue starting at 3:30pm; return shuttles every 45 min until 12:15am.",
     faqs: [
-      { q: "What's the dress code?", a: "Cocktail attire. Garden party meets candlelit barn — long dresses encouraged but not required. Comfortable shoes for the grass." },
-      { q: "Are kids invited?", a: "We love your kids. Per RSVP — please indicate on the response card. We'll have a small kids' room with snacks + activities during the reception." },
-      { q: "Dietary restrictions?", a: "Yes — please tell us on the RSVP form. Our caterer accommodates allergens and dietary preferences. Please flag anything anaphylactic in the notes." },
-      { q: "Parking?", a: "Free on-site. We strongly recommend the shuttle from the hotel block — fewer cars and you can stay later." },
+      { q: "What's the dress code?", a: "Cocktail attire. Garden party meets candlelit barn. long dresses encouraged but not required. Comfortable shoes for the grass." },
+      { q: "Are kids invited?", a: "We love your kids. Per RSVP. please indicate on the response card. We'll have a small kids' room with snacks + activities during the reception." },
+      { q: "Dietary restrictions?", a: "Yes. please tell us on the RSVP form. Our caterer accommodates allergens and dietary preferences. Please flag anything anaphylactic in the notes." },
+      { q: "Parking?", a: "Free on-site. We strongly recommend the shuttle from the hotel block. fewer cars and you can stay later." },
       { q: "Can we bring a plus-one?", a: "Plus-ones are listed on your envelope. If your invitation says 'and guest,' you're welcome to bring one." },
     ],
   };
@@ -579,7 +579,7 @@ export async function buildDemoState(): Promise<ProjectState> {
   // ---- Hotel blocks + shuttles -------------------------------------------
   const hotelBlocks = [
     { id: id("ht"), hotel: "The Inn at Hudson", city: "Hudson, NY",   roomsBlocked: 30, roomsBooked: 18, nightlyRateUsd: 189, releaseDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10), notes: "Block code MAYA-SAM" },
-    { id: id("ht"), hotel: "Rivertown Lodge",   city: "Hudson, NY",   roomsBlocked: 12, roomsBooked: 4,  nightlyRateUsd: 220, releaseDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10), notes: "Block code MAYA-SAM-2 — limited inventory" },
+    { id: id("ht"), hotel: "Rivertown Lodge",   city: "Hudson, NY",   roomsBlocked: 12, roomsBooked: 4,  nightlyRateUsd: 220, releaseDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10), notes: "Block code MAYA-SAM-2. limited inventory" },
   ];
   const shuttles = [
     { id: id("sh"), route: "The Inn at Hudson → Hudson Valley Barn",   pickupTime: "15:30", capacity: 56, reservedSeats: 38 },
@@ -600,10 +600,10 @@ export async function buildDemoState(): Promise<ProjectState> {
     { id: id("vw"), whose: "partner"   as const, draft: "Maya, when I think of who I want to be, I think of who I am with you... [full draft, 4 paragraphs]", wordCount: 264, locked: false },
   ];
   const speeches = [
-    { id: id("sp"), speaker: "Priya Patel — Maid of Honor",   draft: "Good evening — I'm Priya, Maya's MOH. I have stories I won't tell tonight, and a couple I will... [5 minutes]", wordCount: 720, approved: true },
-    { id: id("sp"), speaker: "Michael Park — Best Man",        draft: "Hi everyone. I'm Michael, and I have known Sam for fourteen years... [5 minutes]", wordCount: 680, approved: true },
-    { id: id("sp"), speaker: "David Patel — Father of bride", draft: "[outline] gratitude → memory of Maya at 6 → toast",  wordCount: 0, approved: false },
-    { id: id("sp"), speaker: "Rachel Park — Mother of groom",  draft: "", wordCount: 0, approved: false },
+    { id: id("sp"), speaker: "Priya Patel. Maid of Honor",   draft: "Good evening. I'm Priya, Maya's MOH. I have stories I won't tell tonight, and a couple I will... [5 minutes]", wordCount: 720, approved: true },
+    { id: id("sp"), speaker: "Michael Park. Best Man",        draft: "Hi everyone. I'm Michael, and I have known Sam for fourteen years... [5 minutes]", wordCount: 680, approved: true },
+    { id: id("sp"), speaker: "David Patel. Father of bride", draft: "[outline] gratitude → memory of Maya at 6 → toast",  wordCount: 0, approved: false },
+    { id: id("sp"), speaker: "Rachel Park. Mother of groom",  draft: "", wordCount: 0, approved: false },
   ];
 
   // ---- Memorials ---------------------------------------------------------
@@ -616,8 +616,8 @@ export async function buildDemoState(): Promise<ProjectState> {
   const findGuestByName = (name: string) => guests.find((g) => g.fullName.startsWith(name));
   const thanks = [
     { id: id("tk"), guestId: findGuestByName("Linda Wong")?.id ?? "", guestName: "Linda Wong + Mark Wong",      giftDescription: "Le Creuset 5.5qt",     status: "drafting" as const },
-    { id: id("tk"), guestId: findGuestByName("Priya")?.id ?? "",      guestName: "Priya Patel",                  giftDescription: "Coyuchi towel set",     status: "ready"    as const, draftBody: "Priya — thank you for the Coyuchi towels. We've been using them every morning. We love them, and we love you. — Maya & Sam" },
-    { id: id("tk"), guestId: "",                                       guestName: "The Wong family (joint gift)", giftDescription: "Cash gift — $300",      status: "drafting" as const },
+    { id: id("tk"), guestId: findGuestByName("Priya")?.id ?? "",      guestName: "Priya Patel",                  giftDescription: "Coyuchi towel set",     status: "ready"    as const, draftBody: "Priya. thank you for the Coyuchi towels. We've been using them every morning. We love them, and we love you.. Maya & Sam" },
+    { id: id("tk"), guestId: "",                                       guestName: "The Wong family (joint gift)", giftDescription: "Cash gift. $300",      status: "drafting" as const },
   ];
 
   // ---- Ledger ------------------------------------------------------------
@@ -674,7 +674,7 @@ export async function buildDemoState(): Promise<ProjectState> {
     approvedTokens: [],
     visits: [
       { id: id("vt"), kind: "venue_tour" as const, vendorId: vendors[0]?.id, vendorName: vendors[0]?.name ?? "Hudson Valley Barn", date: priorDayISO(brief.dateWindow, 60), time: "11:00", location: vendors[0]?.city ?? "Hudson, NY",     attendees: ["Maya", "Sam"], notes: "Toured the barn + grounds. Photographed sun position at 4pm.", done: true },
-      { id: id("vt"), kind: "tasting"    as const, vendorId: vendors.find((v) => v.category === "Caterer" && v.status === "contracted")?.id, vendorName: "Hudson Valley Table Co.", date: priorDayISO(brief.dateWindow, 30), time: "13:00", location: "Caterer kitchen", attendees: ["Maya", "Sam"], notes: "Tasting menu — picked the lamb + the gnocchi.", done: true },
+      { id: id("vt"), kind: "tasting"    as const, vendorId: vendors.find((v) => v.category === "Caterer" && v.status === "contracted")?.id, vendorName: "Hudson Valley Table Co.", date: priorDayISO(brief.dateWindow, 30), time: "13:00", location: "Caterer kitchen", attendees: ["Maya", "Sam"], notes: "Tasting menu. picked the lamb + the gnocchi.", done: true },
     ],
     menu: [
       { id: id("mn"), course: "appetizer", name: "Heirloom tomato salad", description: "Burrata, basil oil, smoked salt", containsAllergens: ["dairy"] },
@@ -746,22 +746,22 @@ interface SampleHousehold { label: string; side: Side; members: SampleMember[] }
 const SAMPLE_HOUSEHOLDS: SampleHousehold[] = [
   // Maya's side
   { label: "Patel parents",                   side: "organizer" as const, members: [
-    { name: "David Patel",  rel: "immediate_family" as const,           rsvp: "yes" as const,    plusOne: "named" as const,  song: "Stand By Me — Ben E. King" },
+    { name: "David Patel",  rel: "immediate_family" as const,           rsvp: "yes" as const,    plusOne: "named" as const,  song: "Stand By Me. Ben E. King" },
     { name: "Anjali Patel", rel: "immediate_family" as const,           rsvp: "yes" as const,    plusOne: "named" as const,  dietary: "Vegetarian", prefs: ["vegetarian" as const] },
   ]},
   { label: "Patel grandparents",              side: "organizer" as const, members: [
-    { name: "Vikram Patel",  rel: "extended_family" as const, rsvp: "yes" as const, dietary: "Diabetic — sugar-free dessert please", prefs: ["diabetic" as const] },
+    { name: "Vikram Patel",  rel: "extended_family" as const, rsvp: "yes" as const, dietary: "Diabetic. sugar-free dessert please", prefs: ["diabetic" as const] },
     { name: "Sushila Patel", rel: "extended_family" as const, rsvp: "yes" as const },
   ]},
   { label: "Wong family",                     side: "organizer" as const, members: [
     { name: "Linda Wong",     rel: "extended_family" as const, rsvp: "yes" as const, plusOne: "named" as const },
-    { name: "Mark Wong",      rel: "extended_family" as const, rsvp: "yes" as const, plusOne: "named" as const, dietary: "Severe peanut allergy — anaphylactic. Carries epi-pen.", allergens: [{ code: "peanut" as const, severity: "anaphylactic" as const }] },
+    { name: "Mark Wong",      rel: "extended_family" as const, rsvp: "yes" as const, plusOne: "named" as const, dietary: "Severe peanut allergy. anaphylactic. Carries epi-pen.", allergens: [{ code: "peanut" as const, severity: "anaphylactic" as const }] },
     { name: "Sophia Wong",    rel: "child" as const,             rsvp: "yes" as const },
   ]},
   { label: "Priya Patel",                     side: "organizer" as const, members: [
-    { name: "Priya Patel",  rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const, song: "Levitating — Dua Lipa" },
+    { name: "Priya Patel",  rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const, song: "Levitating. Dua Lipa" },
   ]},
-  { label: "College friends — Boston",        side: "organizer" as const, members: [
+  { label: "College friends. Boston",        side: "organizer" as const, members: [
     { name: "Avery Chen",   rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const },
     { name: "Jamie Rivera", rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const, dietary: "Gluten-free, lactose-intolerant", prefs: ["gluten_free" as const, "dairy_free" as const] },
   ]},
@@ -772,7 +772,7 @@ const SAMPLE_HOUSEHOLDS: SampleHousehold[] = [
 
   // Sam's side
   { label: "Park parents",                    side: "partner" as const, members: [
-    { name: "Rachel Park",  rel: "immediate_family" as const, rsvp: "yes" as const, plusOne: "named" as const, song: "Unforgettable — Nat King Cole" },
+    { name: "Rachel Park",  rel: "immediate_family" as const, rsvp: "yes" as const, plusOne: "named" as const, song: "Unforgettable. Nat King Cole" },
     { name: "Won Park",     rel: "immediate_family" as const, rsvp: "yes" as const, plusOne: "named" as const },
   ]},
   { label: "Park siblings",                   side: "partner" as const, members: [
@@ -789,8 +789,8 @@ const SAMPLE_HOUSEHOLDS: SampleHousehold[] = [
     { name: "Sarah Kim",     rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const },
     { name: "Eli Goldstein", rel: "college_friend" as const, rsvp: "no_response" as const, dietary: "Kosher (no shellfish, no pork, no dairy with meat)", prefs: ["kosher" as const] },
   ]},
-  { label: "Sam's work — engineering team",   side: "partner" as const, members: [
-    { name: "Andrei Volkov",  rel: "work" as const, rsvp: "yes" as const, plusOne: "open" as const, song: "Mr. Brightside — The Killers" },
+  { label: "Sam's work. engineering team",   side: "partner" as const, members: [
+    { name: "Andrei Volkov",  rel: "work" as const, rsvp: "yes" as const, plusOne: "open" as const, song: "Mr. Brightside. The Killers" },
     { name: "Maria Rossi",    rel: "work" as const, rsvp: "yes" as const, plusOne: "named" as const },
     { name: "Kai Tanaka",     rel: "work" as const, rsvp: "no" as const, plusOne: "open" as const },
   ]},
@@ -800,6 +800,6 @@ const SAMPLE_HOUSEHOLDS: SampleHousehold[] = [
     { name: "Lara Adams",    rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const },
     { name: "Theo Adams",    rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const, dietary: "Vegan", prefs: ["vegan" as const] },
     { name: "Maya Robinson", rel: "college_friend" as const, rsvp: "no_response" as const },
-    { name: "Charlotte Lee", rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const, song: "September — EWF" },
+    { name: "Charlotte Lee", rel: "college_friend" as const, rsvp: "yes" as const, plusOne: "named" as const, song: "September. EWF" },
   ]},
 ];

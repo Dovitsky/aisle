@@ -1,4 +1,4 @@
-// Offline Maestro tests — verify the rule-based onboarding path actually
+// Offline Maestro tests. verify the rule-based onboarding path actually
 // extracts brief fields and fires the right tool calls in offline mode.
 // Without these, the entire chat flow is dead when no API key is present.
 
@@ -65,7 +65,7 @@ async function main() {
   tu = r.toolUses.find((t) => t.name === "update_brief");
   assert(!!tu && (tu.input as Record<string, unknown>).budgetUsd === 110000, "Budget: '$110,000' → 110000");
 
-  // 6. Date window — month + year.
+  // 6. Date window. month + year.
   r = await maestroReply({
     brief: partial({}), history: [],
     userMessage: "Late September 2026 ideally",
@@ -74,7 +74,7 @@ async function main() {
   const dw = (tu?.input as Record<string, unknown>)?.dateWindow as string;
   assert(typeof dw === "string" && dw.includes("September") && dw.includes("2026"), "Date: 'Late September 2026' parsed");
 
-  // 7. Date window — season form.
+  // 7. Date window. season form.
   r = await maestroReply({
     brief: partial({}), history: [],
     userMessage: "Spring 2027 maybe",
@@ -93,7 +93,7 @@ async function main() {
   const reg = (tu?.input as Record<string, unknown>)?.region as string;
   assert(typeof reg === "string" && reg.toLowerCase().includes("hudson"), `Region: 'Hudson Valley' parsed (got: ${reg})`);
 
-  // 9. Vibe — long descriptive sentence.
+  // 9. Vibe. long descriptive sentence.
   r = await maestroReply({
     brief: partial({ organizerName: "Maya", partnerName: "Sam", dateWindow: "September 2026", region: "Hudson Valley", guestCount: 120, budgetUsd: 80000 }),
     history: [],
@@ -113,7 +113,7 @@ async function main() {
   r = await maestroReply({ brief: complete, history: [], userMessage: "yes lock it" });
   assert(r.toolUses.some((t) => t.name === "lock_brief_now"), "Lock: 'yes lock it' → lock_brief_now fires");
 
-  // 11. Negative override — "no, wait" while complete should NOT lock.
+  // 11. Negative override. "no, wait" while complete should NOT lock.
   r = await maestroReply({ brief: complete, history: [], userMessage: "no wait, change the date" });
   assert(!r.toolUses.some((t) => t.name === "lock_brief_now"), "Lock: 'no wait' does not fire lock");
 

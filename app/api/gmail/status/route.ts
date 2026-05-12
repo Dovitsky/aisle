@@ -1,4 +1,4 @@
-// GET — connection + scan status. Drives the Settings + Inbox UI.
+// GET. connection + scan status. Drives the Settings + Inbox UI.
 
 import { NextResponse } from "next/server";
 import { getConnection, listInboxMessages } from "@/lib/gmail/store";

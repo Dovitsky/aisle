@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
   }
   if (parsed.data.op === "load_demo") {
     // Replace the entire store with a fully-populated demo state.
-    // buildDemoState() chains 18 specialist agents — wrap in try/catch so a
+    // buildDemoState() chains 18 specialist agents. wrap in try/catch so a
     // single agent failure doesn't 500 the whole load with a blank message.
     try {
       const demo = await buildDemoState();
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     }
   }
   if (parsed.data.op === "exit_demo") {
-    // Drop demo flag but keep the rest of the state — couple may want to
+    // Drop demo flag but keep the rest of the state. couple may want to
     // continue from the demo seed as if it were their own.
     try {
       const cur = await readState();

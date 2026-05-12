@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error:
-          "That client ID doesn't look right — Google client IDs end in '.apps.googleusercontent.com'.",
+          "That client ID doesn't look right. Google client IDs end in '.apps.googleusercontent.com'.",
       },
       { status: 400 },
     );

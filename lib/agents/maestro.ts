@@ -1,4 +1,4 @@
-// Maestro — the orchestrator (PRD §4.1).
+// Maestro. the orchestrator (PRD §4.1).
 // Owns the chat surface, the brief, and the approvals queue.
 // Specialists' outputs are surfaced through Maestro.
 
@@ -6,7 +6,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { Brief, ChatMessage } from "../types";
 
-const SYSTEM = `You are Maestro, the orchestrator agent of Corsia — an autonomous wedding planning platform.
+const SYSTEM = `You are Maestro, the orchestrator agent of Corsia. an autonomous wedding planning platform.
 
 Voice and tone:
 - Warm, attentive, genuinely curious. Like a planner the couple has known for years and trusts completely. You're rooting for them.
@@ -14,13 +14,13 @@ Voice and tone:
 - Use their names. Drop the formality of "the couple" or "the user."
 - No clichés ("big day", "happily ever after", "best day of your life"). No corporate filler ("Got it!", "Awesome!"). No emojis.
 - Concise but never clipped. Two short paragraphs is plenty. Leave room for them to talk.
-- Acknowledge before you ask. "Late May, Maiori, sounds gorgeous — what's your partner's name?" beats "What's your partner's name?"
+- Acknowledge before you ask. "Late May, Maiori, sounds gorgeous. what's your partner's name?" beats "What's your partner's name?"
 
 How you take action:
-- You are the ORCHESTRATOR. You don't draft emails, pick venues, or research locations yourself — your specialists do. You decide which specialist to call and when, you read their outputs, and you bring the user the next decision.
-- ALWAYS prefer a tool call over describing what you'd do. If the user shares brief info, call update_brief. If they ask for a venue, call dispatch_scout. If they describe a vibe but haven't picked a place, call dispatch_locator. If they say "email the venue about the rain plan" / "ask the photographer if they shoot film" / "check with the caterer on dietary", call dispatch_email_vendor — never paraphrase the request as if you'd do it later. Describing without acting is a failure.
-- SCOUT HAS OPEN-WEB SEARCH. When the couple names a specific real-world person — "find Karen the NYT-featured photographer in NYC", "the band my friend used in Brooklyn last fall", "a local officiant from the Hudson Valley named Margaret" — call dispatch_scout with BOTH category (Photographer / Band / Officiant / etc.) AND targetDescription (their verbatim ask). Scout will hunt them on the open web, verify them, score them against the brief, stage them on the same shortlist as marketplace vendors, and pre-draft a personalized first email. NEVER refuse with "I can only search our marketplace" or "share their contact info" — Scout does that legwork. This applies to non-vendor humans too: a friend-of-a-friend musician, a specific officiant. Same dispatch, same flow.
-- When Scout's targeted hunt comes back, your reply is two lines, not three paragraphs. "Found her. {Name} — {city}. Verified site + contact path. Pricing $$$. Fit 91/100. On your shortlist. First-contact email drafted, references the {portfolio detail}." If Scout couldn't verify, say so plainly and ask one focused follow-up — never the open-ended "share their info" punt.
+- You are the ORCHESTRATOR. You don't draft emails, pick venues, or research locations yourself. your specialists do. You decide which specialist to call and when, you read their outputs, and you bring the user the next decision.
+- ALWAYS prefer a tool call over describing what you'd do. If the user shares brief info, call update_brief. If they ask for a venue, call dispatch_scout. If they describe a vibe but haven't picked a place, call dispatch_locator. If they say "email the venue about the rain plan" / "ask the photographer if they shoot film" / "check with the caterer on dietary", call dispatch_email_vendor. never paraphrase the request as if you'd do it later. Describing without acting is a failure.
+- SCOUT HAS OPEN-WEB SEARCH. When the couple names a specific real-world person. "find Karen the NYT-featured photographer in NYC", "the band my friend used in Brooklyn last fall", "a local officiant from the Hudson Valley named Margaret". call dispatch_scout with BOTH category (Photographer / Band / Officiant / etc.) AND targetDescription (their verbatim ask). Scout will hunt them on the open web, verify them, score them against the brief, stage them on the same shortlist as marketplace vendors, and pre-draft a personalized first email. NEVER refuse with "I can only search our marketplace" or "share their contact info". Scout does that legwork. This applies to non-vendor humans too: a friend-of-a-friend musician, a specific officiant. Same dispatch, same flow.
+- When Scout's targeted hunt comes back, your reply is two lines, not three paragraphs. "Found her. {Name}. {city}. Verified site + contact path. Pricing $$$. Fit 91/100. On your shortlist. First-contact email drafted, references the {portfolio detail}." If Scout couldn't verify, say so plainly and ask one focused follow-up. never the open-ended "share their info" punt.
 - The specialists you orchestrate: Locator (where), Scout (vendors), Outreach (first emails), Negotiator (counters), Counsel (contracts), Treasurer (budget), Designer (mood), Stationer (invitations), Cleric (ceremony), Cantor (music), Patissier (cake), Sommelier (bar), Botanist (florals), Steward (rentals), Atelier (hair & makeup), Quartermaster (welcome bags), Couturier (dress, gated), Voice (vows), Curator (registry), Itinerist (honeymoon, gated), Concierge (engagement), Larder (dietary), Triage (inbox).
 
 Formatting your replies:
@@ -32,17 +32,17 @@ Formatting your replies:
 
 Onboarding (when no brief is locked):
 - Required fields: organizerName (the user), partnerName, dateWindow (e.g. "Late September 2026"), region (e.g. "Hudson Valley, NY"), guestCount (int), budgetUsd (int), vibe (1-2 sentences).
-- LOCATION-FIRST FLOW: If the user describes a vibe / aesthetic / feel BEFORE naming a region, call dispatch_locator with that vibe — Locator searches the world and surfaces 3-5 real locations as a choice card. The user picks one and that becomes the region. This is the most magical onboarding moment — they describe a feeling, we propose places.
+- LOCATION-FIRST FLOW: If the user describes a vibe / aesthetic / feel BEFORE naming a region, call dispatch_locator with that vibe. Locator searches the world and surfaces 3-5 real locations as a choice card. The user picks one and that becomes the region. This is the most magical onboarding moment. they describe a feeling, we propose places.
 - If the user already named a specific region (e.g. "Hudson Valley", "Charleston"), skip Locator and call update_brief directly.
 - Each turn, extract whatever the user just told you and call update_brief with those fields. Do NOT wait until you have everything.
 - After every update_brief, your prose MUST do two things in one short paragraph:
-  1. Acknowledge what you saved (e.g. "Got it — late May 2026, Maiori on the Amalfi Coast.")
+  1. Acknowledge what you saved (e.g. "Got it. late May 2026, Maiori on the Amalfi Coast.")
   2. Immediately ask for the single next missing field. The seven required fields are: organizerName, partnerName, dateWindow, region, guestCount, budgetUsd, vibe. If something is still missing, ASK FOR IT IN THE SAME REPLY. Never end on just "Got it." while fields remain empty.
 - When all 7 required fields are set, Corsia auto-renders a brief summary card with Yes/No in chat. You don't need to repeat the question in prose.
 - The MOMENT the user says yes / lock it / go / sounds good / ship it / proceed (or clicks "Yes"), IMMEDIATELY call lock_brief_now. Locking releases Scout to start venue + photographer work and outreach cards land in the queue. Keep your prose to one short sentence: "Locking it. Welcome." or similar.
 
 After the brief is locked:
-- The brief is still editable. If the couple says "actually let's do Amalfi instead" or "we're up to 150 guests now" or "moving to next October", call update_brief with the new fields. Corsia detects material pivots (region / date / guest count) and automatically re-fires Scout against the new brief — no need to ask permission. Acknowledge the change in one short line: "Pivoting to Amalfi. Scout's on it."
+- The brief is still editable. If the couple says "actually let's do Amalfi instead" or "we're up to 150 guests now" or "moving to next October", call update_brief with the new fields. Corsia detects material pivots (region / date / guest count) and automatically re-fires Scout against the new brief. no need to ask permission. Acknowledge the change in one short line: "Pivoting to Amalfi. Scout's on it."
 - For non-material edits (budget tweaks, vibe re-phrasing), call update_brief and acknowledge briefly. No re-fire needed.
 
 You will not:
@@ -50,7 +50,7 @@ You will not:
 - Discuss locked-gate content (dress, surprise gifts) with a blocked partner. Refuse non-revealingly: "I don't have anything to share on that."
 `;
 
-// Tool definitions — Maestro can dispatch specialists from chat.
+// Tool definitions. Maestro can dispatch specialists from chat.
 // The actual side-effect happens server-side in /api/chat after Maestro's response.
 type Tool = {
   name: string;
@@ -70,7 +70,7 @@ type Tool = {
 };
 
 const TOOLS: Tool[] = [
-  // Onboarding — these are always available, even before the brief is locked.
+  // Onboarding. these are always available, even before the brief is locked.
   {
     name: "update_brief",
     description: "Save or update brief fields the user has shared. Pass only the fields you heard this turn; existing fields are preserved. Call this every turn the user reveals anything: dates, region, guest count, budget, vibe, names, planner status.",
@@ -113,7 +113,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "parse_estimate",
-    description: "Parse arbitrary text the couple pasted in (forwarded vendor email, OCR'd PDF, screenshot transcription, SMS) and extract a structured wedding-vendor estimate. Quill returns vendor name, total, line items, contact info. Corsia then auto-renders a summary card with the parsed numbers and the answer becomes a Budget line + Vendor record. Use this whenever the user says 'here's the quote', 'parse this', 'add this estimate', or pastes a block of vendor pricing text. Do not call this for casual brief info — that's update_brief.",
+    description: "Parse arbitrary text the couple pasted in (forwarded vendor email, OCR'd PDF, screenshot transcription, SMS) and extract a structured wedding-vendor estimate. Quill returns vendor name, total, line items, contact info. Corsia then auto-renders a summary card with the parsed numbers and the answer becomes a Budget line + Vendor record. Use this whenever the user says 'here's the quote', 'parse this', 'add this estimate', or pastes a block of vendor pricing text. Do not call this for casual brief info. that's update_brief.",
     input_schema: {
       type: "object",
       properties: {
@@ -122,7 +122,7 @@ const TOOLS: Tool[] = [
       required: ["text"],
     },
   },
-  // Conversational UI — surface structured choices instead of plain-text questions.
+  // Conversational UI. surface structured choices instead of plain-text questions.
   {
     name: "ask_choice",
     description: "Ask the user to pick one option from 2-5 alternatives. Renders as a labelled choice card; the user's selection comes back as their next message. Use for tradition, design direction, vendor pick, etc.",
@@ -202,8 +202,8 @@ const TOOLS: Tool[] = [
     name: "dispatch_scout",
     description:
       "Tell Scout to produce a vendor shortlist for a category, then queue an outreach Approval Card to the top match. " +
-      "Scout has open-web search — when the couple names a SPECIFIC person ('find Karen the NYT photographer in NYC', 'the band my friend used in Brooklyn last fall'), pass that whole description as `targetDescription` and Scout will hunt them down, verify them on the open web, score them against the brief, and stage them on the shortlist alongside marketplace vendors. " +
-      "Never refuse a named-vendor request with 'I can only search the marketplace' — Scout does the legwork.",
+      "Scout has open-web search. when the couple names a SPECIFIC person ('find Karen the NYT photographer in NYC', 'the band my friend used in Brooklyn last fall'), pass that whole description as `targetDescription` and Scout will hunt them down, verify them on the open web, score them against the brief, and stage them on the shortlist alongside marketplace vendors. " +
+      "Never refuse a named-vendor request with 'I can only search the marketplace'. Scout does the legwork.",
     input_schema: {
       type: "object",
       properties: {
@@ -247,7 +247,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: "dispatch_email_vendor",
-    description: "When the couple asks you to email a specific vendor with a specific question — 'email the venue about the rain plan', 'ask the photographer about film', 'check with the caterer on dietary' — call this. You can refer to the vendor by name OR by category ('the venue', 'the photographer', 'the caterer', 'the florist', 'the band'); we'll resolve to the contracted/leading vendor in that category. The email lands as an Approval Card the couple taps to send.",
+    description: "When the couple asks you to email a specific vendor with a specific question. 'email the venue about the rain plan', 'ask the photographer about film', 'check with the caterer on dietary'. call this. You can refer to the vendor by name OR by category ('the venue', 'the photographer', 'the caterer', 'the florist', 'the band'); we'll resolve to the contracted/leading vendor in that category. The email lands as an Approval Card the couple taps to send.",
     input_schema: {
       type: "object",
       properties: {
@@ -351,7 +351,7 @@ const TOOLS: Tool[] = [
   // Personal + post-event
   {
     name: "dispatch_couturier",
-    description: "Tell Couturier to propose dress directions. Output is GATED — partner cannot see.",
+    description: "Tell Couturier to propose dress directions. Output is GATED. partner cannot see.",
     input_schema: {
       type: "object",
       properties: { notes: { type: "string", description: "Optional silhouette / fabric / designer notes" } },
@@ -364,7 +364,7 @@ const TOOLS: Tool[] = [
       type: "object",
       properties: {
         whose: { type: "string", enum: ["organizer","partner"] },
-        prompts: { type: "string", description: "What they want to say — specifics, the moment they knew, promises they intend to keep" },
+        prompts: { type: "string", description: "What they want to say. specifics, the moment they knew, promises they intend to keep" },
       },
       required: ["whose", "prompts"],
     },
@@ -438,7 +438,7 @@ export async function maestroReply(args: {
   const name = (args.displayName?.trim() || "Maestro");
   const identity = name === "Maestro"
     ? ""
-    : `\n\nThe couple has renamed you "${name}" — sign and self-reference as ${name} but otherwise behave as Maestro.`;
+    : `\n\nThe couple has renamed you "${name}". sign and self-reference as ${name} but otherwise behave as Maestro.`;
 
   const briefBlock = args.brief
     ? `Current brief on file:
@@ -453,7 +453,7 @@ export async function maestroReply(args: {
 - Brief locked: ${args.brief.locked ? "yes" : "no"}`
     : "No brief on file yet. The couple has not completed first-run intake.";
 
-  // Page context — when the couple sends a message FROM a specific page
+  // Page context. when the couple sends a message FROM a specific page
   // (e.g. /florals), short imperatives like "find cheaper ones", "more
   // options", "draft an email" should be interpreted in that page's
   // context. Inject explicit guidance into the system prompt.
@@ -490,7 +490,7 @@ export async function maestroReply(args: {
 }
 
 // --------------------------------------------------------------------
-// Offline Maestro — deterministic, rule-based onboarding agent that runs
+// Offline Maestro. deterministic, rule-based onboarding agent that runs
 // when no ANTHROPIC_API_KEY is set. Extracts brief fields from natural
 // language and emits real update_brief / lock_brief_now tool calls so the
 // full chat → brief → auto-lock → Scout → Approval Card pipeline works
@@ -521,7 +521,7 @@ function nextFieldQuestion(field: typeof REQUIRED_FIELDS[number]): string {
     case "region":        return "Where? A city or region is plenty.";
     case "guestCount":    return "Roughly how many guests?";
     case "budgetUsd":     return "What's the budget envelope, ballpark?";
-    case "vibe":          return "Tell me the feel — one or two sentences on the look and the room.";
+    case "vibe":          return "Tell me the feel. one or two sentences on the look and the room.";
   }
 }
 
@@ -560,7 +560,7 @@ function offlineMaestroReplyWithTools(args: {
       });
       const adverb = intent === "scout_cheaper" ? "cheaper " : "more ";
       return {
-        text: `On it — pulling ${adverb}${pageVendorCat.toLowerCase()} options. Cards will land in your queue in a moment.`,
+        text: `On it. pulling ${adverb}${pageVendorCat.toLowerCase()} options. Cards will land in your queue in a moment.`,
         toolUses,
       };
     }
@@ -573,7 +573,7 @@ function offlineMaestroReplyWithTools(args: {
     if (emailIntent) {
       toolUses.push({ name: "dispatch_email_vendor", input: emailIntent as unknown as Record<string, unknown> });
       return {
-        text: `Drafting an email to ${humanizeVendorRef(emailIntent.vendorRef)} about ${emailIntent.topic}. It'll land as an approval card — tap to send.`,
+        text: `Drafting an email to ${humanizeVendorRef(emailIntent.vendorRef)} about ${emailIntent.topic}. It'll land as an approval card. tap to send.`,
         toolUses,
       };
     }
@@ -619,7 +619,7 @@ function offlineMaestroReplyWithTools(args: {
   // First-message branch: nothing in chat yet, no brief, user just said hi.
   if (!brief && Object.keys(extracted).length === 0 && args.history.length <= 1) {
     return {
-      text: `Hi — I'm ${me}. To plan well I need seven things: your name, your partner's name, the date window, the region, guest count, budget envelope, and the vibe. We can do this in two minutes. What's your first name?`,
+      text: `Hi. I'm ${me}. To plan well I need seven things: your name, your partner's name, the date window, the region, guest count, budget envelope, and the vibe. We can do this in two minutes. What's your first name?`,
       toolUses,
     };
   }
@@ -692,7 +692,7 @@ function extractBriefFields(msg: string, brief: Brief | null): Record<string, un
     }
   }
 
-  // Budget — accept "$80k", "$80,000", "80k", "80000", "80 thousand".
+  // Budget. accept "$80k", "$80,000", "80k", "80000", "80 thousand".
   if (fieldStillMissing(brief, "budgetUsd")) {
     // "$80k" / "80k"
     let m = msg.match(/\$?\s*(\d{1,4}(?:\.\d{1,2})?)\s*k\b/i);
@@ -706,7 +706,7 @@ function extractBriefFields(msg: string, brief: Brief | null): Record<string, un
         const n = parseInt(m[1].replace(/,/g, ""), 10);
         if (n >= 1000 && n <= 5_000_000) out.budgetUsd = n;
       } else {
-        // "$80000" — only if explicit dollar sign or "budget" context.
+        // "$80000". only if explicit dollar sign or "budget" context.
         m = msg.match(/\$\s*(\d{4,7})\b/);
         if (m) {
           const n = parseInt(m[1], 10);
@@ -743,7 +743,7 @@ function extractBriefFields(msg: string, brief: Brief | null): Record<string, un
         if (monthYear) {
           out.dateWindow = `${monthYear[1] ? capitalize(monthYear[1]) + " " : ""}${capitalize(monthYear[2])} ${monthYear[3]}`;
         } else if (monthRe.test(msg)) {
-          // Just a month, no year — assume next occurrence.
+          // Just a month, no year. assume next occurrence.
           const m = msg.match(monthRe);
           if (m) {
             const now = new Date();
@@ -756,7 +756,7 @@ function extractBriefFields(msg: string, brief: Brief | null): Record<string, un
     }
   }
 
-  // Region — runs LAST so we don't grab a name. Several heuristics:
+  // Region. runs LAST so we don't grab a name. Several heuristics:
   //   "in Hudson Valley", "Hudson Valley, NY", "Charleston SC", capitalized noun phrases
   if (fieldStillMissing(brief, "region")) {
     // "in <Place>" / "at <Place>"
@@ -784,7 +784,7 @@ function extractBriefFields(msg: string, brief: Brief | null): Record<string, un
     }
   }
 
-  // Vibe — only when other fields are mostly settled and the user typed a
+  // Vibe. only when other fields are mostly settled and the user typed a
   // descriptive sentence (longer text, lowercase-flowing, possibly comma-rich).
   if (fieldStillMissing(brief, "vibe")) {
     const wordCount = msg.trim().split(/\s+/).length;
@@ -829,7 +829,7 @@ function monthFromNumber(n: number): string {
 // Detects: "email/ask/send/contact/check with <vendor ref> about/regarding/<re/whether> <topic>"
 //
 // Vendor ref can be a role ("the venue", "the photographer") or a proper
-// name. We don't try to resolve to a specific Vendor record here — that
+// name. We don't try to resolve to a specific Vendor record here. that
 // happens server-side in /api/chat where the live vendor list is available.
 // We just extract the (ref, topic) pair and let dispatch_email_vendor
 // handle resolution.

@@ -3,8 +3,8 @@
 // When the AI-generated brief.heroImage hasn't arrived yet (or failed,
 // or is just the placeholder SVG), the dashboard should never show
 // blank cream space. We pick a curated stock photo whose vibe matches
-// the brief's region — Tuscany sun for Amalfi, autumn foliage for the
-// Hudson Valley, vineyard golds for Napa, etc. — and fall back to a
+// the brief's region. Tuscany sun for Amalfi, autumn foliage for the
+// Hudson Valley, vineyard golds for Napa, etc.. and fall back to a
 // universally beautiful wedding scene if no keyword matches.
 //
 // All URLs are Unsplash images (free for commercial use, no attribution
@@ -15,7 +15,7 @@ import type { Brief } from "./types";
 interface RegionHero {
   /** Keywords (lowercase) to match against brief.region and brief.vibe. */
   match: string[];
-  /** Unsplash photo URL — landscape orientation, wedding-appropriate. */
+  /** Unsplash photo URL. landscape orientation, wedding-appropriate. */
   url: string;
   /** Short description for alt text. */
   alt: string;
@@ -96,7 +96,7 @@ const HERO_LIBRARY: RegionHero[] = [
   },
 ];
 
-// Universal fallback — the same warm candlelit-bouquet image the landing
+// Universal fallback. the same warm candlelit-bouquet image the landing
 // page uses. Never blank. Premium. Works for any wedding.
 const DEFAULT_HERO =
   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80";

@@ -7,7 +7,7 @@
 //
 // Items can either be a flat link (href) or a deep-linked search-param
 // filter (href + query.category). Groups split a section into visual
-// subheads — Build splits into "Vendors" + "Plan", The Day stays flat.
+// subheads. Build splits into "Vendors" + "Plan", The Day stays flat.
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -50,7 +50,7 @@ const BUILD_PLAN_ITEMS: SectionItem[] = [
   { href: "/guests", label: "Guests" },
   { href: "/wedding-party", label: "Wedding party" },
   { href: "/design", label: "Design" },
-  { href: "/atelier", label: "Atelier — the dress" },
+  { href: "/atelier", label: "Atelier. the dress" },
   { href: "/music", label: "Music" },
   { href: "/seating", label: "Seating" },
   { href: "/stationery", label: "Stationery" },

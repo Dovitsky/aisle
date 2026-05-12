@@ -1,4 +1,4 @@
-// Planning lanes — the 8 sequential phases Corsia walks couples through.
+// Planning lanes. the 8 sequential phases Corsia walks couples through.
 //
 // A great planner never dumps the whole project on a couple at once. They
 // guide one room at a time: foundation, then food, then photography, then
@@ -34,10 +34,10 @@ export interface Lane {
   /** ApprovalCard.action.kind values that belong here (when an action's
    *  domain isn't a vendor category). */
   actionKinds: string[];
-  /** "This lane is finished" predicate — typically the primary booking is
+  /** "This lane is finished" predicate. typically the primary booking is
    *  contracted OR a lock approval is resolved. */
   isComplete: (s: ProjectState) => boolean;
-  /** Short phrase for transitions: "Beautiful choice. Next up — let's…" */
+  /** Short phrase for transitions: "Beautiful choice. Next up. let's…" */
   transitionLine: string;
 }
 
@@ -57,7 +57,7 @@ export const LANES: Lane[] = [
     agents: ["Scout", "Counsel"],
     actionKinds: ["sign_contract", "lock_brief"],
     isComplete: (s) => cat(s, "Venue"),
-    transitionLine: "Foundation locked. Next up — let's talk food and drink.",
+    transitionLine: "Foundation locked. Next up. let's talk food and drink.",
   },
   {
     id: "food_and_drink",
@@ -128,7 +128,7 @@ export const LANES: Lane[] = [
     isComplete: (s) =>
       approvalApproved(s, ["send_invitations"])
       || (cat(s, "Stationer") && approvalApproved(s, ["publish_website"])),
-    transitionLine: "Paper goods are out. Final stretch — day-of logistics.",
+    transitionLine: "Paper goods are out. Final stretch. day-of logistics.",
   },
   {
     id: "day_of",
@@ -141,7 +141,7 @@ export const LANES: Lane[] = [
       "lock_seating", "lock_ceremony", "file_marriage_license", "send_caterer_brief",
       "block_hotel_rooms", "schedule_payment",
     ],
-    isComplete: () => false, // never "complete" — runs through the wedding day itself
+    isComplete: () => false, // never "complete". runs through the wedding day itself
     transitionLine: "We're in the final stretch.",
   },
 ];
@@ -158,9 +158,9 @@ export function laneById(id: LaneId): Lane {
 export function laneFor(card: ApprovalCard): LaneId {
   const a = card.action;
 
-  // 1. Action.kind precedence — most specific.
+  // 1. Action.kind precedence. most specific.
   if (a.kind === "sign_contract" || a.kind === "schedule_payment" || a.kind === "send_email" || a.kind === "send_message") {
-    // These actions target a specific vendor — match by vendor name + category lookup
+    // These actions target a specific vendor. match by vendor name + category lookup
     // when the dashboard has the state. Without state here, fall back to the to/vendor field.
     const target = (a.kind === "send_email" ? a.to
                   : a.kind === "send_message" ? a.to

@@ -1,4 +1,4 @@
-// Treasurer — proposes a budget allocation against a brief and watches variance.
+// Treasurer. proposes a budget allocation against a brief and watches variance.
 // Builds an industry-standard percentage allocation, then adapts to the vibe.
 
 import type Anthropic from "@anthropic-ai/sdk";
@@ -82,7 +82,7 @@ function coerce(raw: unknown, target: number): BudgetProposal {
   return { lines: out, total: target };
 }
 
-// Offline allocation — apply industry-standard percentage splits so the
+// Offline allocation. apply industry-standard percentage splits so the
 // /budget page is populated and Treasurer's invariants are exercised even
 // without an API key. Percentages mirror Knot/WeddingWire averages and the
 // guidance in the build brief; sum is forced to brief.budgetUsd exactly.

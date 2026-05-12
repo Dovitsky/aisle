@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       const after = await setSite({
         slug,
         hero: `${state.brief.organizerName} & ${state.brief.partnerName} · ${state.brief.dateWindow}`,
-        story: `We're so glad you're here. This is the place for the schedule, the venue, the dress code, and travel info — and where you'll RSVP when invitations go out.`,
+        story: `We're so glad you're here. This is the place for the schedule, the venue, the dress code, and travel info. and where you'll RSVP when invitations go out.`,
         schedulePublished: false,
         rsvpEnabled: false,
         registryLinked: false,
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
           { q: "What's the dress code?", a: "Black tie optional. Check the schedule for details on each event." },
           { q: "Are kids invited?", a: "We love them, but this celebration is adults-only. We'll happily share recommendations for childcare." },
           { q: "Where do I RSVP?", a: "RSVP opens with the formal invitation. We'll need a response by 30 days before the wedding." },
-          { q: "Where do I stay?", a: "We've reserved a hotel block — see the Stay tab. Reservations release 30 days before." },
+          { q: "Where do I stay?", a: "We've reserved a hotel block. see the Stay tab. Reservations release 30 days before." },
         ],
         customRsvpQuestions: DEFAULT_RSVP_QUESTIONS,
       });
