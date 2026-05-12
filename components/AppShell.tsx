@@ -258,6 +258,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const pendingCount = state?.approvals.filter((a) => a.status === "pending").length ?? 0;
   const isPublic = pathname.startsWith("/wed/");
+  // /dossier owns its own full-bleed dark layout — skip the dashboard chrome.
+  const isDossier = pathname === "/dossier";
   // Marketing landing. kill the dashboard chrome (topbar, mobile-tab nav,
   // chat dock). The Landing component renders its own minimal header.
   // ONLY when there's NO brief at all. once the user has typed anything in
@@ -266,7 +268,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // "Continue with Maestro" CTA on the partial-brief surface has nothing
   // to open.
   const isMarketingLanding = pathname === "/" && !state?.brief;
-  const dockOff = isPublic || isMarketingLanding || pathname.startsWith("/login") || pathname.startsWith("/portal");
+  const dockOff = isPublic || isMarketingLanding || isDossier || pathname.startsWith("/login") || pathname.startsWith("/portal");
   // When the chat panel is open on lg+, push the entire app frame right by
   // the panel width so page content sits beside the chat instead of under
   // it. On mobile (<lg) the panel overlays with a backdrop instead. there
@@ -293,6 +295,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // Marketing landing renders without dashboard chrome. the Landing
   // component owns its own minimal header.
   if (isMarketingLanding) {
+    return <>{children}</>;
+  }
+
+  // Dossier builder owns its own full-bleed dark stage.
+  if (isDossier) {
     return <>{children}</>;
   }
 

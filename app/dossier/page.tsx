@@ -1,8 +1,9 @@
-import { BriefForm } from "@/components/BriefForm";
+import { DossierBuilder } from "@/components/DossierBuilder";
 
-// The wedding dossier intake. The internal data shape is still called
-// `brief` (PRD §5.1, `state.brief`) so all downstream agents work
-// unchanged — only the URL and user-facing copy use "dossier".
+// The interactive, visual dossier builder. Dark theme, multi-stage,
+// chip selectors + mood cards instead of a wall of inputs. Replaces
+// the old BriefForm (which is still available as a fallback on
+// /dossier/form for the admin/edit view).
 export default function DossierPage() {
-  return <BriefForm />;
+  return <DossierBuilder />;
 }
