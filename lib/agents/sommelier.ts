@@ -1,11 +1,21 @@
-// Sommelier — bar program agent (PRD §3.2 Bartending).
+// Sommelier — bar program agent.
+//
+// "App grows with you" principle: by the time the couple reaches the
+// bar, the app already knows their venue, season, palette, and design
+// direction. Pick signature cocktails that match — an October Hudson
+// Valley barn deserves spiced cider and bourbon-pear, not a beachside
+// piña colada.
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { Brief, BarMenuItem, BarProgram } from "../types";
+import type { WeddingContext } from "./context";
+import { contextSummaryForPrompt } from "./context";
 
 const SYSTEM = `You are Sommelier, AISLE's bar agent.
 Design a bar program for the wedding.
+
+CRITICAL: Use what the app already knows about THIS wedding — the season, the region (climate + local distilleries / vineyards), the venue's setting (rustic barn vs coastal villa changes the cocktail register), and the formality. Signature cocktails should taste like the season and place.
 
 Output JSON only:
 {
@@ -23,15 +33,25 @@ Output JSON only:
 
 Defaults: 2 signature cocktails (one named per partner), curated wine list (1 white / 1 red / 1 sparkling), 2 beer options, full spirits if open. Estimate ~1.5 drinks/guest/hour for a 5-hour reception.`;
 
-export async function sommelierPropose(args: { brief: Brief; alcoholBudget?: number }): Promise<BarProgram> {
+export async function sommelierPropose(args: {
+  brief: Brief;
+  context?: WeddingContext;
+  alcoholBudget?: number;
+}): Promise<BarProgram> {
   if (!hasApiKey()) return offline(args);
 
-  const userPrompt = `Vibe: ${args.brief.vibe}
-Guest count: ${args.brief.guestCount}
+  const header = args.context
+    ? contextSummaryForPrompt(args.context)
+    : [
+        `Vibe: ${args.brief.vibe}`,
+        `Guest count: ${args.brief.guestCount}`,
+      ].join("\n");
+
+  const userPrompt = `${header}
 Total wedding budget: $${args.brief.budgetUsd.toLocaleString()}
 ${args.alcoholBudget ? `\nAllocated alcohol line: $${args.alcoholBudget}` : ""}
 
-Design the bar now.`;
+Design the bar now — signature cocktails that taste like the season + region + venue setting above.`;
 
   const resp = await client().messages.create({
     model: MODELS.specialist,

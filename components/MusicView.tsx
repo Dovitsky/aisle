@@ -12,6 +12,7 @@
 
 import { useMemo, useState } from "react";
 import type { MusicCue, MusicSlot, ProjectState } from "@/lib/types";
+import { PickedForYou } from "./PickedForYou";
 import { useProject } from "./StateProvider";
 import { useToast } from "./Toast";
 import { Reveal, CountUp } from "./Atmosphere";
@@ -154,6 +155,11 @@ export function MusicView() {
           do-not-play list. Guest song requests from RSVPs feed straight in. Whatever's here
           is what your band or DJ will see.
         </p>
+        {briefLocked && (
+          <div className="mt-5">
+            <PickedForYou />
+          </div>
+        )}
       </header>
 
       {/* Propose card */}

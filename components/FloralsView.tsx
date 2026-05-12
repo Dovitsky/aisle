@@ -13,6 +13,7 @@ import type { FloralPiece, ProjectState } from "@/lib/types";
 import { useProject } from "./StateProvider";
 import { useToast } from "./Toast";
 import { Reveal, CountUp } from "./Atmosphere";
+import { PickedForYou } from "./PickedForYou";
 
 const PIECE_LABEL: Record<FloralPiece, string> = {
   ceremony_arch: "Ceremony arch",
@@ -119,6 +120,11 @@ export function FloralsView() {
           and the season we&rsquo;re in. Edit individual pieces; the line goes to your florist
           as a dossier.
         </p>
+        {briefLocked && (
+          <div className="mt-5">
+            <PickedForYou />
+          </div>
+        )}
       </header>
 
       {/* Propose card */}

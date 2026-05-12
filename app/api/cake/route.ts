@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { appendApproval, readState, setCake } from "@/lib/store";
 import { patissierPropose } from "@/lib/agents/patissier";
+import { weddingContext } from "@/lib/agents/context";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -32,7 +33,10 @@ export async function POST(req: NextRequest) {
   switch (data.op) {
     case "propose": {
       if (!state.brief?.locked) return NextResponse.json({ error: "Lock the brief first." }, { status: 412 });
-      const spec = await patissierPropose({ brief: state.brief });
+      // Pass full WeddingContext so Patissier sees venue + palette +
+      // season — not just the brief in isolation.
+      const ctx = weddingContext(state) ?? undefined;
+      const spec = await patissierPropose({ brief: state.brief, context: ctx });
       const after = await setCake({ id: "cake_" + Date.now().toString(36), ...spec });
       return NextResponse.json({ state: after });
     }

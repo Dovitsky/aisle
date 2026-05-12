@@ -4,6 +4,7 @@ import {
   addMusicCue, appendApproval, readState, setMusic, updateMusicCue,
 } from "@/lib/store";
 import { cantorPropose } from "@/lib/agents/cantor";
+import { weddingContext } from "@/lib/agents/context";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -30,7 +31,8 @@ export async function POST(req: NextRequest) {
     case "propose": {
       if (!state.brief?.locked) return NextResponse.json({ error: "Lock the brief first." }, { status: 412 });
       const guestRequests = state.guests.map((g) => g.songRequest).filter(Boolean) as string[];
-      const cues = await cantorPropose({ brief: state.brief, guestRequests });
+      const ctx = weddingContext(state) ?? undefined;
+      const cues = await cantorPropose({ brief: state.brief, context: ctx, guestRequests });
       let last = state;
       for (const c of cues) last = await addMusicCue(c);
       return NextResponse.json({ state: last, count: cues.length });

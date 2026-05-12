@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ALLERGEN_LABEL, type ProjectState } from "@/lib/types";
 import { useProject } from "./StateProvider";
+import { PickedForYou } from "./PickedForYou";
 import { useToast } from "./Toast";
 import { Reveal, CountUp } from "./Atmosphere";
 import { ThoughtStream } from "./ThoughtStream";
@@ -100,6 +101,11 @@ export function CakeView() {
             ? `${cake.frostingStyle} frosting, ${cake.flavors.length} flavors. Allergens cross-check against your guests' dietary records automatically.`
             : "Patissier sketches a starting cake from your vibe and guest count — tiers, flavors, fillings, frosting, decoration. Swap any piece."}
         </p>
+        {briefLocked && (
+          <div className="mt-5">
+            <PickedForYou />
+          </div>
+        )}
       </header>
 
       {/* Propose card */}

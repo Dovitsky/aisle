@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { readState, setFlorals, updateFloral } from "@/lib/store";
 import { botanistPropose } from "@/lib/agents/botanist";
+import { weddingContext } from "@/lib/agents/context";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -31,7 +32,16 @@ export async function POST(req: NextRequest) {
       if (!state.brief?.locked) return NextResponse.json({ error: "Lock the brief first." }, { status: 412 });
       const palette = state.designs.find((d) => d.kind === "moodboard" && d.approved)?.swatches;
       const tableCount = state.seating.tables.length || Math.ceil(state.brief.guestCount / 8);
-      const arr = await botanistPropose({ brief: state.brief, tableCount, weddingPartySize: state.weddingParty.length, palette });
+      // Pass the full WeddingContext so Botanist sees region+season+
+      // venue+palette+design direction — not just the brief in isolation.
+      const ctx = weddingContext(state) ?? undefined;
+      const arr = await botanistPropose({
+        brief: state.brief,
+        context: ctx,
+        tableCount,
+        weddingPartySize: state.weddingParty.length,
+        palette,
+      });
       const withIds = arr.map((a, i) => ({ id: "fl" + (i + 1) + "_" + Date.now().toString(36), ...a }));
       const after = await setFlorals(withIds);
       return NextResponse.json({ state: after, count: arr.length });

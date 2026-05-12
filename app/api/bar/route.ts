@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { readState, setBar } from "@/lib/store";
 import { sommelierPropose } from "@/lib/agents/sommelier";
+import { weddingContext } from "@/lib/agents/context";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -21,7 +22,8 @@ export async function POST(req: NextRequest) {
   switch (data.op) {
     case "propose": {
       if (!state.brief?.locked) return NextResponse.json({ error: "Lock the brief first." }, { status: 412 });
-      const program = await sommelierPropose({ brief: state.brief });
+      const ctx = weddingContext(state) ?? undefined;
+      const program = await sommelierPropose({ brief: state.brief, context: ctx });
       const after = await setBar({ ...program, id: "bar_" + Date.now().toString(36) });
       return NextResponse.json({ state: after });
     }

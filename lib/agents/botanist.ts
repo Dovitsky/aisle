@@ -1,9 +1,16 @@
-// Botanist — floral arrangement designer (PRD §3.2). Translates the locked
-// design palette into actual stems, vessel notes, and per-piece quantities.
+// Botanist — floral arrangement designer.
+//
+// Lives the "app grows with you" principle: by the time the couple
+// reaches florals, the app already knows their region, month, vibe,
+// contracted venue, locked palette. The Botanist weaves ALL of it into
+// its prompt so the recommendations feel like they were made for THIS
+// couple, THIS venue, THIS season — not a generic floral catalog.
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { Brief, FloralArrangement, FloralPiece } from "../types";
+import type { WeddingContext } from "./context";
+import { contextSummaryForPrompt } from "./context";
 
 const PIECES: FloralPiece[] = [
   "ceremony_arch", "ceremony_aisle", "centerpiece",
@@ -15,6 +22,8 @@ const PIECES: FloralPiece[] = [
 const SYSTEM = `You are Botanist, AISLE's floral agent.
 Design the full floral program: arches, aisle, centerpieces, bouquets, boutonnières, corsages, cake florals.
 
+CRITICAL: Use what the app already knows about THIS wedding — the season, the region's climate, the contracted venue's style, the locked palette. Pick stems that are in peak season for the wedding month in that region. If the venue is a barn, lean rustic-elegant. If it's a coastal villa, lean airy and Mediterranean. Match the palette swatches.
+
 Output JSON only:
 { "arrangements": [
   { "piece": "<one of the listed pieces>",
@@ -25,19 +34,33 @@ Output JSON only:
 Quantities should match a wedding of the given guest count (e.g., 1 centerpiece per table of 8-10, 1 boutonnière per groomsman, 2 bouquets organizer/partner, etc.).
 Use real flower names tied to the season + region. No "miscellaneous greens" — be specific.`;
 
-export async function botanistPropose(args: { brief: Brief; tableCount?: number; weddingPartySize?: number; palette?: string[] }): Promise<Omit<FloralArrangement, "id">[]> {
+export async function botanistPropose(args: {
+  brief: Brief;
+  context?: WeddingContext;
+  tableCount?: number;
+  weddingPartySize?: number;
+  palette?: string[];
+}): Promise<Omit<FloralArrangement, "id">[]> {
   if (!hasApiKey()) return offline(args);
 
-  const userPrompt = `Vibe: ${args.brief.vibe}
-Cultural: ${args.brief.cultural ?? "secular"}
-Region: ${args.brief.region}
-Date window: ${args.brief.dateWindow}
-Guest count: ${args.brief.guestCount}
+  // Build the prompt's "what we know" header from the full context when
+  // available; fall back to the brief-only header otherwise.
+  const ctxHeader = args.context
+    ? contextSummaryForPrompt(args.context)
+    : [
+        `Region: ${args.brief.region}`,
+        `When: ${args.brief.dateWindow}`,
+        `Guest count: ${args.brief.guestCount}`,
+        `Vibe: ${args.brief.vibe}`,
+        `Cultural: ${args.brief.cultural ?? "secular"}`,
+      ].join("\n");
+
+  const userPrompt = `${ctxHeader}
 Tables (estimate): ${args.tableCount ?? Math.ceil(args.brief.guestCount / 8)}
 Wedding party size (estimate): ${args.weddingPartySize ?? 8}
-Palette: ${args.palette?.join(", ") ?? "(use the brief's vibe)"}
+${args.palette?.length ? `Palette swatches: ${args.palette.join(", ")}` : ""}
 
-Design the florals now.`;
+Design the florals now — stems in peak season for the month + region, anchored to the venue and palette above.`;
 
   const resp = await client().messages.create({
     model: MODELS.specialist,
@@ -72,21 +95,42 @@ function coerce(raw: unknown): Omit<FloralArrangement, "id"> | null {
 
 // Offline floral program — generates a complete, realistic spec keyed off the
 // brief so /florals is populated and the cascade approval looks credible.
-function offline(args: { brief: Brief; tableCount?: number; weddingPartySize?: number }): Omit<FloralArrangement, "id">[] {
+// When no Anthropic key is set we still try to honor the season hint from the
+// context object: autumn → dahlias + amaranth, winter → ranunculus + evergreens, etc.
+function offline(args: {
+  brief: Brief;
+  context?: WeddingContext;
+  tableCount?: number;
+  weddingPartySize?: number;
+}): Omit<FloralArrangement, "id">[] {
   const tables = args.tableCount ?? Math.ceil(args.brief.guestCount / 8);
   const partySize = args.weddingPartySize ?? Math.min(8, Math.max(4, Math.round(args.brief.guestCount / 20)));
   const v = (args.brief.vibe || "").toLowerCase();
+  const season = args.context?.season ?? "the soft hours";
   const moody = /candlelit|moody|editorial|deep|jewel|noir/.test(v);
   const garden = /garden|wildflower|botanical|barn|farm|rustic/.test(v);
   const coastal = /coast|sea|cliff|beach|amalfi/.test(v);
-  const primary = moody
+  const autumn = season === "autumn";
+  const winter = season === "winter";
+
+  const primary = autumn && garden
+    ? ["Café au Lait dahlias", "Burgundy amaranth", "Garden roses (toffee)"]
+    : autumn
+    ? ["Dahlias (autumn palette)", "Garden roses", "Hypericum berries"]
+    : winter
+    ? ["White ranunculus", "Anemones", "Hellebores"]
+    : moody
     ? ["Black Magic roses", "Café au Lait dahlias", "Burgundy ranunculus"]
     : coastal
     ? ["White ranunculus", "Jasmine vine", "Olive branches"]
     : garden
     ? ["Cosmos", "Queen Anne's lace", "Garden roses"]
     : ["Garden roses", "Eucalyptus", "Lisianthus"];
-  const secondary = moody
+  const secondary = autumn
+    ? ["Dried wheat", "Pampas accents", "Smoked eucalyptus"]
+    : winter
+    ? ["Cedar", "Silver dollar eucalyptus", "Privet berries"]
+    : moody
     ? ["Smokebush", "Dusty miller", "Privet berries"]
     : coastal
     ? ["Sea grass", "Eucalyptus", "Statice"]

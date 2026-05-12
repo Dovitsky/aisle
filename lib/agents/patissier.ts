@@ -1,11 +1,21 @@
-// Patissier — cake & dessert agent (PRD §3.2).
+// Patissier — cake & dessert agent.
+//
+// Lives the "app grows with you" principle: by the time the couple
+// reaches cake, the app knows the venue, palette, season, design
+// direction. The cake should reflect THAT specific wedding — fall
+// flavors for an October Hudson Valley barn, citrus + olive oil for
+// an Amalfi May, etc.
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { client, MODELS, hasApiKey } from "../anthropic";
 import { ALLERGEN_CODES, AllergenCode, Brief, CakeSpec } from "../types";
+import type { WeddingContext } from "./context";
+import { contextSummaryForPrompt } from "./context";
 
 const SYSTEM = `You are Patissier, AISLE's cake & dessert agent.
 Design a wedding cake spec.
+
+CRITICAL: Use what the app already knows about THIS wedding — the season, the region's climate, the contracted venue's style, the locked palette and design direction. Pick flavors and frostings that resonate with the season (stone fruit + elderflower in summer, spiced pear + brown butter in autumn, citrus + olive oil in Mediterranean spring). Match decoration to the moodboard palette.
 
 Output JSON only:
 { "tiers": int 2-5, "flavors": ["per-tier flavor"], "fillings": ["per-tier filling"],
@@ -18,15 +28,24 @@ Match the brief's vibe and formality. Real flavors and frostings, not placeholde
 Every wedding cake almost certainly contains dairy, gluten, and egg unless explicitly substituted — include those in the allergens array unless the spec is vegan/GF.
 If a flavor name implies an allergen (almond, hazelnut, pistachio → tree_nut; peanut → peanut), include it.`;
 
-export async function patissierPropose(args: { brief: Brief }): Promise<Omit<CakeSpec, "id" | "vendorId" | "approved">> {
+export async function patissierPropose(args: {
+  brief: Brief;
+  context?: WeddingContext;
+}): Promise<Omit<CakeSpec, "id" | "vendorId" | "approved">> {
   if (!hasApiKey()) return offline(args);
 
-  const userPrompt = `Vibe: ${args.brief.vibe}
-Cultural: ${args.brief.cultural ?? "secular"}
-Formality: ${args.brief.formalityTone ?? "modern"}
-Guest count: ${args.brief.guestCount}
+  const header = args.context
+    ? contextSummaryForPrompt(args.context)
+    : [
+        `Vibe: ${args.brief.vibe}`,
+        `Cultural: ${args.brief.cultural ?? "secular"}`,
+        `Formality: ${args.brief.formalityTone ?? "modern"}`,
+        `Guest count: ${args.brief.guestCount}`,
+      ].join("\n");
 
-Design the cake now.`;
+  const userPrompt = `${header}
+
+Design the cake now — flavors in season for the month + region, decoration that resonates with the palette and venue above.`;
 
   const resp = await client().messages.create({
     model: MODELS.specialist,

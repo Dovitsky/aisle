@@ -4,6 +4,8 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { MODELS, hasApiKey, createWithWebSearch } from "../anthropic";
 import { Brief, MusicCue, MusicSlot } from "../types";
+import type { WeddingContext } from "./context";
+import { contextSummaryForPrompt } from "./context";
 
 const SLOTS: MusicSlot[] = [
   "processional", "ceremony_music", "recessional",
@@ -32,16 +34,26 @@ Coverage:
 - 3-5 entries for cocktail_hour, dinner, and open_dancing each.
 Cultural tradition matters — match instrumentation to the brief.`;
 
-export async function cantorPropose(args: { brief: Brief; guestRequests?: string[] }): Promise<Omit<MusicCue, "id">[]> {
+export async function cantorPropose(args: {
+  brief: Brief;
+  context?: WeddingContext;
+  guestRequests?: string[];
+}): Promise<Omit<MusicCue, "id">[]> {
   if (!hasApiKey()) return offline(args);
 
-  const userPrompt = `Vibe: ${args.brief.vibe}
-Cultural: ${args.brief.cultural ?? "secular"}
-Formality: ${args.brief.formalityTone ?? "modern"}
-Region: ${args.brief.region}
+  const header = args.context
+    ? contextSummaryForPrompt(args.context)
+    : [
+        `Vibe: ${args.brief.vibe}`,
+        `Cultural: ${args.brief.cultural ?? "secular"}`,
+        `Formality: ${args.brief.formalityTone ?? "modern"}`,
+        `Region: ${args.brief.region}`,
+      ].join("\n");
+
+  const userPrompt = `${header}
 ${args.guestRequests?.length ? `\nGuest requests so far:\n${args.guestRequests.slice(0, 30).join("\n")}` : ""}
 
-Build the setlist now.`;
+Build the setlist now — anchored to the vibe + venue + design direction above.`;
 
   const resp = await createWithWebSearch({
     model: MODELS.orchestrator,

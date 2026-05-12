@@ -12,6 +12,7 @@
 
 import { useState } from "react";
 import type { BarMenuItem, ProjectState } from "@/lib/types";
+import { PickedForYou } from "./PickedForYou";
 import { useProject } from "./StateProvider";
 import { useToast } from "./Toast";
 import { Reveal, CountUp } from "./Atmosphere";
@@ -124,6 +125,11 @@ export function BarView() {
           drink. Volumetrics estimated at ~1.5 drinks per guest per hour over a four-hour
           reception.
         </p>
+        {briefLocked && (
+          <div className="mt-5">
+            <PickedForYou />
+          </div>
+        )}
       </header>
 
       {/* Propose card */}
