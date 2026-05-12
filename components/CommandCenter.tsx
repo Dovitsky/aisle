@@ -656,17 +656,58 @@ function BriefStrip({
     }
   }, [rendering, pollForUpdates]);
 
-  // Auto-fire render-hero once per brief identity. Brief identity = names +
-  // region + date — so if the user locks a fresh brief, we re-render rather
-  // than show a stale empty hero. The retriedRef carries the brief key so
-  // a second mount with the same brief doesn't re-fire.
+  // Auto-fire render-hero whenever the prompt-relevant signals change.
+  // The "app grows with you" principle: as more details lock in (venue
+  // contracted, design approved, florals approved, cultural tradition
+  // set), the hero prompt picks them up and the new image fades over
+  // the old. The retriedRef stores a hash of every signal that feeds
+  // into the prompt so we re-fire ONCE per material change.
+  const lockedVenueId = state.vendors.find(
+    (v) =>
+      v.category === "Venue" &&
+      (v.status === "contracted" || v.status === "paid"),
+  )?.id;
+  const approvedDesignId = state.designs?.find((d) => d.approved)?.id;
+  const approvedFloralIds = (state.florals ?? [])
+    .filter((f) => f.approved)
+    .map((f) => f.id)
+    .join("|");
   useEffect(() => {
-    if (!needsRender) return;
-    const briefKey = `${brief.organizerName}|${brief.partnerName}|${brief.region}|${brief.dateWindow}`;
-    if (retriedRef.current === briefKey) return;
-    retriedRef.current = briefKey;
+    // Only fire when we genuinely need a render — either the image is
+    // missing, OR it's the placeholder SVG, OR a meaningful state
+    // signal has changed since the last render.
+    const promptKey = [
+      brief.organizerName,
+      brief.partnerName,
+      brief.region,
+      brief.dateWindow,
+      brief.vibe,
+      brief.cultural ?? "secular",
+      brief.formalityTone ?? "modern",
+      lockedVenueId ?? "no-venue",
+      approvedDesignId ?? "no-design",
+      approvedFloralIds || "no-florals",
+    ].join("|");
+    const haveSignalChanged = retriedRef.current !== promptKey;
+    if (!haveSignalChanged && !needsRender) return;
+    if (!brief.locked) return; // no auto-render on unlocked briefs
+    retriedRef.current = promptKey;
     void triggerRender();
-  }, [needsRender, brief.organizerName, brief.partnerName, brief.region, brief.dateWindow, triggerRender]);
+  }, [
+    needsRender,
+    brief.locked,
+    brief.organizerName,
+    brief.partnerName,
+    brief.region,
+    brief.dateWindow,
+    brief.vibe,
+    brief.cultural,
+    brief.formalityTone,
+    lockedVenueId,
+    approvedDesignId,
+    approvedFloralIds,
+    triggerRender,
+  ]);
 
   return (
     <header
