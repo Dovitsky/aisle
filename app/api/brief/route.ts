@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     });
     await appendChat({
       role: "agent", agent: "Maestro",
-      content: `Sealed. I've put a card in your queue so you can greenlight the venue hunt. The moment you approve, Scout starts in the background.`,
+      content: `Sealed. I've planned, oh, four hundred of these, and yours already looks promising. I've left a card in your queue. greenlight it and Scout starts the venue hunt in the background. Saturday photographers in your region book first, by the way. always have. We'll move quickly without being unseemly about it.`,
     });
   }
 

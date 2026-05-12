@@ -830,9 +830,9 @@ export async function POST(req: NextRequest) {
   // --- Empty/stub fallback: never leave the user staring at a stale stub.
   const STUB = /^i'?ll come back to you on that shortly\.?$/i;
   if (!replyText.trim() || STUB.test(replyText.trim())) {
-    if (calledLockNow) replyText = "Locking it. Welcome.";
-    else if (calledUpdateBrief) replyText = "Got it.";
-    else replyText = "On it.";
+    if (calledLockNow) replyText = "Sealed. Right then. let's get you a venue before the good ones notice we're looking.";
+    else if (calledUpdateBrief) replyText = "Noted. carry on.";
+    else replyText = "On it. give me a moment.";
   }
 
   // --- Continuation guard: if update_brief fired and the brief is still

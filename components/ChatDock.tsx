@@ -101,8 +101,8 @@ export function ChatDock() {
           notify({
             kind: "agent",
             agent: "Maestro",
-            title: "Foundation in flight",
-            detail: "Scout, Designer, and Treasurer are working. decisions will land as they finish.",
+            title: "Right. we're off.",
+            detail: "Scout, Designer, and Treasurer are at it. cards will appear as they finish. Won't be long.",
             hrefOnClick: "/",
           });
         } else if (
@@ -315,8 +315,8 @@ export function ChatDock() {
               </p>
               <p className="text-[13px] leading-relaxed mt-2 chat-ink-soft">
                 {state.brief?.locked
-                  ? "Vendors, budget, the day-of timeline. I hold the whole picture."
-                  : "Names, the date, where, the feeling. Start anywhere."}
+                  ? "Vendors, budget, the day-of timeline. I hold the whole picture, including the bits you'd rather not think about."
+                  : "Names, the date, where, the feeling. Start anywhere. I'll do the tidying."}
               </p>
             </div>
           ) : (
