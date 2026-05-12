@@ -236,9 +236,15 @@ function Header() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/api/brand/logo"
+            src="/logo-corsia-white.svg"
             alt="Corsia"
-            style={{ height: 28, width: "auto", display: "block" }}
+            style={{
+              height: 44,
+              width: "auto",
+              display: "block",
+              // Soft shadow so the wordmark holds against bright skies in the photo
+              filter: "drop-shadow(0 2px 12px rgba(14,15,13,0.45))",
+            }}
           />
         </Link>
 
@@ -1274,9 +1280,9 @@ function Footer() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/api/brand/logo"
+          src="/logo-corsia.svg"
           alt="Corsia"
-          style={{ height: 22, width: "auto", display: "block" }}
+          style={{ height: 32, width: "auto", display: "block" }}
         />
         <span
           style={{

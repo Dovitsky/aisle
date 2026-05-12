@@ -321,9 +321,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/api/brand/logo"
+                src="/logo-corsia.svg"
                 alt="Corsia"
-                style={{ height: 26, width: "auto", display: "block" }}
+                style={{ height: 36, width: "auto", display: "block" }}
               />
             </Link>
             {state?.brief?.locked && (

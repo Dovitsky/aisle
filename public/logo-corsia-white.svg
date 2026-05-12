@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" role="img" aria-label="Corsia">
-  <!-- Corsia wordmark, ink-on-transparent.
-       Used over cream / paper backgrounds (post-login pages).
+  <!-- Corsia wordmark, white-on-transparent.
+       Used over dark photography (landing hero, dossier builder).
        Editorial serif in italic. no box, no background, just type. -->
   <text
     x="6"
@@ -10,6 +10,6 @@
     font-style="italic"
     font-size="76"
     letter-spacing="3"
-    fill="#0E0F0D"
+    fill="#FAF7EE"
   >Corsia</text>
 </svg>
