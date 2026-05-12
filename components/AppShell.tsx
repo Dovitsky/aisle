@@ -314,7 +314,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/logo-corsia.svg"
+                src="/api/brand/logo"
                 alt="Corsia"
                 style={{ height: 26, width: "auto", display: "block" }}
               />

@@ -233,7 +233,7 @@ function Header() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo-corsia.svg"
+            src="/api/brand/logo"
             alt="Corsia"
             style={{ height: 28, width: "auto", display: "block" }}
           />
@@ -1273,7 +1273,7 @@ function Footer() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/logo-corsia.svg"
+          src="/api/brand/logo"
           alt="Corsia"
           style={{ height: 22, width: "auto", display: "block" }}
         />
