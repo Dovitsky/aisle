@@ -128,6 +128,22 @@ export function Landing() {
             margin-top: 22px !important;
             text-align: center !important;
           }
+          /* Stack the input and BEGIN button vertically on mobile so
+             the full placeholder ("Tell us about your dream wedding…")
+             has room to render. Side-by-side at desktop > 720px. */
+          .hero-action-row {
+            flex-direction: column !important;
+            gap: 12px !important;
+          }
+          .hero-action-row > input {
+            width: 100% !important;
+            font-size: 16px !important; /* prevents iOS zoom on focus */
+          }
+          .hero-action-row > button {
+            width: 100% !important;
+            padding: 16px 26px !important;
+          }
+
           /* App Store-style: just the hero on mobile. Trust section
              ("OUR PROMISE"), ProductMoment, and Footer all hidden.
              Brand + photo + headline + one input + sign-in. Done. */
