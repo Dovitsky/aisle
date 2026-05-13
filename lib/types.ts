@@ -293,6 +293,7 @@ export interface Household {
   welcomeBag?: boolean;
   saveTheDateSentAt?: string;
   invitationSentAt?: string;
+  invitationOpenedAt?: string;
 }
 
 export interface Guest {
@@ -602,6 +603,31 @@ export interface SpeechDraft {
   draft: string;
   wordCount: number;
   approved?: boolean;
+}
+
+// ---- Invitations (luxury template suite) -------------------------------
+
+export type InvitationTemplateId =
+  | "editorial"
+  | "monogram"
+  | "asymmetric"
+  | "pressed"
+  | "botanical"
+  | "modern";
+
+export interface InvitationsConfig {
+  templateId: InvitationTemplateId;
+  // Customizable copy. Defaults fall back to Brief.
+  headerLine?: string;       // e.g., "Together with their families"
+  dateLine?: string;         // e.g., "Saturday, the fourteenth of September"
+  yearLine?: string;         // e.g., "two thousand twenty-six"
+  ceremonyTime?: string;     // "Four o'clock in the afternoon"
+  venueLine?: string;
+  venueAddress?: string;
+  receptionLine?: string;    // "Reception to follow"
+  rsvpUrl?: string;          // optional override; defaults to /wed/<slug>/rsvp
+  accentColor?: string;      // CSS color string
+  updatedAt?: string;
 }
 
 // ---- Registry ----------------------------------------------------------
@@ -997,6 +1023,10 @@ export interface ProjectState {
   // The Couturier. atelier surfaces. The dress firewall (gates.dress)
   // hides all of this from the partner viewer.
   atelier?: AtelierState;
+
+  // Invitations module. picks a template + customizes copy. tracks send/open
+  // status on each Household.
+  invitations?: InvitationsConfig | null;
 }
 
 // ---- The Couturier (atelier) -------------------------------------------
