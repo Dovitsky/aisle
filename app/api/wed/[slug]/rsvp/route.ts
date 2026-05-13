@@ -20,6 +20,12 @@ const Body = z.object({
   rsvp: z.enum(["yes", "no", "maybe"]),
   plusOneName: z.string().optional(),
   answers: z.record(z.string(), z.string()).optional(),
+  // First-class RSVP fields used by the standalone /wed/<slug>/rsvp page.
+  // The legacy embedded form on /wed/<slug> still routes everything via
+  // customRsvpQuestions, so these are optional.
+  meal: z.string().optional(),
+  dietary: z.string().optional(),
+  songRequest: z.string().optional(),
 });
 
 function norm(s: string): string {
@@ -85,6 +91,15 @@ export async function POST(
     target.rsvp = parsed.data.rsvp as RsvpState;
     if (parsed.data.plusOneName?.trim()) {
       target.plusOneName = parsed.data.plusOneName.trim();
+    }
+    if (parsed.data.meal?.trim()) {
+      target.meal = parsed.data.meal.trim();
+    }
+    if (parsed.data.dietary?.trim()) {
+      target.dietary = (target.dietary ? target.dietary + " · " : "") + parsed.data.dietary.trim();
+    }
+    if (parsed.data.songRequest?.trim()) {
+      target.songRequest = (target.songRequest ? target.songRequest + " · " : "") + parsed.data.songRequest.trim();
     }
     if (dietaryAdd) {
       target.dietary = (target.dietary ? target.dietary + " · " : "") + dietaryAdd;
